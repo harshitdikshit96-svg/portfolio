@@ -161,6 +161,12 @@ function Nav() {
         </button>
       </div>
 
+      <div
+        className={`nav-mobile-backdrop ${menuOpen ? "open" : ""}`}
+        onClick={() => setMenuOpen(false)}
+        aria-hidden="true"
+      />
+
       <div className={`nav-mobile-panel ${menuOpen ? "open" : ""}`}>
         <div className="nav-mobile-panel-inner">
           {navItems.map((item) => (
