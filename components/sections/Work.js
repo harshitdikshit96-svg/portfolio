@@ -57,6 +57,7 @@ export default function Work() {
                 {p.tags.map((tag) => (
                   <span
                     key={tag}
+                    className="tag-chip"
                     style={{
                       fontFamily: "'Times New Roman', Times, serif",
                       fontSize: 11,

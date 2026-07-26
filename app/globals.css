@@ -108,6 +108,27 @@ a:hover {
   color: oklch(0.93 0.02 68) !important;
 }
 
+.nav-logo {
+  transition: opacity 0.2s ease;
+}
+.nav-logo:hover {
+  opacity: 0.8;
+}
+
+/* Keyboard-navigation focus ring — most of this site's interactive elements
+   are unstyled <a>/<button>s on a dark background, so the browser default
+   outline is either invisible or clashes. Tab through the site and it
+   should always be obvious where focus is. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid oklch(0.76 0.13 60);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
 .btn-primary {
   font-family: "Times New Roman", Times, serif;
   font-size: 15px;
@@ -123,6 +144,9 @@ a:hover {
 .btn-primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 24px -12px oklch(0.76 0.13 60 / 0.55);
+}
+.btn-primary:active {
+  transform: translateY(0) scale(0.97);
 }
 
 .btn-secondary {
@@ -140,29 +164,89 @@ a:hover {
   border-color: oklch(0.76 0.13 60);
   transform: translateY(-2px);
 }
+.btn-secondary:active {
+  transform: translateY(0) scale(0.97);
+}
 
 .project-card {
-  transition: border-color 0.2s, transform 0.2s;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 .project-card:hover {
   border-color: oklch(0.76 0.13 60) !important;
   transform: translateY(-3px);
+  box-shadow: 0 16px 32px -20px oklch(0.06 0.02 40 / 0.7);
+}
+.project-card:active {
+  transform: translateY(-1px) scale(0.99);
 }
 
 .work-card {
-  transition: border-color 0.2s, transform 0.2s;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 .work-card:hover {
   border-color: oklch(0.66 0.11 195) !important;
   transform: translateY(-3px);
+  box-shadow: 0 16px 32px -20px oklch(0.06 0.02 40 / 0.7);
+}
+.work-card:active {
+  transform: translateY(-1px) scale(0.99);
 }
 
 .service-card {
-  transition: border-color 0.2s, transform 0.2s;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 .service-card:hover {
   border-color: oklch(0.76 0.13 60) !important;
   transform: translateY(-3px);
+  box-shadow: 0 16px 32px -20px oklch(0.06 0.02 40 / 0.7);
+}
+.service-card:active {
+  transform: translateY(-1px) scale(0.99);
+}
+
+/* Fact chips + skill/tag pills — small hover lift so the site reads as
+   interactive even where nothing is clickable, matching the rest of the UI. */
+.fact-chip,
+.tag-chip {
+  transition: border-color 0.2s, background-color 0.2s, transform 0.15s;
+}
+.fact-chip:hover {
+  background: oklch(0.23 0.045 42) !important;
+}
+.tag-chip:hover {
+  border-color: oklch(0.76 0.13 60) !important;
+  color: oklch(0.93 0.02 68) !important;
+}
+
+.freelance-pill {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 12.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 15px;
+  border: 1px solid oklch(0.38 0.035 45);
+  border-radius: 20px;
+  color: oklch(0.93 0.02 68);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: border-color 0.2s, transform 0.15s;
+}
+.freelance-pill:hover {
+  border-color: oklch(0.76 0.13 60);
+  transform: translateY(-1px);
+}
+.freelance-pill-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: oklch(0.76 0.13 60);
+  animation: pulseDot 2s infinite;
+}
+
+/* Marquee pauses on hover so a curious cursor can actually read a word. */
+.marquee-wrap:hover .marquee-track {
+  animation-play-state: paused;
 }
 
 /* ---------- Scroll-reveal (see components/Reveal.js) ---------- */
@@ -218,6 +302,11 @@ a:hover {
   cursor: pointer;
   padding: 0;
   flex-shrink: 0;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+.nav-hamburger:hover {
+  background: oklch(1 0 0 / 0.06);
 }
 .nav-hamburger span {
   display: block;
@@ -236,6 +325,12 @@ a:hover {
   transform: translateY(-7px) rotate(-45deg);
 }
 
+/* The dropdown is positioned absolutely below the bar (top: 100% of <nav>,
+   which is the closest positioned ancestor) instead of sitting in the same
+   flex row as the logo/hamburger. That keeps the bar's own height fixed
+   regardless of how tall the open menu is — the earlier version had the
+   panel as a flex sibling, so opening it grew the whole row and
+   align-items:center re-centered the logo into the middle of the menu. */
 .nav-mobile-panel {
   display: none;
 }
@@ -248,9 +343,14 @@ a:hover {
     display: flex;
   }
   .nav-mobile-panel {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: oklch(0.08 0 0 / 0.98);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid oklch(0.32 0.035 45);
     max-height: 0;
     overflow: hidden;
     opacity: 0;
@@ -260,22 +360,41 @@ a:hover {
     max-height: 520px;
     opacity: 1;
   }
+  .nav-mobile-panel-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 6vw 24px;
+  }
+}
+
+.nav-mobile-link {
+  border-radius: 8px;
+  transition: background-color 0.2s, color 0.2s;
+}
+.nav-mobile-link:hover,
+.nav-mobile-link:active {
+  background: oklch(1 0 0 / 0.05);
+  color: oklch(0.93 0.02 68) !important;
 }
 
 /* ---------- Responsive layout grids ---------- */
 .hero-grid {
   display: grid;
-  grid-template-columns: 1fr 320px;
-  gap: 50px;
-  align-items: end;
+  grid-template-columns: 1fr;
+  gap: 36px;
 }
-@media (max-width: 900px) {
+.hero-portrait-wrap {
+  justify-self: center;
+}
+@media (min-width: 901px) {
   .hero-grid {
-    grid-template-columns: 1fr;
-    gap: 36px;
+    grid-template-columns: 1fr 320px;
+    gap: 50px;
+    align-items: end;
   }
   .hero-portrait-wrap {
-    justify-self: center !important;
+    justify-self: end;
   }
 }
 

@@ -48,7 +48,7 @@ export default function Home() {
             </Link>
           </div>
         </div>
-        <div className="hero-portrait-wrap" style={{ animation: "floatSlow 6s ease-in-out infinite", justifySelf: "end" }}>
+        <div className="hero-portrait-wrap" style={{ animation: "floatSlow 6s ease-in-out infinite" }}>
           <ImageSlot
             src="/images/hero-portrait.webp"
             alt="Harshit Dixit portrait"
@@ -68,6 +68,7 @@ export default function Home() {
       </div>
 
       <div
+        className="marquee-wrap"
         style={{
           overflow: "hidden",
           borderTop: `1px solid ${colors.border}`,
@@ -76,7 +77,10 @@ export default function Home() {
           marginBottom: 70,
         }}
       >
-        <div style={{ display: "flex", gap: 40, whiteSpace: "nowrap", animation: "marquee 22s linear infinite", width: "max-content" }}>
+        <div
+          className="marquee-track"
+          style={{ display: "flex", gap: 40, whiteSpace: "nowrap", animation: "marquee 22s linear infinite", width: "max-content" }}
+        >
           {MARQUEE_ITEMS.map((m, i) => (
             <span key={i} style={{ fontSize: 14, letterSpacing: "0.05em", color: colors.textFaintest }}>
               {m} <span style={{ color: colors.accent }}>·</span>
@@ -97,7 +101,12 @@ export default function Home() {
         }}
       >
         {FACT_CHIPS.map((fact) => (
-          <Reveal key={fact.label} delay={fact.delay} style={{ background: colors.bgCard, padding: "26px 24px" }}>
+          <Reveal
+            key={fact.label}
+            delay={fact.delay}
+            className="fact-chip"
+            style={{ background: colors.bgCard, padding: "26px 24px" }}
+          >
             <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 11, color: colors.textFaint, marginBottom: 8, letterSpacing: "0.05em" }}>
               {fact.label}
             </div>

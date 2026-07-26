@@ -122,6 +122,7 @@ export default function About() {
               {grp.items.map((s) => (
                 <span
                   key={s}
+                  className="tag-chip"
                   style={{
                     fontFamily: "'Times New Roman', Times, serif",
                     fontSize: 12.5,
