@@ -2,6 +2,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body {
   margin: 0;
@@ -106,33 +110,35 @@ a:hover {
 
 .btn-primary {
   font-family: "Times New Roman", Times, serif;
-  font-size: 14px;
-  padding: 13px 26px;
+  font-size: 15px;
+  padding: 14px 28px;
   background: oklch(0.76 0.13 60);
   color: oklch(0.16 0.035 45);
   border: none;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 700;
-  transition: transform 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 .btn-primary:hover {
   transform: translateY(-2px);
+  box-shadow: 0 12px 24px -12px oklch(0.76 0.13 60 / 0.55);
 }
 
 .btn-secondary {
   font-family: "Times New Roman", Times, serif;
-  font-size: 14px;
-  padding: 13px 26px;
+  font-size: 15px;
+  padding: 14px 28px;
   background: transparent;
   color: oklch(0.93 0.02 68);
   border: 1px solid oklch(0.38 0.035 45);
   border-radius: 8px;
   cursor: pointer;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, transform 0.2s;
 }
 .btn-secondary:hover {
   border-color: oklch(0.76 0.13 60);
+  transform: translateY(-2px);
 }
 
 .project-card {
@@ -149,4 +155,205 @@ a:hover {
 .work-card:hover {
   border-color: oklch(0.66 0.11 195) !important;
   transform: translateY(-3px);
+}
+
+.service-card {
+  transition: border-color 0.2s, transform 0.2s;
+}
+.service-card:hover {
+  border-color: oklch(0.76 0.13 60) !important;
+  transform: translateY(-3px);
+}
+
+/* ---------- Scroll-reveal (see components/Reveal.js) ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---------- Nav: desktop row + sliding active indicator ---------- */
+.nav-tabs {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.nav-indicator {
+  position: absolute;
+  bottom: -1px;
+  height: 2px;
+  background: oklch(0.76 0.13 60);
+  transition: left 0.3s ease, width 0.3s ease;
+  pointer-events: none;
+}
+
+.nav-desktop-row {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+.nav-hamburger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: oklch(0.93 0.02 68);
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+.nav-hamburger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.nav-hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+.nav-hamburger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.nav-mobile-panel {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .nav-desktop-row {
+    display: none;
+  }
+  .nav-hamburger {
+    display: flex;
+  }
+  .nav-mobile-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.35s ease, opacity 0.3s ease;
+  }
+  .nav-mobile-panel.open {
+    max-height: 520px;
+    opacity: 1;
+  }
+}
+
+/* ---------- Responsive layout grids ---------- */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 50px;
+  align-items: end;
+}
+@media (max-width: 900px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .hero-portrait-wrap {
+    justify-self: center !important;
+  }
+}
+
+.fact-chips {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+@media (max-width: 640px) {
+  .fact-chips {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+@media (max-width: 768px) {
+  .card-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.about-bio-grid {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 40px;
+  align-items: start;
+}
+@media (max-width: 768px) {
+  .about-bio-grid {
+    grid-template-columns: 1fr;
+  }
+  .about-bio-grid > *:last-child {
+    justify-self: center;
+  }
+}
+
+.about-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+@media (max-width: 768px) {
+  .about-two-col {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+@media (max-width: 768px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Contact form ---------- */
+.contact-field {
+  width: 100%;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 15px;
+  padding: 13px 16px;
+  background: oklch(0.2 0.04 42);
+  border: 1px solid oklch(0.32 0.035 45);
+  border-radius: 8px;
+  color: oklch(0.93 0.02 68);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.contact-field:focus {
+  border-color: oklch(0.76 0.13 60);
+}
+.contact-field::placeholder {
+  color: oklch(0.56 0.02 55);
 }

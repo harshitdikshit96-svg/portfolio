@@ -1,29 +1,27 @@
-"use client";
-
-import { memo } from "react";
 import { colors } from "@/lib/colors";
 import { EXPERIENCE, SKILL_GROUPS, TALKS, SOCIAL } from "@/lib/data";
 import ImageSlot from "@/components/ImageSlot";
+import Reveal from "@/components/Reveal";
 
-function About() {
+export default function About() {
   return (
     <section data-screen-label="About" style={{ padding: "80px 0 40px", animation: "fadeUp 0.5s ease both" }}>
       <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 13, color: colors.accent, marginBottom: 12 }}>
         {"// who I am"}
       </div>
-      <h2 style={{ fontSize: "clamp(32px, 4vw, 46px)", margin: "0 0 22px", fontWeight: 700, letterSpacing: "-0.02em" }}>
+      <h2 style={{ fontSize: "clamp(34px, 4.4vw, 50px)", margin: "0 0 22px", fontWeight: 700, letterSpacing: "-0.02em" }}>
         About
       </h2>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 220px", gap: 40, alignItems: "start", marginBottom: 20 }}>
+      <div className="about-bio-grid" style={{ marginBottom: 20 }}>
         <div>
-          <p style={{ fontSize: 16.5, lineHeight: 1.75, color: colors.textMuted, maxWidth: 700, margin: "0 0 20px" }}>
+          <p style={{ fontSize: 17.5, lineHeight: 1.8, color: colors.textMuted, maxWidth: 700, margin: "0 0 20px" }}>
             I&apos;m Harshit — a frontend-leaning software engineer out of IIIT Lucknow, five-plus years into building
             consumer-facing web products for large-scale platforms. I&apos;ve spent that time on both sides of the
             stack: React and Next.js up front, Node.js and infra underneath, with a habit of caring more than average
             about how fast a page actually feels.
           </p>
-          <p style={{ fontSize: 16.5, lineHeight: 1.75, color: colors.textMuted, maxWidth: 700, margin: 0 }}>
+          <p style={{ fontSize: 17.5, lineHeight: 1.8, color: colors.textMuted, maxWidth: 700, margin: 0 }}>
             Right now I consult independently on web architecture and frontend performance, co-run{" "}
             <a href="https://airimation.in" target="_blank" rel="noopener noreferrer">
               Airimation
@@ -57,10 +55,7 @@ function About() {
         }}
       >
         {EXPERIENCE.map((job) => (
-          <div
-            key={job.company}
-            style={{ position: "relative", paddingBottom: 34, opacity: 0, animation: "fadeUp 0.55s ease forwards", animationDelay: `${job.delay}ms` }}
-          >
+          <Reveal key={job.company} delay={job.delay} style={{ position: "relative", paddingBottom: 34 }}>
             <span
               style={{
                 position: "absolute",
@@ -76,20 +71,20 @@ function About() {
             <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 12, color: colors.textFaint, marginBottom: 6 }}>
               {job.period}
             </div>
-            <div style={{ fontSize: 19, fontWeight: 600, marginBottom: 3 }}>{job.role}</div>
-            <div style={{ fontSize: 14, color: colors.accent, marginBottom: 10 }}>{job.company}</div>
-            <div style={{ fontSize: 14.5, lineHeight: 1.65, color: colors.textDimmer, maxWidth: 640 }}>{job.desc}</div>
-          </div>
+            <div style={{ fontSize: 20, fontWeight: 600, marginBottom: 3 }}>{job.role}</div>
+            <div style={{ fontSize: 15, color: colors.accent, marginBottom: 10 }}>{job.company}</div>
+            <div style={{ fontSize: 15.5, lineHeight: 1.7, color: colors.textDimmer, maxWidth: 640 }}>{job.desc}</div>
+          </Reveal>
         ))}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, marginBottom: 60 }}>
+      <div className="about-two-col" style={{ marginBottom: 60 }}>
         <div>
           <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 13, color: colors.teal, marginBottom: 18 }}>
             {"// education"}
           </div>
-          <div style={{ fontSize: 17, fontWeight: 600, marginBottom: 4 }}>IIIT Lucknow</div>
-          <div style={{ fontSize: 14, color: colors.textDimmer }}>B.Tech, Information Technology — 2017 to 2021</div>
+          <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 4 }}>IIIT Lucknow</div>
+          <div style={{ fontSize: 15, color: colors.textDimmer }}>B.Tech, Information Technology — 2017 to 2021</div>
         </div>
         <div>
           <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 13, color: colors.teal, marginBottom: 18 }}>
@@ -99,7 +94,7 @@ function About() {
             <div
               key={talk.org}
               style={{
-                fontSize: 14.5,
+                fontSize: 15.5,
                 marginBottom: i === TALKS.length - 1 ? 0 : 10,
                 color: i === 0 ? colors.text : colors.textDimmer,
               }}
@@ -115,18 +110,10 @@ function About() {
           {"// stack"}
         </div>
         {SKILL_GROUPS.map((grp) => (
-          <div
+          <Reveal
             key={grp.label}
-            style={{
-              display: "flex",
-              alignItems: "baseline",
-              gap: 16,
-              marginBottom: 14,
-              flexWrap: "wrap",
-              opacity: 0,
-              animation: "fadeUp 0.55s ease forwards",
-              animationDelay: `${grp.delay}ms`,
-            }}
+            delay={grp.delay}
+            style={{ display: "flex", alignItems: "baseline", gap: 16, marginBottom: 14, flexWrap: "wrap" }}
           >
             <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 12, color: colors.textFaint, width: 78, flexShrink: 0 }}>
               {grp.label}
@@ -137,7 +124,7 @@ function About() {
                   key={s}
                   style={{
                     fontFamily: "'Times New Roman', Times, serif",
-                    fontSize: 12,
+                    fontSize: 12.5,
                     padding: "5px 11px",
                     borderRadius: 6,
                     background: colors.bgChip,
@@ -149,7 +136,7 @@ function About() {
                 </span>
               ))}
             </div>
-          </div>
+          </Reveal>
         ))}
       </div>
 
@@ -164,7 +151,7 @@ function About() {
           gap: 8,
           marginTop: 30,
           fontFamily: "'Times New Roman', Times, serif",
-          fontSize: 12.5,
+          fontSize: 13,
           color: colors.textFaint,
           borderBottom: `1px dashed ${colors.borderStrong}`,
           paddingBottom: 2,
@@ -175,5 +162,3 @@ function About() {
     </section>
   );
 }
-
-export default memo(About);

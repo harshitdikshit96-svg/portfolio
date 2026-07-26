@@ -1,5 +1,5 @@
-import Portfolio from "@/components/Portfolio";
+import Home from "@/components/sections/Home";
 
 export default function Page() {
-  return <Portfolio />;
+  return <Home />;
 }

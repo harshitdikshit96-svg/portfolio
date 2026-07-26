@@ -1,24 +1,14 @@
-"use client";
-
-import { memo } from "react";
+import Link from "next/link";
 import { colors } from "@/lib/colors";
 import { HOME_PROJECTS, FACT_CHIPS, MARQUEE_ITEMS } from "@/lib/data";
 import ImageSlot from "@/components/ImageSlot";
+import Reveal from "@/components/Reveal";
+import Services from "@/components/sections/Services";
 
-function Home({ onGoWork, onGoContact }) {
+export default function Home() {
   return (
     <section data-screen-label="Home" style={{ animation: "fadeUp 0.6s ease both" }}>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 320px",
-          gap: 50,
-          alignItems: "end",
-          padding: "90px 0 60px",
-          position: "relative",
-          zIndex: 1,
-        }}
-      >
+      <div className="hero-grid" style={{ padding: "90px 0 60px", position: "relative", zIndex: 1 }}>
         <div>
           <div
             style={{
@@ -33,32 +23,32 @@ function Home({ onGoWork, onGoContact }) {
           </div>
           <h1
             style={{
-              fontSize: "clamp(34px, 4.4vw, 54px)",
+              fontSize: "clamp(36px, 5vw, 64px)",
               lineHeight: 1.14,
               margin: "0 0 22px",
               fontWeight: 700,
               letterSpacing: "-0.01em",
-              maxWidth: 640,
+              maxWidth: 680,
             }}
           >
             Builds web products that{" "}
             <span style={{ fontStyle: "italic", color: colors.accent }}>hold up</span> at scale.
           </h1>
-          <p style={{ fontSize: 17, lineHeight: 1.65, color: colors.textDim, maxWidth: 520, margin: "0 0 34px" }}>
+          <p style={{ fontSize: 18, lineHeight: 1.7, color: colors.textDim, maxWidth: 540, margin: "0 0 34px" }}>
             Five-plus years shipping frontend and full-stack systems for large consumer platforms — previously
             leading engineering ventures at Acko and Bigbasket. IIIT Lucknow, B.Tech IT. Now taking on select
             freelance and consulting work.
           </p>
           <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-            <button onClick={onGoWork} className="btn-primary">
+            <Link href="/work" className="btn-primary">
               See my work →
-            </button>
-            <button onClick={onGoContact} className="btn-secondary">
+            </Link>
+            <Link href="/contact" className="btn-secondary">
               Say hello
-            </button>
+            </Link>
           </div>
         </div>
-        <div style={{ animation: "floatSlow 6s ease-in-out infinite", justifySelf: "end" }}>
+        <div className="hero-portrait-wrap" style={{ animation: "floatSlow 6s ease-in-out infinite", justifySelf: "end" }}>
           <ImageSlot
             src="/images/hero-portrait.webp"
             alt="Harshit Dixit portrait"
@@ -96,9 +86,8 @@ function Home({ onGoWork, onGoContact }) {
       </div>
 
       <div
+        className="fact-chips"
         style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
           gap: 1,
           background: colors.border,
           border: `1px solid ${colors.border}`,
@@ -108,68 +97,52 @@ function Home({ onGoWork, onGoContact }) {
         }}
       >
         {FACT_CHIPS.map((fact) => (
-          <div
-            key={fact.label}
-            style={{
-              background: colors.bgCard,
-              padding: "26px 24px",
-              opacity: 0,
-              animation: "fadeUp 0.55s ease forwards",
-              animationDelay: `${fact.delay}ms`,
-            }}
-          >
+          <Reveal key={fact.label} delay={fact.delay} style={{ background: colors.bgCard, padding: "26px 24px" }}>
             <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 11, color: colors.textFaint, marginBottom: 8, letterSpacing: "0.05em" }}>
               {fact.label}
             </div>
-            <div style={{ fontSize: 16, fontWeight: 500 }}>{fact.value}</div>
-          </div>
+            <div style={{ fontSize: 17, fontWeight: 500 }}>{fact.value}</div>
+          </Reveal>
         ))}
       </div>
 
-      <div style={{ marginBottom: 100 }}>
+      <Services />
+
+      <div style={{ margin: "100px 0" }}>
         <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 13, color: colors.teal, marginBottom: 14 }}>
           {"// 01 — selected work"}
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 20 }}>
+        <div className="card-grid-2">
           {HOME_PROJECTS.map((p) => (
-            <div
+            <Reveal
               key={p.slotId}
-              onClick={onGoWork}
+              delay={p.delay}
               className="project-card"
-              style={{
-                background: colors.bgCard,
-                border: `1px solid ${colors.border}`,
-                borderRadius: 12,
-                overflow: "hidden",
-                cursor: "pointer",
-                opacity: 0,
-                animation: "fadeUp 0.55s ease forwards",
-                animationDelay: `${p.delay}ms`,
-              }}
+              style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: 12, overflow: "hidden" }}
             >
-              <ImageSlot
-                src={p.image}
-                alt={`${p.name} screenshot`}
-                fill
-                height={150}
-                placeholder="project screenshot"
-              />
-              <div style={{ padding: 22 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 10 }}>
-                  <div style={{ fontSize: 19, fontWeight: 600 }}>{p.name}</div>
-                  <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 11, color: p.tint }}>{p.role}</div>
+              <Link href="/work" style={{ display: "block", color: colors.text }}>
+                <ImageSlot
+                  src={p.image}
+                  alt={`${p.name} screenshot`}
+                  fill
+                  height={150}
+                  placeholder="project screenshot"
+                />
+                <div style={{ padding: 22 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 10 }}>
+                    <div style={{ fontSize: 19, fontWeight: 600 }}>{p.name}</div>
+                    <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 11, color: p.tint }}>{p.role}</div>
+                  </div>
+                  <div style={{ fontSize: 15, lineHeight: 1.6, color: colors.textDimmer }}>{p.tagline}</div>
                 </div>
-                <div style={{ fontSize: 14.5, lineHeight: 1.6, color: colors.textDimmer }}>{p.tagline}</div>
-              </div>
-            </div>
+              </Link>
+            </Reveal>
           ))}
         </div>
-        <div onClick={onGoWork} style={{ marginTop: 22, fontFamily: "'Times New Roman', Times, serif", fontSize: 13, color: colors.accent, cursor: "pointer" }}>
+        <Link href="/work" style={{ display: "inline-block", marginTop: 22, fontFamily: "'Times New Roman', Times, serif", fontSize: 13, color: colors.accent }}>
           view all projects →
-        </div>
+        </Link>
       </div>
     </section>
   );
 }
-
-export default memo(Home);

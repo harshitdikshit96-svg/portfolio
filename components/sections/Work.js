@@ -1,27 +1,27 @@
-"use client";
-
-import { memo } from "react";
 import { colors } from "@/lib/colors";
 import { PROJECTS } from "@/lib/data";
 import ImageSlot from "@/components/ImageSlot";
+import Reveal from "@/components/Reveal";
 
-function Work() {
+export default function Work() {
   return (
     <section data-screen-label="Work" style={{ padding: "80px 0 40px", animation: "fadeUp 0.5s ease both" }}>
       <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 13, color: colors.accent, marginBottom: 12 }}>
         {"// things I've built"}
       </div>
-      <h2 style={{ fontSize: "clamp(32px, 4vw, 46px)", margin: "0 0 16px", fontWeight: 700, letterSpacing: "-0.02em" }}>
+      <h2 style={{ fontSize: "clamp(34px, 4.4vw, 50px)", margin: "0 0 16px", fontWeight: 700, letterSpacing: "-0.02em" }}>
         Work
       </h2>
-      <p style={{ fontSize: 16, color: colors.textDimmer, maxWidth: 620, margin: "0 0 50px", lineHeight: 1.6 }}>
+      <p style={{ fontSize: 17, color: colors.textDimmer, maxWidth: 620, margin: "0 0 50px", lineHeight: 1.65 }}>
         A mix of a startup I co-founded, freelance client builds, and things I made for fun. Public projects only —
         a couple of client and research engagements stay off this list.
       </p>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 22 }}>
+      <div className="card-grid-2">
         {PROJECTS.map((p) => (
-          <a
+          <Reveal
             key={p.slotId}
+            delay={p.delay}
+            as="a"
             href={p.url}
             target="_blank"
             rel="noopener noreferrer"
@@ -33,9 +33,6 @@ function Work() {
               borderRadius: 14,
               overflow: "hidden",
               color: colors.text,
-              opacity: 0,
-              animation: "fadeUp 0.55s ease forwards",
-              animationDelay: `${p.delay}ms`,
             }}
           >
             <ImageSlot
@@ -53,7 +50,7 @@ function Work() {
                 <div style={{ fontSize: 22, fontWeight: 600 }}>{p.name}</div>
                 <div style={{ fontSize: 18, color: colors.textFaint }}>↗</div>
               </div>
-              <div style={{ fontSize: 14.5, lineHeight: 1.65, color: colors.textDimmer, marginBottom: 20, minHeight: 66 }}>
+              <div style={{ fontSize: 15.5, lineHeight: 1.65, color: colors.textDimmer, marginBottom: 20, minHeight: 66 }}>
                 {p.tagline}
               </div>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -74,11 +71,9 @@ function Work() {
                 ))}
               </div>
             </div>
-          </a>
+          </Reveal>
         ))}
       </div>
     </section>
   );
 }
-
-export default memo(Work);

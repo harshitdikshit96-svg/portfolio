@@ -1,20 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { colors } from "@/lib/colors";
 import Nav from "@/components/Nav";
 import IntroOverlay from "@/components/IntroOverlay";
 import Footer from "@/components/Footer";
-import Home from "@/components/sections/Home";
-import Work from "@/components/sections/Work";
-import About from "@/components/sections/About";
-import Contact from "@/components/sections/Contact";
-import Blog from "@/components/sections/Blog";
 
-const SECTIONS = { home: Home, work: Work, about: About, contact: Contact, blog: Blog };
-
-export default function Portfolio() {
-  const [view, setViewState] = useState("home");
+export default function SiteChrome({ children }) {
   const [introShow, setIntroShow] = useState(true);
   const [introLifted, setIntroLifted] = useState(false);
 
@@ -26,17 +18,6 @@ export default function Portfolio() {
       clearTimeout(hideTimer);
     };
   }, []);
-
-  // Stable identity so Nav (memoized) and each section (memoized) don't
-  // re-render just because Portfolio's own state changed elsewhere.
-  const setView = useCallback((next) => {
-    setViewState(next);
-    window.scrollTo({ top: 0, behavior: "instant" });
-  }, []);
-  const goWork = useCallback(() => setView("work"), [setView]);
-  const goContact = useCallback(() => setView("contact"), [setView]);
-
-  const ActiveSection = SECTIONS[view] ?? Home;
 
   return (
     <div
@@ -63,10 +44,10 @@ export default function Portfolio() {
 
       <IntroOverlay show={introShow} lifted={introLifted} />
 
-      <Nav view={view} onNavigate={setView} />
+      <Nav />
 
       <main style={{ position: "relative", zIndex: 1, maxWidth: 1180, margin: "0 auto", padding: "0 6vw 100px" }}>
-        <ActiveSection onGoWork={goWork} onGoContact={goContact} />
+        {children}
       </main>
 
       <Footer />

@@ -1,9 +1,6 @@
-"use client";
-
-import { memo } from "react";
 import { colors } from "@/lib/colors";
 
-function Blog() {
+export default function Blog() {
   return (
     <section
       data-screen-label="Blog"
@@ -12,12 +9,10 @@ function Blog() {
       <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 60, color: colors.borderLight, marginBottom: 20 }}>
         {"{ }"}
       </div>
-      <h2 style={{ fontSize: 28, fontWeight: 600, margin: "0 0 10px" }}>Writing, soon.</h2>
-      <p style={{ fontSize: 15, color: colors.textFainter }}>
+      <h2 style={{ fontSize: 30, fontWeight: 600, margin: "0 0 10px" }}>Writing, soon.</h2>
+      <p style={{ fontSize: 16, color: colors.textFainter }}>
         Notes on frontend performance, systems, and building on the side — coming to this space.
       </p>
     </section>
   );
 }
-
-export default memo(Blog);
