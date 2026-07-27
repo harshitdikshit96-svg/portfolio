@@ -4,7 +4,7 @@ import ContactForm from "@/components/ContactForm";
 
 export default function Contact() {
   return (
-    <section data-screen-label="Contact" style={{ padding: "100px 0", animation: "fadeUp 0.5s ease both", minHeight: "50vh" }}>
+    <section data-screen-label="Contact" style={{ padding: "100px 0", animation: "fadeUp 0.25s ease both", minHeight: "50vh" }}>
       <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 13, color: colors.accent, marginBottom: 14 }}>
         {"// get in touch"}
       </div>

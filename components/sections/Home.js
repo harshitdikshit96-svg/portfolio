@@ -4,10 +4,11 @@ import { HOME_PROJECTS, FACT_CHIPS, MARQUEE_ITEMS } from "@/lib/data";
 import ImageSlot from "@/components/ImageSlot";
 import Reveal from "@/components/Reveal";
 import Services from "@/components/sections/Services";
+import CtaBand from "@/components/CtaBand";
 
 export default function Home() {
   return (
-    <section data-screen-label="Home" style={{ animation: "fadeUp 0.6s ease both" }}>
+    <section data-screen-label="Home" style={{ animation: "fadeUp 0.25s ease both" }}>
       <div className="hero-grid" style={{ padding: "90px 0 60px", position: "relative", zIndex: 1 }}>
         <div>
           <div
@@ -152,6 +153,8 @@ export default function Home() {
           view all projects →
         </Link>
       </div>
+
+      <CtaBand />
     </section>
   );
 }

@@ -2,10 +2,11 @@ import { colors } from "@/lib/colors";
 import { PROJECTS } from "@/lib/data";
 import ImageSlot from "@/components/ImageSlot";
 import Reveal from "@/components/Reveal";
+import CtaBand from "@/components/CtaBand";
 
 export default function Work() {
   return (
-    <section data-screen-label="Work" style={{ padding: "80px 0 40px", animation: "fadeUp 0.5s ease both" }}>
+    <section data-screen-label="Work" style={{ padding: "80px 0 40px", animation: "fadeUp 0.25s ease both" }}>
       <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 13, color: colors.accent, marginBottom: 12 }}>
         {"// things I've built"}
       </div>
@@ -75,6 +76,11 @@ export default function Work() {
           </Reveal>
         ))}
       </div>
+
+      <CtaBand
+        heading="Like what you see?"
+        subtext="I take on a small number of freelance projects at a time — reach out if the timing works."
+      />
     </section>
   );
 }

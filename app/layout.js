@@ -14,6 +14,7 @@ export const metadata = {
     template: "%s — harshit.dev",
   },
   description: defaultDescription,
+  alternates: { canonical: "/" },
   keywords: [
     "freelance web developer",
     "technical consultant",
@@ -44,6 +45,7 @@ const personJsonLd = {
   url: siteUrl,
   jobTitle: "Freelance Technical Consultant & Web Solutions Architect",
   description: defaultDescription,
+  image: `${siteUrl}/images/hero-portrait.webp`,
   email: `mailto:${SOCIAL.email}`,
   sameAs: [SOCIAL.linkedin, SOCIAL.github],
   alumniOf: {

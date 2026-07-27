@@ -2,10 +2,11 @@ import { colors } from "@/lib/colors";
 import { EXPERIENCE, SKILL_GROUPS, TALKS, SOCIAL } from "@/lib/data";
 import ImageSlot from "@/components/ImageSlot";
 import Reveal from "@/components/Reveal";
+import CtaBand from "@/components/CtaBand";
 
 export default function About() {
   return (
-    <section data-screen-label="About" style={{ padding: "80px 0 40px", animation: "fadeUp 0.5s ease both" }}>
+    <section data-screen-label="About" style={{ padding: "80px 0 40px", animation: "fadeUp 0.25s ease both" }}>
       <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 13, color: colors.accent, marginBottom: 12 }}>
         {"// who I am"}
       </div>
@@ -160,6 +161,8 @@ export default function About() {
       >
         ↓ download resume (pdf)
       </a>
+
+      <CtaBand />
     </section>
   );
 }

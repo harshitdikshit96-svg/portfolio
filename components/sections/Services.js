@@ -22,10 +22,27 @@ export default function Services() {
               border: `1px solid ${colors.border}`,
               borderRadius: 12,
               padding: 26,
+              display: "flex",
+              flexDirection: "column",
             }}
           >
-            <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 10 }}>{service.title}</div>
-            <div style={{ fontSize: 15, lineHeight: 1.65, color: colors.textDimmer }}>{service.desc}</div>
+            <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 11, color: colors.accent, marginBottom: 10, letterSpacing: "0.04em" }}>
+              {service.title.toUpperCase()}
+            </div>
+            <div style={{ fontSize: 19, fontWeight: 600, lineHeight: 1.35, marginBottom: 10 }}>{service.outcome}</div>
+            <div style={{ fontSize: 15, lineHeight: 1.65, color: colors.textDimmer, marginBottom: 16 }}>{service.desc}</div>
+            <div
+              style={{
+                marginTop: "auto",
+                fontFamily: "'Times New Roman', Times, serif",
+                fontSize: 12.5,
+                color: colors.textFaint,
+                paddingTop: 14,
+                borderTop: `1px solid ${colors.border}`,
+              }}
+            >
+              {service.engagement}
+            </div>
           </Reveal>
         ))}
       </div>
