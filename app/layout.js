@@ -3,9 +3,9 @@ import SiteChrome from "@/components/SiteChrome";
 import { SOCIAL, SKILL_GROUPS, SERVICES } from "@/lib/data";
 
 const siteUrl = "https://www.harshitcreates.in";
-const defaultTitle = "Harshit Dixit — Freelance Technical Consultant & Web Solutions Architect";
+const defaultTitle = "Harshit Dixit — Freelance Website Developer & Technical Consultant, Lucknow";
 const defaultDescription =
-  "Five-plus years shipping frontend and full-stack systems for large consumer platforms. Now taking on freelance web development, architecture reviews, and technical consulting.";
+  "Freelance website design and development, technical consulting, and architecture audits — based in Lucknow, working with local and remote clients. Five-plus years shipping production systems at Acko and Bigbasket.";
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
@@ -15,8 +15,17 @@ export const metadata = {
   },
   description: defaultDescription,
   alternates: { canonical: "/" },
+  // Mixes the plain-language terms a local business owner actually
+  // searches ("website design", "web developer near me") with the more
+  // specific technical terms that qualify inbound leads once they land —
+  // Google no longer weighs this tag for ranking, but it costs nothing to
+  // keep accurate and other engines/aggregators still read it.
   keywords: [
+    "website design Lucknow",
+    "website development Lucknow",
+    "web developer near me",
     "freelance web developer",
+    "freelance website developer",
     "technical consultant",
     "React developer",
     "Next.js developer",
@@ -36,6 +45,11 @@ export const metadata = {
     title: defaultTitle,
     description: defaultDescription,
   },
+  manifest: "/site.webmanifest",
+};
+
+export const viewport = {
+  themeColor: "#1a120e",
 };
 
 const personJsonLd = {

@@ -35,10 +35,13 @@ export default function Home() {
             Builds web products that{" "}
             <span style={{ fontStyle: "italic", color: colors.accent }}>hold up</span> at scale.
           </h1>
-          <p style={{ fontSize: 18, lineHeight: 1.7, color: colors.textDim, maxWidth: 540, margin: "0 0 34px" }}>
+          <p style={{ fontSize: 18, lineHeight: 1.7, color: colors.textDim, maxWidth: 540, margin: "0 0 16px" }}>
             Five-plus years shipping frontend and full-stack systems for large consumer platforms — previously
             leading engineering ventures at Acko and Bigbasket. IIIT Lucknow, B.Tech IT. Now taking on select
-            freelance and consulting work.
+            freelance website design and development, technical consulting, and architecture work.
+          </p>
+          <p style={{ fontSize: 14, color: colors.textFaint, maxWidth: 540, margin: "0 0 34px", letterSpacing: "0.02em" }}>
+            Based in Lucknow — open to local and remote clients.
           </p>
           <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
             <Link href="/work" className="btn-primary">

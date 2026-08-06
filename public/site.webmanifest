@@ -1,0 +1,16 @@
+{
+  "name": "Harshit Dixit — Freelance Website Developer & Technical Consultant",
+  "short_name": "harshit.dev",
+  "description": "Freelance website design and development, technical consulting, and architecture audits based in Lucknow.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a120e",
+  "theme_color": "#1a120e",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

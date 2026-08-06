@@ -11,9 +11,13 @@ export default function Contact() {
       <h2 style={{ fontSize: "clamp(36px, 5.4vw, 60px)", margin: "0 0 24px", fontWeight: 700, letterSpacing: "-0.02em", maxWidth: 700 }}>
         Have a web problem worth solving properly?
       </h2>
-      <p style={{ fontSize: 17.5, lineHeight: 1.75, color: colors.textDim, maxWidth: 560, margin: "0 0 40px" }}>
-        Open to freelance and consulting work — architecture reviews, performance audits, or building the thing
-        outright. Tell me what you&apos;re working on and I&apos;ll reply within a couple of days.
+      <p style={{ fontSize: 17.5, lineHeight: 1.75, color: colors.textDim, maxWidth: 560, margin: "0 0 12px" }}>
+        Open to freelance and consulting work — website design and development, architecture reviews, performance
+        audits, or building the thing outright. Tell me what you&apos;re working on and I&apos;ll reply within a
+        couple of days.
+      </p>
+      <p style={{ fontSize: 14, color: colors.textFaint, maxWidth: 560, margin: "0 0 40px" }}>
+        Based in Lucknow — happy to meet locally, or work fully remote.
       </p>
 
       <ContactForm />
