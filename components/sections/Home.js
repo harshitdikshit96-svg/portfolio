@@ -5,6 +5,8 @@ import ImageSlot from "@/components/ImageSlot";
 import Reveal from "@/components/Reveal";
 import Services from "@/components/sections/Services";
 import CtaBand from "@/components/CtaBand";
+import UspBanner from "@/components/UspBanner";
+import ConsultationCta from "@/components/ConsultationCta";
 
 export default function Home() {
   return (
@@ -71,6 +73,8 @@ export default function Home() {
         </div>
       </div>
 
+      <UspBanner />
+
       <div
         className="marquee-wrap"
         style={{
@@ -120,6 +124,8 @@ export default function Home() {
       </div>
 
       <Services />
+
+      <ConsultationCta />
 
       <div style={{ margin: "100px 0" }}>
         <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 13, color: colors.teal, marginBottom: 14 }}>

@@ -1,6 +1,7 @@
 import { colors } from "@/lib/colors";
 import { SOCIAL } from "@/lib/data";
 import ContactForm from "@/components/ContactForm";
+import ConsultationCta from "@/components/ConsultationCta";
 
 export default function Contact() {
   return (
@@ -21,6 +22,11 @@ export default function Contact() {
       </p>
 
       <ContactForm />
+
+      <ConsultationCta
+        heading="Or skip the form — book a slot directly"
+        subtext="Free 30-minute call, no obligation. Pick whatever time works for you."
+      />
 
       <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap", margin: "48px 0 24px" }}>
         <span style={{ fontSize: 14, color: colors.textFaintest }}>or reach me directly —</span>

@@ -146,6 +146,10 @@ function Nav() {
             <span className="freelance-pill-dot" />
             open to freelance
           </a>
+
+          <Link href="/contact" className="btn-primary" style={{ padding: "10px 20px", fontSize: 13.5 }}>
+            Free consultation →
+          </Link>
         </div>
 
         <button
@@ -211,6 +215,9 @@ function Nav() {
             <span className="freelance-pill-dot" />
             open to freelance
           </a>
+          <Link href="/contact" className="btn-primary" style={{ margin: "0 10px 8px", textAlign: "center" }}>
+            Free consultation →
+          </Link>
         </div>
       </div>
     </nav>

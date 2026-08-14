@@ -35,6 +35,11 @@ function Footer() {
         <a href={SOCIAL.github} target="_blank" rel="noopener noreferrer" style={{ color: colors.textFaintest }}>
           github
         </a>
+        {SOCIAL.gbpUrl && (
+          <a href={SOCIAL.gbpUrl} target="_blank" rel="noopener noreferrer" style={{ color: colors.textFaintest }}>
+            google reviews
+          </a>
+        )}
       </div>
     </footer>
   );

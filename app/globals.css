@@ -536,6 +536,136 @@ select:focus-visible {
   }
 }
 
+/* ---------- USP banner ---------- */
+.usp-banner {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1px;
+  background: oklch(0.32 0.035 45);
+  border: 1px solid oklch(0.32 0.035 45);
+  border-radius: 12px;
+  overflow: hidden;
+}
+@media (max-width: 900px) {
+  .usp-banner {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 520px) {
+  .usp-banner {
+    grid-template-columns: 1fr;
+  }
+}
+.usp-item {
+  background: oklch(0.20 0.04 42);
+  padding: 20px 16px;
+  text-align: center;
+  transition: background-color 0.2s;
+}
+.usp-item:hover {
+  background: oklch(0.23 0.045 42);
+}
+
+/* ---------- Packages / add-on selector ---------- */
+.package-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+@media (max-width: 1024px) {
+  .package-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .package-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.package-card {
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  text-align: left;
+}
+.package-card:hover {
+  transform: translateY(-3px);
+}
+.package-card.selected {
+  border-color: oklch(0.76 0.13 60) !important;
+  box-shadow: 0 16px 32px -20px oklch(0.06 0.02 40 / 0.7);
+}
+
+.addon-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+@media (max-width: 700px) {
+  .addon-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.addon-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid oklch(0.32 0.035 45);
+  background: oklch(0.20 0.04 42);
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+.addon-row:hover {
+  border-color: oklch(0.38 0.035 45);
+}
+.addon-row.checked {
+  border-color: oklch(0.76 0.13 60);
+  background: oklch(0.22 0.045 42);
+}
+.addon-checkbox {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  accent-color: oklch(0.76 0.13 60);
+  flex-shrink: 0;
+}
+
+.price-summary {
+  position: sticky;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 20px 24px;
+  border-radius: 14px;
+  background: oklch(0.20 0.04 42);
+  border: 1px solid oklch(0.38 0.035 45);
+  box-shadow: 0 20px 40px -20px oklch(0.06 0.02 40 / 0.8);
+}
+
+/* ---------- Consultation / Calendly block ---------- */
+.consultation-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: center;
+}
+@media (max-width: 860px) {
+  .consultation-block {
+    grid-template-columns: 1fr;
+  }
+}
+.calendly-frame {
+  width: 100%;
+  min-height: 480px;
+  border: 1px solid oklch(0.32 0.035 45);
+  border-radius: 12px;
+  background: oklch(0.20 0.04 42);
+}
+
 /* ---------- Contact form ---------- */
 .contact-field {
   width: 100%;

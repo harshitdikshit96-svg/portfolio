@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { colors } from "@/lib/colors";
 import { SERVICES } from "@/lib/data";
 import Reveal from "@/components/Reveal";
@@ -46,6 +47,18 @@ export default function Services() {
           </Reveal>
         ))}
       </div>
+      <Link
+        href="/packages"
+        style={{
+          display: "inline-block",
+          marginTop: 26,
+          fontFamily: "'Times New Roman', Times, serif",
+          fontSize: 13,
+          color: colors.accent,
+        }}
+      >
+        see packages, add-ons &amp; starting prices →
+      </Link>
     </div>
   );
 }
