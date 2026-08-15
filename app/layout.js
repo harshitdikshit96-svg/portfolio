@@ -1,7 +1,8 @@
+import Script from "next/script";
 import { Space_Grotesk, Public_Sans } from "next/font/google";
 import "./globals.css";
 import SiteChrome from "@/components/SiteChrome";
-import { SOCIAL, SKILL_GROUPS, SERVICES } from "@/lib/data";
+import { SOCIAL, SKILL_GROUPS, SERVICES, GTM_ID } from "@/lib/data";
 
 // Space Grotesk (headings) + Public Sans (body) replace the site's old
 // system-serif look as part of the "Harshit Creates" redesign — see
@@ -155,6 +156,26 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" data-scroll-behavior="smooth" className={`${spaceGrotesk.variable} ${publicSans.variable}`}>
       <body>
+        {/* Google Tag Manager — GA4 and any future tags/pixels are configured
+            inside the GTM container itself (tagmanager.google.com), not
+            hardcoded here. See GTM_ID in lib/data.js. */}
+        <Script id="gtm-script" strategy="afterInteractive">
+          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','${GTM_ID}');`}
+        </Script>
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+            title="Google Tag Manager"
+          />
+        </noscript>
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
