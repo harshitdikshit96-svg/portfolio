@@ -2,6 +2,7 @@ import { colors } from "@/lib/colors";
 import PackageBuilder from "@/components/PackageBuilder";
 import ConsultationCta from "@/components/ConsultationCta";
 import UspBanner from "@/components/UspBanner";
+import Services from "@/components/sections/Services";
 
 export const metadata = {
   title: "Packages & Pricing",
@@ -13,7 +14,7 @@ export const metadata = {
 export default function Page() {
   return (
     <section data-screen-label="Packages" style={{ padding: "80px 0 40px", animation: "fadeUp 0.25s ease both" }}>
-      <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 13, color: colors.accent, marginBottom: 12 }}>
+      <div style={{ fontSize: 13, color: colors.accent, marginBottom: 12 }}>
         {"// packages & pricing"}
       </div>
       <h1 style={{ fontSize: "clamp(32px, 4.4vw, 48px)", margin: "0 0 18px", fontWeight: 700, letterSpacing: "-0.02em", maxWidth: 700 }}>
@@ -25,9 +26,13 @@ export default function Page() {
         site? Every add-on below is available standalone too.
       </p>
 
-      <UspBanner />
+      <div style={{ marginBottom: 60 }}>
+        <UspBanner />
+      </div>
 
       <PackageBuilder />
+
+      <Services />
 
       <ConsultationCta />
     </section>

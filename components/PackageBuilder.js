@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { colors } from "@/lib/colors";
-import { PACKAGE_TIERS, ADDONS, SOCIAL } from "@/lib/data";
+import { PACKAGE_TIERS, ADDONS, SOCIAL, PROMO, getDiscountedPrice } from "@/lib/data";
 
 const formatRs = (n) => `₹${n.toLocaleString("en-IN")}`;
 
@@ -19,10 +19,11 @@ export default function PackageBuilder() {
 
   const tier = PACKAGE_TIERS.find((t) => t.id === tierId);
   const selectedAddons = ADDONS.filter((a) => addonIds.includes(a.id));
+  const tierPrice = getDiscountedPrice(tier?.basePriceFrom ?? 0);
 
   const total = useMemo(
-    () => (tier?.basePriceFrom ?? 0) + selectedAddons.reduce((sum, a) => sum + a.price, 0),
-    [tier, selectedAddons]
+    () => tierPrice + selectedAddons.reduce((sum, a) => sum + a.price, 0),
+    [tierPrice, selectedAddons]
   );
 
   const toggleAddon = (id) =>
@@ -31,7 +32,7 @@ export default function PackageBuilder() {
   const handleRequest = () => {
     const subject = `Package inquiry: ${tier.name}${selectedAddons.length ? " + add-ons" : ""}`;
     const lines = [
-      `Package: ${tier.name} (starting at ${formatRs(tier.basePriceFrom)})`,
+      `Package: ${tier.name} (starting at ${formatRs(tierPrice)}${PROMO.active ? `, discounted from ${formatRs(tier.basePriceFrom)}` : ""})`,
       selectedAddons.length ? "Add-ons:" : null,
       ...selectedAddons.map((a) => `  - ${a.name} (${formatRs(a.price)})`),
       "",
@@ -48,6 +49,7 @@ export default function PackageBuilder() {
       <div className="package-grid" style={{ marginBottom: 40 }}>
         {PACKAGE_TIERS.map((t) => {
           const selected = t.id === tierId;
+          const price = getDiscountedPrice(t.basePriceFrom);
           return (
             <button
               key={t.id}
@@ -55,9 +57,9 @@ export default function PackageBuilder() {
               onClick={() => setTierId(t.id)}
               className={`package-card ${selected ? "selected" : ""}`}
               style={{
-                background: colors.bgCard,
-                border: `1px solid ${selected ? colors.accent : colors.border}`,
-                borderRadius: 12,
+                background: selected ? colors.accentTint : colors.bgCard,
+                border: `2px solid ${selected ? colors.accent : colors.border}`,
+                borderRadius: 10,
                 padding: 22,
                 display: "flex",
                 flexDirection: "column",
@@ -65,14 +67,24 @@ export default function PackageBuilder() {
                 color: colors.text,
               }}
             >
-              <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 11, color: colors.textFaint, letterSpacing: "0.04em" }}>
+              <div style={{ fontSize: 11, color: colors.textFaint, letterSpacing: "0.04em" }}>
                 {t.scope.toUpperCase()}
               </div>
               <div style={{ fontSize: 18, fontWeight: 700 }}>{t.name}</div>
               <div style={{ fontSize: 13.5, color: colors.textDimmer, lineHeight: 1.55, minHeight: 58 }}>{t.tagline}</div>
-              <div style={{ fontSize: 20, fontWeight: 700, color: colors.accent, marginTop: 4 }}>
-                {formatRs(t.basePriceFrom)}
-                <span style={{ fontSize: 12, color: colors.textFaint, fontWeight: 400 }}> starting at**</span>
+              <div style={{ marginTop: 4 }}>
+                <div style={{ fontSize: 11.5, color: colors.textFaint, fontWeight: 600, marginBottom: 2 }}>starts @</div>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+                  {PROMO.active && (
+                    <span style={{ fontSize: 14, color: colors.textFaintest, textDecoration: "line-through" }}>
+                      {formatRs(t.basePriceFrom)}
+                    </span>
+                  )}
+                  <span style={{ fontSize: 20, fontWeight: 700, color: colors.accent }}>{formatRs(price)}</span>
+                  {PROMO.active && (
+                    <span style={{ fontSize: 11, fontWeight: 700, color: colors.teal }}>{PROMO.discountPct}% OFF</span>
+                  )}
+                </div>
               </div>
               <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 6 }}>
                 {t.includes.map((line) => (
@@ -119,12 +131,18 @@ export default function PackageBuilder() {
 
       <div className="price-summary">
         <div>
+          <div style={{ fontSize: 11.5, color: colors.textFaint, fontWeight: 600, marginBottom: 2 }}>starts @</div>
           <div style={{ fontSize: 13, color: colors.textFaint, marginBottom: 4 }}>
             {tier.name}
             {selectedAddons.length ? ` + ${selectedAddons.length} add-on${selectedAddons.length > 1 ? "s" : ""}` : ""}
           </div>
-          <div style={{ fontSize: 26, fontWeight: 700 }}>
-            {formatRs(total)} <span style={{ fontSize: 13, color: colors.textFaint, fontWeight: 400 }}>starting at**</span>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+            <div style={{ fontSize: 26, fontWeight: 700 }}>{formatRs(total)}</div>
+            {PROMO.active && (
+              <span style={{ fontSize: 12, fontWeight: 700, color: colors.teal }}>
+                incl. {PROMO.discountPct}% off base package
+              </span>
+            )}
           </div>
         </div>
         <button type="button" className="btn-primary" onClick={handleRequest}>
@@ -132,7 +150,7 @@ export default function PackageBuilder() {
         </button>
       </div>
       <p style={{ fontSize: 12.5, color: colors.textFaintest, marginTop: 14 }}>
-        ** Every price here is a starting point, not a final quote — actual scope and cost are confirmed together on
+        Every price here is a starting point, not a final quote — actual scope and cost are confirmed together on
         the free consultation call. Nothing is charged by selecting a package.
       </p>
     </div>

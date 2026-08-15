@@ -19,14 +19,14 @@ export default function ConsultationCta({
       style={{
         margin: "90px 0",
         padding: "40px",
-        borderRadius: 16,
+        borderRadius: 10,
         background: colors.bgCard,
         border: `1px solid ${colors.border}`,
       }}
     >
       <div className="consultation-block">
         <div>
-          <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 13, color: colors.teal, marginBottom: 12 }}>
+          <div style={{ fontSize: 13, color: colors.teal, marginBottom: 12 }}>
             {"// free, no strings"}
           </div>
           <h2 style={{ fontSize: "clamp(24px, 3vw, 32px)", margin: "0 0 12px", fontWeight: 700, letterSpacing: "-0.01em" }}>

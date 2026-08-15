@@ -1,17 +1,38 @@
+import { Space_Grotesk, Public_Sans } from "next/font/google";
 import "./globals.css";
 import SiteChrome from "@/components/SiteChrome";
 import { SOCIAL, SKILL_GROUPS, SERVICES } from "@/lib/data";
 
+// Space Grotesk (headings) + Public Sans (body) replace the site's old
+// system-serif look as part of the "Harshit Creates" redesign — see
+// docs/seo-assets-baseline.md for what the previous look/palette was.
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-heading",
+  display: "swap",
+});
+const publicSans = Public_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-body",
+  display: "swap",
+});
+
 const siteUrl = "https://www.harshitcreates.in";
-const defaultTitle = "Harshit Dixit — Freelance Website Developer & Technical Consultant, Lucknow";
+const defaultTitle = "Harshit Dixit — Freelance Website Developer & Technical Consultant";
+// Leads with "for businesses anywhere" rather than the city — pricing and
+// process don't change by location, so the copy shouldn't over-index on
+// Lucknow either (the real local signals — areaServed, GBP — still live in
+// the JSON-LD below and don't need repeating in prose).
 const defaultDescription =
-  "Freelance website design and development, technical consulting, and architecture audits — based in Lucknow, working with local and remote clients. Five-plus years shipping production systems at Acko and Bigbasket.";
+  "Freelance website design and development, technical consulting, and architecture audits for businesses anywhere — remote-friendly, based in Lucknow. Five-plus years shipping production systems at Acko and Bigbasket.";
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default: defaultTitle,
-    template: "%s — harshit.dev",
+    template: "%s — harshitcreates",
   },
   description: defaultDescription,
   alternates: { canonical: "/" },
@@ -20,16 +41,31 @@ export const metadata = {
   // specific technical terms that qualify inbound leads once they land —
   // Google no longer weighs this tag for ranking, but it costs nothing to
   // keep accurate and other engines/aggregators still read it.
+  // Full target list (explicit asks + competitor-research terms from
+  // docs/v2-deliverables.md §1) is tracked in docs/seo-keywords.md, along
+  // with where each one is placed beyond this tag.
   keywords: [
+    "website developer near me",
+    "web developer near me",
+    "website developer in Lucknow",
+    "web developer in Lucknow",
+    "freelance website developer",
+    "freelance web developer",
+    "freelance website developer in Lucknow",
+    "portfolio website developer",
+    "portfolio website developer in Lucknow",
     "website design Lucknow",
     "website development Lucknow",
-    "web developer near me",
-    "freelance web developer",
-    "freelance website developer",
+    "website development company Lucknow",
+    "hire web developer Lucknow",
+    "best web developer in Lucknow",
+    "affordable website design Lucknow",
+    "small business website developer",
+    "custom website development Lucknow",
+    "ecommerce website developer Lucknow",
     "website audit service",
     "technical SEO audit",
     "SEO audit Lucknow",
-    "website developer in Lucknow",
     "Core Web Vitals audit",
     "SEO management services",
     "Google Business Profile optimization",
@@ -46,7 +82,7 @@ export const metadata = {
     title: defaultTitle,
     description: defaultDescription,
     url: siteUrl,
-    siteName: "harshit.dev",
+    siteName: "harshitcreates",
     type: "website",
   },
   twitter: {
@@ -58,7 +94,7 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: "#1a120e",
+  themeColor: "#EDE8F5",
 };
 
 const personJsonLd = {
@@ -117,7 +153,7 @@ const businessJsonLd = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" data-scroll-behavior="smooth">
+    <html lang="en" data-scroll-behavior="smooth" className={`${spaceGrotesk.variable} ${publicSans.variable}`}>
       <body>
         <script
           type="application/ld+json"

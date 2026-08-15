@@ -6,7 +6,7 @@ export default function Blog() {
       data-screen-label="Blog"
       style={{ padding: "120px 0", textAlign: "center", animation: "fadeUp 0.25s ease both", minHeight: "40vh" }}
     >
-      <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 60, color: colors.borderLight, marginBottom: 20 }}>
+      <div style={{ fontSize: 60, color: colors.borderLight, marginBottom: 20 }}>
         {"{ }"}
       </div>
       <h2 style={{ fontSize: 30, fontWeight: 600, margin: "0 0 10px" }}>Writing, soon.</h2>

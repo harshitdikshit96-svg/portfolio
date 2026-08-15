@@ -2,11 +2,12 @@ import { colors } from "@/lib/colors";
 import { SOCIAL } from "@/lib/data";
 import ContactForm from "@/components/ContactForm";
 import ConsultationCta from "@/components/ConsultationCta";
+import GbpSection from "@/components/GbpSection";
 
 export default function Contact() {
   return (
     <section data-screen-label="Contact" style={{ padding: "100px 0", animation: "fadeUp 0.25s ease both", minHeight: "50vh" }}>
-      <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 13, color: colors.accent, marginBottom: 14 }}>
+      <div style={{ fontSize: 13, color: colors.accent, marginBottom: 14 }}>
         {"// get in touch"}
       </div>
       <h2 style={{ fontSize: "clamp(36px, 5.4vw, 60px)", margin: "0 0 24px", fontWeight: 700, letterSpacing: "-0.02em", maxWidth: 700 }}>
@@ -33,7 +34,6 @@ export default function Contact() {
         <a
           href={`mailto:${SOCIAL.email}`}
           style={{
-            fontFamily: "'Times New Roman', Times, serif",
             fontSize: 14,
             padding: "10px 20px",
             background: "transparent",
@@ -45,7 +45,7 @@ export default function Contact() {
           {SOCIAL.email}
         </a>
       </div>
-      <div style={{ display: "flex", gap: 28, fontFamily: "'Times New Roman', Times, serif", fontSize: 14.5 }}>
+      <div style={{ display: "flex", gap: 28, fontSize: 14.5 }}>
         <a href={SOCIAL.linkedin} target="_blank" rel="noopener noreferrer">
           linkedin →
         </a>
@@ -53,6 +53,8 @@ export default function Contact() {
           github →
         </a>
       </div>
+
+      <GbpSection />
     </section>
   );
 }

@@ -6,7 +6,7 @@ import Reveal from "@/components/Reveal";
 export default function Services() {
   return (
     <div style={{ marginBottom: 100 }}>
-      <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 13, color: colors.teal, marginBottom: 14 }}>
+      <div style={{ fontSize: 13, color: colors.teal, marginBottom: 14 }}>
         {"// how I can help"}
       </div>
       <h2 style={{ fontSize: "clamp(26px, 3vw, 34px)", margin: "0 0 30px", fontWeight: 700, letterSpacing: "-0.01em" }}>
@@ -21,13 +21,13 @@ export default function Services() {
             style={{
               background: colors.bgCard,
               border: `1px solid ${colors.border}`,
-              borderRadius: 12,
+              borderRadius: 10,
               padding: 26,
               display: "flex",
               flexDirection: "column",
             }}
           >
-            <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 11, color: colors.accent, marginBottom: 10, letterSpacing: "0.04em" }}>
+            <div style={{ fontSize: 11, color: colors.accent, marginBottom: 10, letterSpacing: "0.04em" }}>
               {service.title.toUpperCase()}
             </div>
             <div style={{ fontSize: 19, fontWeight: 600, lineHeight: 1.35, marginBottom: 10 }}>{service.outcome}</div>
@@ -35,7 +35,6 @@ export default function Services() {
             <div
               style={{
                 marginTop: "auto",
-                fontFamily: "'Times New Roman', Times, serif",
                 fontSize: 12.5,
                 color: colors.textFaint,
                 paddingTop: 14,
@@ -52,7 +51,6 @@ export default function Services() {
         style={{
           display: "inline-block",
           marginTop: 26,
-          fontFamily: "'Times New Roman', Times, serif",
           fontSize: 13,
           color: colors.accent,
         }}

@@ -4,10 +4,9 @@ import { memo, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { colors } from "@/lib/colors";
-import { NAV_DEFS, SOCIAL } from "@/lib/data";
+import { NAV_DEFS } from "@/lib/data";
 
 const navLinkStyle = (active) => ({
-  fontFamily: "'Times New Roman', Times, serif",
   fontSize: 14,
   cursor: "pointer",
   padding: "6px 2px",
@@ -52,7 +51,10 @@ function Nav() {
     return () => window.removeEventListener("resize", measure);
   }, [pathname]);
 
-  const navItems = NAV_DEFS.map((item) => ({ ...item, active: pathname === item.href }));
+  // Lean header: only the items flagged `header: true` in NAV_DEFS show up
+  // in the top bar (desktop + mobile) — everything else lives in the
+  // footer's "Explore" column instead.
+  const navItems = NAV_DEFS.filter((item) => item.header).map((item) => ({ ...item, active: pathname === item.href }));
 
   const tabs = (
     <div className="nav-tabs" ref={tabsRef}>
@@ -111,41 +113,18 @@ function Nav() {
           href="/"
           className="nav-logo"
           style={{
-            fontFamily: "'Times New Roman', Times, serif",
             fontSize: 17,
             fontWeight: 700,
             letterSpacing: "-0.02em",
             color: colors.text,
           }}
         >
-          harshit<span style={{ color: colors.accent }}>.</span>dev
+          harshit<span style={{ color: colors.accent }}>creates</span>
           <span style={{ color: colors.accent, animation: "blink 1.1s step-start infinite" }}>_</span>
         </Link>
 
         <div className="nav-desktop-row">
           {tabs}
-
-          <a
-            href={SOCIAL.resumeHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="dashed-link"
-            style={{
-              fontFamily: "'Times New Roman', Times, serif",
-              fontSize: 13,
-              color: colors.textFainter,
-              borderBottom: `1px dashed ${colors.borderStrong}`,
-              paddingBottom: 2,
-              whiteSpace: "nowrap",
-            }}
-          >
-            Resume ↓
-          </a>
-
-          <a href={`mailto:${SOCIAL.email}`} className="freelance-pill">
-            <span className="freelance-pill-dot" />
-            open to freelance
-          </a>
 
           <Link href="/contact" className="btn-primary" style={{ padding: "10px 20px", fontSize: 13.5 }}>
             Free consultation →
@@ -197,25 +176,7 @@ function Nav() {
               )}
             </Link>
           ))}
-          <a
-            href={SOCIAL.resumeHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="nav-mobile-link"
-            style={{
-              fontFamily: "'Times New Roman', Times, serif",
-              fontSize: 15,
-              color: colors.textFainter,
-              padding: "12px 10px",
-            }}
-          >
-            Resume ↓
-          </a>
-          <a href={`mailto:${SOCIAL.email}`} className="freelance-pill" style={{ margin: "8px 10px 16px" }}>
-            <span className="freelance-pill-dot" />
-            open to freelance
-          </a>
-          <Link href="/contact" className="btn-primary" style={{ margin: "0 10px 8px", textAlign: "center" }}>
+          <Link href="/contact" className="btn-primary" style={{ margin: "8px 10px 8px", textAlign: "center" }}>
             Free consultation →
           </Link>
         </div>

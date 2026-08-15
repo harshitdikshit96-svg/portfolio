@@ -7,7 +7,7 @@ import CtaBand from "@/components/CtaBand";
 export default function About() {
   return (
     <section data-screen-label="About" style={{ padding: "80px 0 40px", animation: "fadeUp 0.25s ease both" }}>
-      <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 13, color: colors.accent, marginBottom: 12 }}>
+      <div style={{ fontSize: 13, color: colors.accent, marginBottom: 12 }}>
         {"// who I am"}
       </div>
       <h2 style={{ fontSize: "clamp(34px, 4.4vw, 50px)", margin: "0 0 22px", fontWeight: 700, letterSpacing: "-0.02em" }}>
@@ -43,7 +43,7 @@ export default function About() {
         />
       </div>
 
-      <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 13, color: colors.teal, margin: "40px 0 20px" }}>
+      <div style={{ fontSize: 13, color: colors.teal, margin: "40px 0 20px" }}>
         {"// 02 — experience"}
       </div>
       <div
@@ -69,7 +69,7 @@ export default function About() {
                 border: `2px solid ${colors.bg}`,
               }}
             />
-            <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 12, color: colors.textFaint, marginBottom: 6 }}>
+            <div style={{ fontSize: 12, color: colors.textFaint, marginBottom: 6 }}>
               {job.period}
             </div>
             <div style={{ fontSize: 20, fontWeight: 600, marginBottom: 3 }}>{job.role}</div>
@@ -81,14 +81,14 @@ export default function About() {
 
       <div className="about-two-col" style={{ marginBottom: 60 }}>
         <div>
-          <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 13, color: colors.teal, marginBottom: 18 }}>
+          <div style={{ fontSize: 13, color: colors.teal, marginBottom: 18 }}>
             {"// education"}
           </div>
           <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 4 }}>IIIT Lucknow</div>
           <div style={{ fontSize: 15, color: colors.textDimmer }}>B.Tech, Information Technology — 2017 to 2021</div>
         </div>
         <div>
-          <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 13, color: colors.teal, marginBottom: 18 }}>
+          <div style={{ fontSize: 13, color: colors.teal, marginBottom: 18 }}>
             {"// talks"}
           </div>
           {TALKS.map((talk, i) => (
@@ -107,7 +107,7 @@ export default function About() {
       </div>
 
       <div style={{ marginBottom: 20 }}>
-        <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 13, color: colors.teal, marginBottom: 18 }}>
+        <div style={{ fontSize: 13, color: colors.teal, marginBottom: 18 }}>
           {"// stack"}
         </div>
         {SKILL_GROUPS.map((grp) => (
@@ -116,7 +116,7 @@ export default function About() {
             delay={grp.delay}
             style={{ display: "flex", alignItems: "baseline", gap: 16, marginBottom: 14, flexWrap: "wrap" }}
           >
-            <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 12, color: colors.textFaint, width: 78, flexShrink: 0 }}>
+            <div style={{ fontSize: 12, color: colors.textFaint, width: 78, flexShrink: 0 }}>
               {grp.label}
             </div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -125,7 +125,6 @@ export default function About() {
                   key={s}
                   className="tag-chip"
                   style={{
-                    fontFamily: "'Times New Roman', Times, serif",
                     fontSize: 12.5,
                     padding: "5px 11px",
                     borderRadius: 6,
@@ -152,7 +151,6 @@ export default function About() {
           alignItems: "center",
           gap: 8,
           marginTop: 30,
-          fontFamily: "'Times New Roman', Times, serif",
           fontSize: 13,
           color: colors.textFaint,
           borderBottom: `1px dashed ${colors.borderStrong}`,

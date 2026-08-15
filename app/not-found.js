@@ -11,7 +11,7 @@ export default function NotFound() {
     <section
       style={{ padding: "140px 0", textAlign: "center", animation: "fadeUp 0.25s ease both", minHeight: "50vh" }}
     >
-      <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 72, color: colors.accent, marginBottom: 20 }}>
+      <div style={{ fontSize: 72, color: colors.accent, marginBottom: 20 }}>
         404
       </div>
       <h1 style={{ fontSize: "clamp(26px, 3.4vw, 36px)", fontWeight: 700, margin: "0 0 12px" }}>

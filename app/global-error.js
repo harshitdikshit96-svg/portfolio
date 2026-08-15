@@ -18,7 +18,7 @@ export default function GlobalError({ reset }) {
           justifyContent: "center",
           background: colors.bg,
           color: colors.text,
-          fontFamily: "'Times New Roman', Times, serif",
+          
           textAlign: "center",
           padding: 24,
         }}
@@ -32,7 +32,6 @@ export default function GlobalError({ reset }) {
             type="button"
             onClick={() => reset()}
             style={{
-              fontFamily: "'Times New Roman', Times, serif",
               fontSize: 15,
               padding: "14px 28px",
               background: colors.accent,

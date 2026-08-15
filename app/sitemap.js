@@ -1,6 +1,6 @@
 const siteUrl = "https://www.harshitcreates.in";
 
-const routes = ["", "/work", "/about", "/contact", "/blog"];
+const routes = ["", "/packages", "/services", "/work", "/about", "/contact", "/blog"];
 
 // No `lastModified` field: stamping every route with `new Date()` on every
 // build claims the content changed on every deploy, which Google's own

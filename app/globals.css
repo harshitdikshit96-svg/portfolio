@@ -12,20 +12,27 @@ body {
   padding: 0;
   max-width: 100vw;
   overflow-x: hidden;
-  background: oklch(0.16 0.035 45);
+  background: #EDE8F5;
+  color: #1B2036;
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
 }
 
 ::selection {
-  background: oklch(0.76 0.13 60 / 0.35);
+  background: color-mix(in srgb, #3D52A0 35%, transparent);
 }
 
 a {
-  color: oklch(0.76 0.13 60);
+  color: #3D52A0;
   text-decoration: none;
 }
 
 a:hover {
-  color: oklch(0.82 0.12 60);
+  color: #32458A;
 }
 
 @keyframes blink {
@@ -50,62 +57,23 @@ a:hover {
   }
 }
 
-@keyframes floatSlow {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
 @keyframes pulseDot {
   0%,
   100% {
-    box-shadow: 0 0 0 0 oklch(0.76 0.13 60 / 0.5);
+    box-shadow: 0 0 0 0 color-mix(in srgb, #3D52A0 50%, transparent);
   }
   50% {
-    box-shadow: 0 0 0 6px oklch(0.76 0.13 60 / 0);
-  }
-}
-
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@keyframes introLetter {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes introProgress {
-  from {
-    width: 0%;
-  }
-  to {
-    width: 100%;
+    box-shadow: 0 0 0 6px transparent;
   }
 }
 
 /* Real :hover rules replace the design tool's synthetic "style-hover" attribute. */
 .nav-link:hover {
-  color: oklch(0.93 0.02 68) !important;
+  color: #1B2036 !important;
 }
 
 .dashed-link:hover {
-  color: oklch(0.93 0.02 68) !important;
+  color: #1B2036 !important;
 }
 
 .nav-logo {
@@ -115,66 +83,181 @@ a:hover {
   opacity: 0.8;
 }
 
+.footer-link {
+  transition: color 0.2s ease;
+}
+.footer-link:hover {
+  color: #C3CBEB !important;
+}
+
+.discount-banner {
+  position: relative;
+  z-index: 21;
+  background: #1B2036;
+  color: #F7F7FB;
+}
+.discount-banner-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 10px 6vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-size: 13.5px;
+  text-align: center;
+}
+.discount-banner-dismiss {
+  background: transparent;
+  border: none;
+  color: #8697C4;
+  cursor: pointer;
+  font-size: 12px;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  transition: background-color 0.2s, color 0.2s;
+}
+.discount-banner-dismiss:hover {
+  background: color-mix(in srgb, #F7F7FB 15%, transparent);
+  color: #F7F7FB;
+}
+
 /* Keyboard-navigation focus ring — most of this site's interactive elements
-   are unstyled <a>/<button>s on a dark background, so the browser default
-   outline is either invisible or clashes. Tab through the site and it
-   should always be obvious where focus is. */
+   are unstyled <a>/<button>s, so the browser default outline is either
+   invisible or clashes. Tab through the site and it should always be
+   obvious where focus is. */
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
-  outline: 2px solid oklch(0.76 0.13 60);
+  outline: 2px solid #3D52A0;
   outline-offset: 3px;
   border-radius: 2px;
 }
 
 .btn-primary {
-  font-family: "Times New Roman", Times, serif;
+  font-family: var(--font-heading);
+  font-weight: 600;
   font-size: 15px;
   padding: 14px 28px;
-  background: oklch(0.76 0.13 60);
-  color: oklch(0.16 0.035 45);
+  background: #3D52A0;
+  color: #EDE8F5;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: 700;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
 }
 .btn-primary:hover {
+  background: #32458A;
   transform: translateY(-2px);
-  box-shadow: 0 12px 24px -12px oklch(0.76 0.13 60 / 0.55);
+  box-shadow: 0 12px 24px -12px color-mix(in srgb, #3D52A0 55%, transparent);
 }
 .btn-primary:active {
   transform: translateY(0) scale(0.97);
 }
 
 .btn-secondary {
-  font-family: "Times New Roman", Times, serif;
+  font-family: var(--font-heading);
+  font-weight: 600;
   font-size: 15px;
   padding: 14px 28px;
   background: transparent;
-  color: oklch(0.93 0.02 68);
-  border: 1px solid oklch(0.38 0.035 45);
+  color: #1B2036;
+  border: 1px solid color-mix(in srgb, #3D52A0 35%, transparent);
   border-radius: 8px;
   cursor: pointer;
   transition: border-color 0.2s, transform 0.2s;
 }
 .btn-secondary:hover {
-  border-color: oklch(0.76 0.13 60);
+  border-color: #3D52A0;
   transform: translateY(-2px);
 }
 .btn-secondary:active {
   transform: translateY(0) scale(0.97);
 }
 
+.sticky-cta-wrap {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sticky-cta-fab {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #3D52A0;
+  color: #EDE8F5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 28px -10px color-mix(in srgb, #1B2036 50%, transparent);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.2s, box-shadow 0.25s;
+}
+.sticky-cta-fab:hover {
+  background: #32458A;
+  transform: scale(1.08) rotate(-4deg);
+  box-shadow: 0 16px 32px -8px color-mix(in srgb, #1B2036 55%, transparent);
+}
+.sticky-cta-fab:active {
+  transform: scale(0.96);
+}
+.sticky-cta-tooltip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #1B2036;
+  color: #F7F7FB;
+  font-size: 13px;
+  padding: 10px 8px 10px 14px;
+  border-radius: 8px;
+  box-shadow: 0 10px 24px -10px color-mix(in srgb, #1B2036 50%, transparent);
+  animation: fadeUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  white-space: nowrap;
+}
+.sticky-cta-dismiss {
+  background: transparent;
+  border: none;
+  color: #8697C4;
+  cursor: pointer;
+  font-size: 12px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  transition: background-color 0.2s, color 0.2s;
+}
+.sticky-cta-dismiss:hover {
+  background: color-mix(in srgb, #F7F7FB 15%, transparent);
+  color: #F7F7FB;
+}
+@media (max-width: 640px) {
+  .sticky-cta-tooltip {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sticky-cta-fab {
+    transition: background-color 0.2s;
+  }
+  .sticky-cta-tooltip {
+    animation: none;
+  }
+}
+
 .project-card {
   transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 .project-card:hover {
-  border-color: oklch(0.76 0.13 60) !important;
+  border-color: #3D52A0 !important;
   transform: translateY(-3px);
-  box-shadow: 0 16px 32px -20px oklch(0.06 0.02 40 / 0.7);
+  box-shadow: 0 16px 32px -20px color-mix(in srgb, #1B2036 50%, transparent);
 }
 .project-card:active {
   transform: translateY(-1px) scale(0.99);
@@ -184,69 +267,83 @@ select:focus-visible {
   transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 .work-card:hover {
-  border-color: oklch(0.66 0.11 195) !important;
+  border-color: #7091E6 !important;
   transform: translateY(-3px);
-  box-shadow: 0 16px 32px -20px oklch(0.06 0.02 40 / 0.7);
+  box-shadow: 0 16px 32px -20px color-mix(in srgb, #1B2036 50%, transparent);
 }
 .work-card:active {
   transform: translateY(-1px) scale(0.99);
+}
+
+.template-card {
+  transition: border-color 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
+}
+.template-card:hover {
+  border-color: #7091E6 !important;
+  transform: translateY(-5px) scale(1.015);
+  box-shadow: 0 18px 36px -18px color-mix(in srgb, #1B2036 40%, transparent);
+}
+.template-card:active {
+  transform: translateY(-2px) scale(0.99);
 }
 
 .service-card {
   transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 .service-card:hover {
-  border-color: oklch(0.76 0.13 60) !important;
+  border-color: #3D52A0 !important;
   transform: translateY(-3px);
-  box-shadow: 0 16px 32px -20px oklch(0.06 0.02 40 / 0.7);
+  box-shadow: 0 16px 32px -20px color-mix(in srgb, #1B2036 50%, transparent);
 }
 .service-card:active {
   transform: translateY(-1px) scale(0.99);
 }
 
-/* Fact chips + skill/tag pills — small hover lift so the site reads as
-   interactive even where nothing is clickable, matching the rest of the UI. */
-.fact-chip,
+.tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12.5px;
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+.tag-outline {
+  border: 1px solid color-mix(in srgb, #3D52A0 35%, transparent);
+  color: #1B2036;
+}
+
+/* Skill/tag pills — small hover lift so the site reads as interactive even
+   where nothing is clickable, matching the rest of the UI. */
 .tag-chip {
   transition: border-color 0.2s, background-color 0.2s, transform 0.15s;
 }
-.fact-chip:hover {
-  background: oklch(0.23 0.045 42) !important;
-}
 .tag-chip:hover {
-  border-color: oklch(0.76 0.13 60) !important;
-  color: oklch(0.93 0.02 68) !important;
+  border-color: #3D52A0 !important;
+  color: #1B2036 !important;
 }
 
 .freelance-pill {
-  font-family: "Times New Roman", Times, serif;
   font-size: 12.5px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 9px 15px;
-  border: 1px solid oklch(0.38 0.035 45);
-  border-radius: 20px;
-  color: oklch(0.93 0.02 68);
+  border: 1px solid color-mix(in srgb, #3D52A0 35%, transparent);
+  border-radius: 10px;
+  color: #1B2036;
   white-space: nowrap;
   flex-shrink: 0;
   transition: border-color 0.2s, transform 0.15s;
 }
 .freelance-pill:hover {
-  border-color: oklch(0.76 0.13 60);
+  border-color: #3D52A0;
   transform: translateY(-1px);
 }
 .freelance-pill-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: oklch(0.76 0.13 60);
+  background: #3D52A0;
   animation: pulseDot 2s infinite;
-}
-
-/* Marquee pauses on hover so a curious cursor can actually read a word. */
-.marquee-wrap:hover .marquee-track {
-  animation-play-state: paused;
 }
 
 /* ---------- Scroll-reveal (see components/Reveal.js) ---------- */
@@ -279,7 +376,7 @@ select:focus-visible {
   position: absolute;
   bottom: -1px;
   height: 2px;
-  background: oklch(0.76 0.13 60);
+  background: #3D52A0;
   transition: left 0.3s ease, width 0.3s ease;
   pointer-events: none;
 }
@@ -306,13 +403,13 @@ select:focus-visible {
   transition: background-color 0.2s;
 }
 .nav-hamburger:hover {
-  background: oklch(1 0 0 / 0.06);
+  background: color-mix(in srgb, #1B2036 6%, transparent);
 }
 .nav-hamburger span {
   display: block;
   width: 100%;
   height: 2px;
-  background: oklch(0.93 0.02 68);
+  background: #1B2036;
   transition: transform 0.25s ease, opacity 0.2s ease;
 }
 .nav-hamburger.open span:nth-child(1) {
@@ -354,9 +451,9 @@ select:focus-visible {
     top: 100%;
     left: 0;
     right: 0;
-    background: oklch(0.08 0 0 / 0.98);
+    background: color-mix(in srgb, #F6F4FB 97%, transparent);
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid oklch(0.32 0.035 45);
+    border-bottom: 1px solid color-mix(in srgb, #3D52A0 20%, transparent);
     opacity: 0;
     transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
   }
@@ -421,8 +518,8 @@ select:focus-visible {
 }
 .nav-mobile-link:hover,
 .nav-mobile-link:active {
-  background: oklch(1 0 0 / 0.05);
-  color: oklch(0.93 0.02 68) !important;
+  background: color-mix(in srgb, #1B2036 5%, transparent);
+  color: #1B2036 !important;
 }
 
 /* Dims the page behind the open mobile menu — also gives users an obvious
@@ -435,7 +532,7 @@ select:focus-visible {
     display: block;
     position: fixed;
     inset: 0;
-    background: oklch(0 0 0 / 0.55);
+    background: color-mix(in srgb, #1B2036 55%, transparent);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease;
@@ -458,35 +555,6 @@ select:focus-visible {
 }
 
 /* ---------- Responsive layout grids ---------- */
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 36px;
-}
-.hero-portrait-wrap {
-  justify-self: center;
-}
-@media (min-width: 901px) {
-  .hero-grid {
-    grid-template-columns: 1fr 320px;
-    gap: 50px;
-    align-items: end;
-  }
-  .hero-portrait-wrap {
-    justify-self: end;
-  }
-}
-
-.fact-chips {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-}
-@media (max-width: 640px) {
-  .fact-chips {
-    grid-template-columns: 1fr;
-  }
-}
-
 .card-grid-2 {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -536,34 +604,101 @@ select:focus-visible {
   }
 }
 
-/* ---------- USP banner ---------- */
-.usp-banner {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 1px;
-  background: oklch(0.32 0.035 45);
-  border: 1px solid oklch(0.32 0.035 45);
-  border-radius: 12px;
+/* ---------- "Why us" tile carousel ---------- */
+.usp-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding: 4px 4px 12px;
+  margin: -4px -4px 0;
+  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+}
+.usp-track::-webkit-scrollbar {
+  display: none;
+}
+.usp-tile {
+  position: relative;
   overflow: hidden;
+  flex: 0 0 216px;
+  scroll-snap-align: start;
+  background: #F6F4FB;
+  border: 1.5px solid transparent;
+  border-radius: 10px;
+  padding: 22px;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, border-color 0.3s ease,
+    background-color 0.3s ease;
 }
-@media (max-width: 900px) {
-  .usp-banner {
-    grid-template-columns: repeat(2, 1fr);
+.usp-tile:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: #3D52A0;
+  background: #EEF0FA;
+  box-shadow: 0 18px 36px -16px color-mix(in srgb, #1B2036 30%, transparent);
+}
+.usp-tile-index {
+  position: absolute;
+  top: 6px;
+  right: 14px;
+  font-family: var(--font-heading);
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1;
+  color: #DCE1F5;
+  transition: color 0.3s ease;
+}
+.usp-tile:hover .usp-tile-index {
+  color: #C3CBEB;
+}
+.usp-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #EDE8F5;
+  border: 1.5px solid #C3CBEB;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease, background-color 0.3s ease;
+}
+.usp-tile:hover .usp-icon {
+  transform: scale(1.15) rotate(-6deg);
+  border-color: #3D52A0;
+  background: #3D52A0;
+}
+@media (max-width: 640px) {
+  .usp-tile {
+    flex-basis: 76vw;
   }
 }
-@media (max-width: 520px) {
-  .usp-banner {
-    grid-template-columns: 1fr;
-  }
+
+/* ---------- Service pricing cards ---------- */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
 }
-.usp-item {
-  background: oklch(0.20 0.04 42);
-  padding: 20px 16px;
-  text-align: center;
-  transition: background-color 0.2s;
+.pricing-card {
+  background: #F6F4FB;
+  padding: 24px;
+  border-radius: 10px;
+  border: 1.5px solid transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #1B2036;
+  text-decoration: none;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, border-color 0.25s ease;
 }
-.usp-item:hover {
-  background: oklch(0.23 0.045 42);
+.pricing-card:hover {
+  transform: translateY(-5px);
+  border-color: #3D52A0;
+  box-shadow: 0 14px 32px -16px color-mix(in srgb, #1B2036 26%, transparent);
 }
 
 /* ---------- Packages / add-on selector ---------- */
@@ -591,8 +726,8 @@ select:focus-visible {
   transform: translateY(-3px);
 }
 .package-card.selected {
-  border-color: oklch(0.76 0.13 60) !important;
-  box-shadow: 0 16px 32px -20px oklch(0.06 0.02 40 / 0.7);
+  border-color: #3D52A0 !important;
+  box-shadow: 0 16px 32px -20px color-mix(in srgb, #1B2036 50%, transparent);
 }
 
 .addon-grid {
@@ -611,23 +746,23 @@ select:focus-visible {
   gap: 12px;
   padding: 14px 16px;
   border-radius: 10px;
-  border: 1px solid oklch(0.32 0.035 45);
-  background: oklch(0.20 0.04 42);
+  border: 1px solid color-mix(in srgb, #3D52A0 20%, transparent);
+  background: #F6F4FB;
   cursor: pointer;
   transition: border-color 0.2s, background-color 0.2s;
 }
 .addon-row:hover {
-  border-color: oklch(0.38 0.035 45);
+  border-color: color-mix(in srgb, #3D52A0 35%, transparent);
 }
 .addon-row.checked {
-  border-color: oklch(0.76 0.13 60);
-  background: oklch(0.22 0.045 42);
+  border-color: #3D52A0;
+  background: #EEF0FA;
 }
 .addon-checkbox {
   margin-top: 3px;
   width: 16px;
   height: 16px;
-  accent-color: oklch(0.76 0.13 60);
+  accent-color: #3D52A0;
   flex-shrink: 0;
 }
 
@@ -640,10 +775,10 @@ select:focus-visible {
   gap: 16px;
   flex-wrap: wrap;
   padding: 20px 24px;
-  border-radius: 14px;
-  background: oklch(0.20 0.04 42);
-  border: 1px solid oklch(0.38 0.035 45);
-  box-shadow: 0 20px 40px -20px oklch(0.06 0.02 40 / 0.8);
+  border-radius: 10px;
+  background: #F6F4FB;
+  border: 1px solid color-mix(in srgb, #3D52A0 35%, transparent);
+  box-shadow: 0 20px 40px -20px color-mix(in srgb, #1B2036 55%, transparent);
 }
 
 /* ---------- Consultation / Calendly block ---------- */
@@ -661,9 +796,45 @@ select:focus-visible {
 .calendly-frame {
   width: 100%;
   min-height: 480px;
-  border: 1px solid oklch(0.32 0.035 45);
-  border-radius: 12px;
-  background: oklch(0.20 0.04 42);
+  border: 1px solid color-mix(in srgb, #3D52A0 20%, transparent);
+  border-radius: 10px;
+  background: #F6F4FB;
+}
+
+/* ---------- FAQ ---------- */
+.faq-item {
+  background: #F6F4FB;
+  border: 1.5px solid transparent;
+  border-radius: 10px;
+  padding: 18px 22px;
+  transition: border-color 0.2s ease;
+}
+.faq-item[open] {
+  border-color: #C3CBEB;
+}
+.faq-item summary {
+  cursor: pointer;
+  font-size: 15.5px;
+  font-weight: 600;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+.faq-item summary::after {
+  content: "+";
+  flex-shrink: 0;
+  font-size: 20px;
+  font-weight: 400;
+  color: #3D52A0;
+  transition: transform 0.25s ease;
+}
+.faq-item[open] summary::after {
+  transform: rotate(45deg);
 }
 
 /* ---------- Contact form ---------- */
@@ -672,16 +843,16 @@ select:focus-visible {
   font-family: "Times New Roman", Times, serif;
   font-size: 15px;
   padding: 13px 16px;
-  background: oklch(0.2 0.04 42);
-  border: 1px solid oklch(0.32 0.035 45);
+  background: #F6F4FB;
+  border: 1px solid color-mix(in srgb, #3D52A0 20%, transparent);
   border-radius: 8px;
-  color: oklch(0.93 0.02 68);
+  color: #1B2036;
   outline: none;
   transition: border-color 0.2s;
 }
 .contact-field:focus {
-  border-color: oklch(0.76 0.13 60);
+  border-color: #3D52A0;
 }
 .contact-field::placeholder {
-  color: oklch(0.56 0.02 55);
+  color: color-mix(in srgb, #1B2036 40%, transparent);
 }

@@ -15,7 +15,7 @@ export default function CtaBand({
       style={{
         margin: "100px 0 60px",
         padding: "48px 40px",
-        borderRadius: 16,
+        borderRadius: 10,
         background: colors.bgCard,
         border: `1px solid ${colors.border}`,
         textAlign: "center",

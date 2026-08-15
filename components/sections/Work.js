@@ -7,7 +7,7 @@ import CtaBand from "@/components/CtaBand";
 export default function Work() {
   return (
     <section data-screen-label="Work" style={{ padding: "80px 0 40px", animation: "fadeUp 0.25s ease both" }}>
-      <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 13, color: colors.accent, marginBottom: 12 }}>
+      <div style={{ fontSize: 13, color: colors.accent, marginBottom: 12 }}>
         {"// things I've built"}
       </div>
       <h2 style={{ fontSize: "clamp(34px, 4.4vw, 50px)", margin: "0 0 16px", fontWeight: 700, letterSpacing: "-0.02em" }}>
@@ -31,7 +31,7 @@ export default function Work() {
               display: "block",
               background: colors.bgCard,
               border: `1px solid ${colors.border}`,
-              borderRadius: 14,
+              borderRadius: 10,
               overflow: "hidden",
               color: colors.text,
             }}
@@ -44,7 +44,7 @@ export default function Work() {
               placeholder="project screenshot"
             />
             <div style={{ padding: 30 }}>
-              <div style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: 11, color: p.tint, marginBottom: 14 }}>
+              <div style={{ fontSize: 11, color: p.tint, marginBottom: 14 }}>
                 {p.index} · {p.role}
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
@@ -60,7 +60,6 @@ export default function Work() {
                     key={tag}
                     className="tag-chip"
                     style={{
-                      fontFamily: "'Times New Roman', Times, serif",
                       fontSize: 11,
                       padding: "5px 10px",
                       borderRadius: 6,
