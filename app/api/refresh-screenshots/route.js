@@ -68,7 +68,15 @@ export async function GET(request) {
           .webp({ quality: 82 })
           .toBuffer();
 
-        const blob = await put(`work-screenshots/${project.slug}.webp`, resized, {
+        // Vercel's Node runtime rejects a fetch body backed by a
+        // SharedArrayBuffer (a spec requirement undici enforces), and small
+        // Buffers from sharp/puppeteer can come out of Node's internal
+        // pooled-allocation memory, which trips that check. `new
+        // Uint8Array(resized)` forces a fresh, non-shared copy — cheap at
+        // this size (~20-40KB) — so `put()` always gets a body it'll accept.
+        const body = new Uint8Array(resized);
+
+        const blob = await put(`work-screenshots/${project.slug}.webp`, body, {
           access: "public",
           addRandomSuffix: false,
           contentType: "image/webp",
