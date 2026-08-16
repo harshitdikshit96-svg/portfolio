@@ -2,7 +2,7 @@ import Script from "next/script";
 import { Space_Grotesk, Public_Sans } from "next/font/google";
 import "./globals.css";
 import SiteChrome from "@/components/SiteChrome";
-import { SOCIAL, SKILL_GROUPS, SERVICES, GTM_ID, SITE_URL } from "@/lib/data";
+import { SOCIAL, SKILL_GROUPS, SERVICES, GTM_ID, SITE_URL, ROLE_TAGLINE } from "@/lib/data";
 
 // Space Grotesk (headings) + Public Sans (body) replace the site's old
 // system-serif look as part of the "Harshit Creates" redesign — see
@@ -21,13 +21,24 @@ const publicSans = Public_Sans({
 });
 
 const siteUrl = SITE_URL;
-const defaultTitle = "Harshit Dixit — Freelance Website Developer & Technical Consultant";
-// Leads with "for businesses anywhere" rather than the city — pricing and
-// process don't change by location, so the copy shouldn't over-index on
-// Lucknow either (the real local signals — areaServed, GBP — still live in
-// the JSON-LD below and don't need repeating in prose).
+// Google truncates title tags at roughly 580px on desktop (~50-60
+// characters for most fonts) and meta descriptions at roughly 155-160
+// characters — anything past that point is never shown in the SERP
+// snippet or a link-preview card, so it can't help SEO or a click-through
+// decision no matter what it says. The previous versions of both were over
+// those limits (title: 66 chars; description: 215, with the one concrete
+// credibility line — "shipping production systems at Acko and Bigbasket"
+// — sitting past character 160 and never actually rendering). Fixed by
+// tightening the title and moving that line to the front of the
+// description so it's inside the part that reliably displays.
+const defaultTitle = `Harshit Dixit — ${ROLE_TAGLINE}`;
+// Leads with the Acko/Bigbasket credibility line, then "for businesses
+// anywhere" rather than the city — pricing and process don't change by
+// location, so the copy shouldn't over-index on Lucknow either (the real
+// local signals — areaServed, GBP — still live in the JSON-LD below and
+// don't need repeating in prose).
 const defaultDescription =
-  "Freelance website design and development, technical consulting, and architecture audits for businesses anywhere — remote-friendly, based in Lucknow. Five-plus years shipping production systems at Acko and Bigbasket.";
+  "Freelance web developer — 5+ years shipping production systems at Acko and Bigbasket. Website design, development, technical consulting and audits, remote-friendly for businesses anywhere.";
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
@@ -103,7 +114,12 @@ const personJsonLd = {
   "@type": "Person",
   name: "Harshit Dixit",
   url: siteUrl,
-  jobTitle: "Freelance Technical Consultant & Web Solutions Architect",
+  // Deliberately fuller than ROLE_TAGLINE (which the <title> tag and OG
+  // image use — those have hard display-length limits this field doesn't).
+  // docs/seo-keywords.md tracks "web solutions architect" and "technical
+  // consultant" as placed here specifically; don't collapse this to
+  // ROLE_TAGLINE or that keyword placement is lost for no display benefit.
+  jobTitle: "Freelance Web Developer, Technical Consultant & Web Solutions Architect",
   description: defaultDescription,
   image: `${siteUrl}/images/hero-portrait.webp`,
   email: `mailto:${SOCIAL.email}`,

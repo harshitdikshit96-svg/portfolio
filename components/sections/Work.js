@@ -12,7 +12,8 @@ function ProjectCard({ p }) {
       <div
         className="work-card"
         style={{
-          background: colors.tileBg,
+          background: colors.bgCard,
+          border: `1px solid ${colors.border}`,
           borderRadius: 14,
           overflow: "hidden",
           color: colors.text,
@@ -69,7 +70,7 @@ export default async function Work() {
   // Overlays auto-refreshed live-site screenshots (see
   // app/api/refresh-screenshots) over the static fallback images — no-op
   // until that pipeline is set up, since getScreenshotManifest() returns {}
-  // when BLOB_MANIFEST_URL isn't configured yet.
+  // whenever the manifest blob hasn't been uploaded yet (see lib/screenshots.js).
   const manifest = await getScreenshotManifest();
   const liveProjects = withScreenshots(LIVE_PROJECTS, manifest);
   const templateProjects = withScreenshots(TEMPLATE_PROJECTS, manifest);

@@ -74,6 +74,13 @@ export default function Page() {
         <UspBanner />
       </div>
 
+      {/* GuaranteeBlock and PackageBuilder each open with an h3 — correct
+          when Home.js wraps them in its own visible h2 ("Start with a
+          budget..."), but here on /packages they'd otherwise sit directly
+          under the page h1 with no h2 between, a real heading-hierarchy
+          skip. An sr-only h2 closes the gap without adding visible copy
+          that wasn't asked for. */}
+      <h2 className="sr-only">The guarantee, and what you can add</h2>
       <GuaranteeBlock />
 
       <PackageBuilder />

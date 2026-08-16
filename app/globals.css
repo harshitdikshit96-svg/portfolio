@@ -104,6 +104,24 @@ select:focus-visible {
   border-radius: 2px;
 }
 
+/* Standard visually-hidden pattern — keeps content available to screen
+   readers and crawlers without changing anything on-screen. Used to fix
+   heading-hierarchy skips (h1 straight to h3) where inserting a *visible*
+   h2 would mean picking new on-page copy, which isn't a call to make
+   unilaterally, but the semantic gap is a real, fixable a11y/SEO issue on
+   its own. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .btn-primary {
   font-family: var(--font-heading);
   font-weight: 600;
@@ -243,11 +261,11 @@ select:focus-visible {
   transform: translateY(-1px) scale(0.99);
 }
 
-/* Thin "mat" around the tile screenshot — just enough for the card's own
-   background to show as a frame — instead of the image bleeding flush to
+/* Padded "mat" around the tile screenshot so it reads as an inset framed
+   photo (card background showing as a border) instead of bleeding flush to
    the card's edges. */
 .work-card-image-frame {
-  padding: 8px 8px 0;
+  padding: 14px 14px 0;
 }
 
 /* Image area of a work-card: crops/zooms the screenshot slightly on hover
@@ -257,7 +275,7 @@ select:focus-visible {
 .work-card-image {
   position: relative;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 .work-card-image img {
   transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
@@ -404,12 +422,18 @@ select:focus-visible {
 }
 
 .nav-hamburger {
+  /* 44x44 meets the WCAG 2.5.5 / iOS-HIG minimum touch target size — was
+     32x32, which is the mobile menu's only way to open nav on every mobile
+     pageview. The three bars stay the same width/thickness; only the
+     button's own hit area grows, so this doesn't change how the icon
+     looks, just how easy it is to tap. */
   display: none;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   gap: 5px;
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -422,8 +446,11 @@ select:focus-visible {
   background: color-mix(in srgb, #1B2036 6%, transparent);
 }
 .nav-hamburger span {
+  /* Fixed width (not 100%) so the icon itself stays the same visual size
+     now that the button's tap area is bigger — otherwise growing the
+     button to 44px would stretch the bars 37% wider too. */
   display: block;
-  width: 100%;
+  width: 22px;
   height: 2px;
   background: #1B2036;
   transition: transform 0.25s ease, opacity 0.2s ease;

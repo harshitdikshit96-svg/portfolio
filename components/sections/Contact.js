@@ -10,9 +10,9 @@ export default function Contact() {
       <div style={{ fontSize: 13, color: colors.accent, marginBottom: 14 }}>
         {"// get in touch"}
       </div>
-      <h2 style={{ fontSize: "clamp(36px, 5.4vw, 60px)", margin: "0 0 24px", fontWeight: 700, letterSpacing: "-0.02em", maxWidth: 700 }}>
+      <h1 style={{ fontSize: "clamp(36px, 5.4vw, 60px)", margin: "0 0 24px", fontWeight: 700, letterSpacing: "-0.02em", maxWidth: 700 }}>
         Have a web problem worth solving properly?
-      </h2>
+      </h1>
       <p style={{ fontSize: 17.5, lineHeight: 1.75, color: colors.textDim, maxWidth: 560, margin: "0 0 12px" }}>
         Open to freelance and consulting work — website design and development, architecture reviews, performance
         audits, or building the thing outright. Tell me what you&apos;re working on and I&apos;ll reply within a

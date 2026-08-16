@@ -91,9 +91,6 @@ export default async function Page({ params }) {
           shape="rounded"
           radius={10}
           placeholder="project screenshot"
-          style={{
-            boxShadow: "0 0 0 3px #FFFFFF, 0 0 0 4px color-mix(in srgb, #1B2036 75%, transparent)",
-          }}
         />
       </div>
 

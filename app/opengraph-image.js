@@ -1,7 +1,11 @@
 import { ImageResponse } from "next/og";
+import { ROLE_TAGLINE } from "@/lib/data";
 
-export const alt =
-  "Harshit Dixit — Freelance Technical Consultant & Web Solutions Architect";
+// Kept in sync with the <title> tag and Person JSON-LD's jobTitle via the
+// shared ROLE_TAGLINE constant — this card used to say "Freelance Technical
+// Consultant & Web Solutions Architect" while the title tag right below it
+// in a link-preview said something else, which read as inconsistent.
+export const alt = `Harshit Dixit — ${ROLE_TAGLINE}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -37,7 +41,7 @@ export default function Image() {
               marginBottom: 28,
             }}
           >
-            FREELANCE TECHNICAL CONSULTANT &amp; WEB SOLUTIONS ARCHITECT
+            {ROLE_TAGLINE.toUpperCase()}
           </div>
           <div
             style={{

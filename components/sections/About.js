@@ -10,9 +10,9 @@ export default function About() {
       <div style={{ fontSize: 13, color: colors.accent, marginBottom: 12 }}>
         {"// who I am"}
       </div>
-      <h2 style={{ fontSize: "clamp(34px, 4.4vw, 50px)", margin: "0 0 22px", fontWeight: 700, letterSpacing: "-0.02em" }}>
+      <h1 style={{ fontSize: "clamp(34px, 4.4vw, 50px)", margin: "0 0 22px", fontWeight: 700, letterSpacing: "-0.02em" }}>
         About
-      </h2>
+      </h1>
 
       <div className="about-bio-grid" style={{ marginBottom: 20 }}>
         <div>

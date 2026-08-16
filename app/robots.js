@@ -1,4 +1,6 @@
-const siteUrl = "https://www.harshitcreates.in";
+import { SITE_URL } from "@/lib/data";
+
+const siteUrl = SITE_URL;
 
 export default function robots() {
   return {
