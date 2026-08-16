@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import puppeteer from "puppeteer-core";
 import chromium from "@sparticuz/chromium";
 import sharp from "sharp";
@@ -98,6 +99,15 @@ export async function GET(request) {
       contentType: "application/json",
       cacheControlMaxAge: 60 * 60,
     });
+
+    // Home, Work, and every case-study page are statically generated at
+    // build time — the `next: { revalidate: 3600 }` on the manifest fetch
+    // only means Next *may* regenerate them in the background once an hour
+    // has passed AND someone visits. Without this, a fresh screenshot can
+    // sit uploaded in Blob for up to an hour before a visitor ever sees it.
+    // Purging the cache here means the very next visit after this run
+    // renders with the screenshots that were just captured.
+    revalidatePath("/", "layout");
 
     return NextResponse.json({ ok: true, results });
   } catch (err) {
