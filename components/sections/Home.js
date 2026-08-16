@@ -66,8 +66,7 @@ export default async function Home() {
               <div
                 className="work-card"
                 style={{
-                  background: colors.bgCard,
-                  border: `1px solid ${colors.border}`,
+                  background: colors.tileBg,
                   borderRadius: 14,
                   overflow: "hidden",
                   color: colors.text,

@@ -243,11 +243,11 @@ select:focus-visible {
   transform: translateY(-1px) scale(0.99);
 }
 
-/* Padded "mat" around the tile screenshot so it reads as an inset framed
-   photo (card background showing as a border) instead of bleeding flush to
+/* Thin "mat" around the tile screenshot — just enough for the card's own
+   background to show as a frame — instead of the image bleeding flush to
    the card's edges. */
 .work-card-image-frame {
-  padding: 14px 14px 0;
+  padding: 8px 8px 0;
 }
 
 /* Image area of a work-card: crops/zooms the screenshot slightly on hover
@@ -257,15 +257,7 @@ select:focus-visible {
 .work-card-image {
   position: relative;
   overflow: hidden;
-  border-radius: 10px;
-  /* A single-color border reads fine against a light screenshot but
-     disappears against a dark one (and vice versa). Layer a light "mat"
-     ring right against the image with a thin dark line just outside it —
-     one of the two always contrasts with the photo, so the edge stays
-     legible no matter what colors the screenshot itself has. */
-  box-shadow:
-    0 0 0 3px #FFFFFF,
-    0 0 0 4px color-mix(in srgb, #1B2036 75%, transparent);
+  border-radius: 8px;
 }
 .work-card-image img {
   transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);

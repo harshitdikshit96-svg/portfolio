@@ -24,6 +24,9 @@ const nextConfig = {
       },
     ],
   },
+  outputFileTracingIncludes: {
+    "/api/refresh-screenshots": ["./node_modules/@sparticuz/chromium/bin/**/*"],
+  },
 };
 
 export default nextConfig;
