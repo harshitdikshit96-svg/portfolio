@@ -27,11 +27,13 @@ automates the refresh step.
   Hobby plan cron jobs are free but capped at once/day with ±59min timing
   precision — see [Vercel's cron pricing docs](https://vercel.com/docs/cron-jobs/usage-and-pricing).
   That's fine here; a work-tile screenshot doesn't need tighter freshness.
-- `lib/screenshots.js` — `getScreenshotManifest()` fetches that manifest
-  (cached at the edge, revalidated hourly) and `withScreenshot()`/
-  `withScreenshots()` overlay a fresh blob URL onto a project's `image`/
-  `imageLg` fields. Wired into `Home.js`, `Work.js`, and
-  `app/work/[slug]/page.js`.
+- `lib/screenshots.js` — `getScreenshotManifest()` looks up that manifest by
+  its known Blob pathname (`head()`, cached at the edge, revalidated hourly)
+  and `withScreenshot()`/`withScreenshots()` overlay a fresh blob URL onto a
+  project's `image`/`imageLg` fields. Wired into `Home.js`, `Work.js`, and
+  `app/work/[slug]/page.js`. Uses the `BLOB_READ_WRITE_TOKEN`/
+  `BLOB_STORE_ID` Vercel auto-injects when the store is connected — no
+  separate env var to set for this part.
 - `next.config.mjs` — allow-lists `*.public.blob.vercel-storage.com` so
   `next/image` will render the blob-hosted screenshots.
 
@@ -55,18 +57,23 @@ purely additive.
 3. **Deploy** — pushing this branch/these files and deploying is what
    actually registers the cron job with Vercel; it does nothing before a
    deploy picks up `vercel.json`.
-4. **Set `BLOB_MANIFEST_URL`**: after the cron has run once (or trigger it
-   manually — see below), open the Blob store in the dashboard, find
-   `work-screenshots/manifest.json`, copy its public URL (looks like
-   `https://<store-id>.public.blob.vercel-storage.com/work-screenshots/manifest.json`),
-   and set it as the `BLOB_MANIFEST_URL` env var. Redeploy (or wait for the
-   next deploy) so `lib/screenshots.js` picks it up. This one manual step
-   only has to happen once — after that, the manifest content updates daily
-   without touching this env var again.
-5. **(Optional) Trigger the first run manually** instead of waiting up to a
+4. **(Optional) Trigger the first run manually** instead of waiting up to a
    day for the first cron fire: `curl -H "Authorization: Bearer <CRON_SECRET>" https://<your-domain>/api/refresh-screenshots`
    (or via the Vercel dashboard's "Cron Jobs" tab, which has a manual
    "Run" button once the project is deployed).
+
+That's it — the site picks up the screenshots on the very next visit after a
+successful run (the refresh route calls `revalidatePath` when it finishes),
+with no manifest URL to copy anywhere. The Blob store's own connection to
+the project is the only thing that has to exist; everything downstream of
+that reads it by pathname.
+
+**Important: make sure the Blob store is connected as Public, not Private.**
+Private stores require every read to go through an authenticated server
+route — `next/image` and this project's direct-URL approach only work
+against a public store. If you accidentally created a private one, create a
+new store with Public access and connect that instead (Vercel doesn't
+support converting an existing store's access mode).
 
 ## Notes / things to watch
 
