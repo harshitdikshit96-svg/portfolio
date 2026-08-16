@@ -1,18 +1,25 @@
 import Link from "next/link";
 import { colors } from "@/lib/colors";
 import { SERVICE_CATALOG, CALENDLY_URL } from "@/lib/data";
+import { pageMetadata, breadcrumbJsonLd } from "@/lib/seo";
 import ConsultationCta from "@/components/ConsultationCta";
 
-export const metadata = {
-  title: "Services",
+export const metadata = pageMetadata({
+  title: "Website & SEO Services",
   description:
-    "What each service actually is, explained in plain language — website and SEO audits, ongoing SEO management, industry-specific booking/ordering systems, and post-launch care plans — and what it does for your business.",
-  alternates: { canonical: "/services" },
-};
+    "Website and SEO help explained plainly — audits, ongoing SEO management, and industry-specific booking systems. Free 30-min call to scope what you need.",
+  path: "/services",
+});
+
+const breadcrumbs = breadcrumbJsonLd([
+  { name: "Home", path: "/" },
+  { name: "Services", path: "/services" },
+]);
 
 export default function Page() {
   return (
     <section data-screen-label="Services" style={{ padding: "80px 0 40px", animation: "fadeUp 0.25s ease both" }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }} />
       <div style={{ fontSize: 13, color: colors.accent, marginBottom: 12 }}>{"// services, explained"}</div>
       <h1 style={{ fontSize: "clamp(32px, 4.4vw, 48px)", margin: "0 0 18px", fontWeight: 700, letterSpacing: "-0.02em", maxWidth: 720 }}>
         What each service is, and what it actually does for you.

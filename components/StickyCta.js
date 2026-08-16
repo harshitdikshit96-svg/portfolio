@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CALENDLY_URL } from "@/lib/data";
 
 /**
@@ -12,9 +12,37 @@ import { CALENDLY_URL } from "@/lib/data";
  */
 export default function StickyCta() {
   const [dismissed, setDismissed] = useState(false);
+  // The bubble sits fixed bottom-right, which is exactly where the
+  // Calendly embed's own controls land on /contact and /packages — hide it
+  // while any `.calendly-frame` is in view so it never covers the primary
+  // conversion action.
+  const [overCalendly, setOverCalendly] = useState(false);
+
+  useEffect(() => {
+    const frames = document.querySelectorAll(".calendly-frame");
+    if (!frames.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        setOverCalendly((prev) => {
+          const next = new Set(prev instanceof Set ? prev : []);
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) next.add(entry.target);
+            else next.delete(entry.target);
+          });
+          return next;
+        });
+      },
+      { threshold: 0.15 }
+    );
+    frames.forEach((frame) => observer.observe(frame));
+    return () => observer.disconnect();
+  }, []);
+
+  const hidden = overCalendly instanceof Set && overCalendly.size > 0;
 
   return (
-    <div className="sticky-cta-wrap">
+    <div className="sticky-cta-wrap" style={hidden ? { opacity: 0, pointerEvents: "none" } : undefined}>
       {!dismissed && (
         <div className="sticky-cta-tooltip">
           <span>Free 30-min consultation?</span>

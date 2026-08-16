@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { colors } from "@/lib/colors";
-import { PACKAGE_TIERS, ADDONS, SOCIAL, PROMO, getDiscountedPrice } from "@/lib/data";
+import { PACKAGE_TIERS, ADDONS, SOCIAL } from "@/lib/data";
 
 const formatRs = (n) => `₹${n.toLocaleString("en-IN")}`;
 
@@ -19,7 +19,7 @@ export default function PackageBuilder() {
 
   const tier = PACKAGE_TIERS.find((t) => t.id === tierId);
   const selectedAddons = ADDONS.filter((a) => addonIds.includes(a.id));
-  const tierPrice = getDiscountedPrice(tier?.basePriceFrom ?? 0);
+  const tierPrice = tier?.basePriceFrom ?? 0;
 
   const total = useMemo(
     () => tierPrice + selectedAddons.reduce((sum, a) => sum + a.price, 0),
@@ -32,7 +32,7 @@ export default function PackageBuilder() {
   const handleRequest = () => {
     const subject = `Package inquiry: ${tier.name}${selectedAddons.length ? " + add-ons" : ""}`;
     const lines = [
-      `Package: ${tier.name} (starting at ${formatRs(tierPrice)}${PROMO.active ? `, discounted from ${formatRs(tier.basePriceFrom)}` : ""})`,
+      `Package: ${tier.name} (starting at ${formatRs(tierPrice)})`,
       selectedAddons.length ? "Add-ons:" : null,
       ...selectedAddons.map((a) => `  - ${a.name} (${formatRs(a.price)})`),
       "",
@@ -49,7 +49,7 @@ export default function PackageBuilder() {
       <div className="package-grid" style={{ marginBottom: 40 }}>
         {PACKAGE_TIERS.map((t) => {
           const selected = t.id === tierId;
-          const price = getDiscountedPrice(t.basePriceFrom);
+          const price = t.basePriceFrom;
           return (
             <button
               key={t.id}
@@ -75,15 +75,7 @@ export default function PackageBuilder() {
               <div style={{ marginTop: 4 }}>
                 <div style={{ fontSize: 11.5, color: colors.textFaint, fontWeight: 600, marginBottom: 2 }}>starts @</div>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
-                  {PROMO.active && (
-                    <span style={{ fontSize: 14, color: colors.textFaintest, textDecoration: "line-through" }}>
-                      {formatRs(t.basePriceFrom)}
-                    </span>
-                  )}
                   <span style={{ fontSize: 20, fontWeight: 700, color: colors.accent }}>{formatRs(price)}</span>
-                  {PROMO.active && (
-                    <span style={{ fontSize: 11, fontWeight: 700, color: colors.teal }}>{PROMO.discountPct}% OFF</span>
-                  )}
                 </div>
               </div>
               <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 6 }}>
@@ -138,11 +130,6 @@ export default function PackageBuilder() {
           </div>
           <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
             <div style={{ fontSize: 26, fontWeight: 700 }}>{formatRs(total)}</div>
-            {PROMO.active && (
-              <span style={{ fontSize: 12, fontWeight: 700, color: colors.teal }}>
-                incl. {PROMO.discountPct}% off base package
-              </span>
-            )}
           </div>
         </div>
         <button type="button" className="btn-primary" onClick={handleRequest}>

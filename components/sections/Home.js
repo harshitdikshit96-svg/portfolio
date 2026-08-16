@@ -1,13 +1,17 @@
 import { colors } from "@/lib/colors";
-import { CALENDLY_URL, TEMPLATE_SHOWCASE, PACKAGE_TIERS, PROMO, getDiscountedPrice } from "@/lib/data";
+import { CALENDLY_URL, LIVE_PROJECTS, TEMPLATE_PROJECTS } from "@/lib/data";
+import { getScreenshotManifest, withScreenshots } from "@/lib/screenshots";
 import ImageSlot from "@/components/ImageSlot";
 import Reveal from "@/components/Reveal";
 import UspBanner from "@/components/UspBanner";
+import HeroCarousel from "@/components/HeroCarousel";
+import GuaranteeBlock from "@/components/GuaranteeBlock";
 import PackageBuilder from "@/components/PackageBuilder";
 import ServiceCatalog from "@/components/ServiceCatalog";
 import ConsultationCta from "@/components/ConsultationCta";
 import FaqSection from "@/components/FaqSection";
 import GbpSection from "@/components/GbpSection";
+import Link from "next/link";
 
 const kickerStyle = {
   display: "inline-block",
@@ -26,54 +30,77 @@ const h2Style = {
   letterSpacing: "-0.01em",
 };
 
-export default function Home() {
+// Featured Work highlights: two real live builds, two capability demos —
+// pulled straight from the same data /work uses, no separate copy to keep
+// in sync.
+const FEATURED_WORK = [LIVE_PROJECTS[0], LIVE_PROJECTS[1], TEMPLATE_PROJECTS[0], TEMPLATE_PROJECTS[2]];
+
+export default async function Home() {
+  // See components/sections/Work.js for the full explanation — no-op until
+  // the screenshot-refresh pipeline is set up.
+  const manifest = await getScreenshotManifest();
+  const featuredWork = withScreenshots(FEATURED_WORK, manifest);
+
   return (
     <section data-screen-label="Home" style={{ animation: "fadeUp 0.25s ease both" }}>
-      <div style={{ padding: "90px 0 60px", position: "relative", zIndex: 1, maxWidth: 760 }}>
-        <span style={kickerStyle}>Websites · Local SEO · Booking Systems</span>
-        <h1
-          style={{
-            fontSize: "clamp(36px, 4.8vw, 58px)",
-            lineHeight: 1.1,
-            margin: "14px 0 0",
-            letterSpacing: "-0.01em",
-          }}
-        >
-          Websites &amp; local SEO for small, local businesses.
-        </h1>
-        <p style={{ fontSize: 18, lineHeight: 1.6, color: colors.textDim, maxWidth: "56ch", margin: "20px 0 0" }}>
-          For dentists, clinics, salons and local service businesses — same process and pricing wherever
-          you&apos;re based. Live in as fast as 24 hours, with a free first draft in about 3, so you see the real
-          thing before
-          you pay for anything.
-        </p>
-        <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginTop: 28 }}>
-          <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">
-            Book a free call
-          </a>
-          <a href="#packages" className="btn-secondary">
-            See packages &amp; prices
-          </a>
-        </div>
-        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 26 }}>
-          {[
-            `Starts @ ₹${getDiscountedPrice(PACKAGE_TIERS[0].basePriceFrom).toLocaleString("en-IN")}${PROMO.active ? ` (${PROMO.discountPct}% off)` : ""}`,
-            "First draft in ~3 hrs",
-            "Free 30-min call",
-            "Remote-friendly",
-          ].map((tag) => (
-            <span key={tag} className="tag tag-outline">
-              {tag}
-            </span>
-          ))}
-        </div>
-      </div>
+      <HeroCarousel />
 
       <div style={{ margin: "0 0 90px" }}>
         <span style={kickerStyle}>Why local businesses call first</span>
         <h2 style={h2Style}>Commitments most web developers won&apos;t make.</h2>
         <div style={{ marginTop: 28 }}>
           <UspBanner />
+        </div>
+      </div>
+
+      <div style={{ margin: "0 0 100px" }}>
+        <span style={kickerStyle}>Featured work</span>
+        <h2 style={h2Style}>Real builds, not mockups.</h2>
+        <p style={{ fontSize: 15.5, lineHeight: 1.6, color: colors.textDim, maxWidth: "62ch", margin: "14px 0 40px" }}>
+          A mix of live sites built for real businesses and capability demos showing the kind of work we can do for
+          yours.
+        </p>
+        <div className="card-grid-2">
+          {featuredWork.map((p) => (
+            <Reveal key={p.slug} delay={p.delay}>
+              <div
+                className="work-card"
+                style={{
+                  background: colors.bgCard,
+                  border: `1px solid ${colors.border}`,
+                  borderRadius: 14,
+                  overflow: "hidden",
+                  color: colors.text,
+                }}
+              >
+                <div className="work-card-image-frame">
+                  <div className="work-card-image">
+                    <ImageSlot src={p.image} alt={`${p.name} screenshot`} fill height={170} placeholder="project screenshot" />
+                    {p.url && (
+                      <a
+                        href={p.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="work-card-visit"
+                        aria-label={`Open the live ${p.name} site in a new tab`}
+                      >
+                        <span>Visit live site ↗</span>
+                      </a>
+                    )}
+                  </div>
+                </div>
+                <Link href={`/work/${p.slug}`} style={{ display: "block", padding: 26, color: "inherit" }}>
+                  <div style={{ fontSize: 19, fontWeight: 600, marginBottom: 8 }}>{p.name}</div>
+                  <div style={{ fontSize: 14, lineHeight: 1.6, color: colors.textDimmer }}>{p.tagline}</div>
+                </Link>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <div style={{ marginTop: 24 }}>
+          <Link href="/work" className="btn-secondary" style={{ display: "inline-block" }}>
+            See all work →
+          </Link>
         </div>
       </div>
 
@@ -84,6 +111,7 @@ export default function Home() {
           Pick a starting package, then add exactly what your business needs — the total updates as you go. Every
           add-on is also sellable on its own.
         </p>
+        <GuaranteeBlock />
         <PackageBuilder />
       </div>
 
@@ -121,31 +149,6 @@ export default function Home() {
         heading="Let's talk about your website — free, no pressure."
         subtext="30 minutes, on a call. Bring your questions; leave with a clear price and a plan."
       />
-
-      <div style={{ margin: "100px 0 40px" }}>
-        <span style={kickerStyle}>Custom templates</span>
-        <h2 style={h2Style}>A sense of what we can build for your industry.</h2>
-        <div className="card-grid-2" style={{ marginTop: 24 }}>
-          {TEMPLATE_SHOWCASE.map((t) => (
-            <Reveal
-              key={t.name}
-              delay={t.delay}
-              className="template-card"
-              style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: 10, overflow: "hidden" }}
-            >
-              <ImageSlot fill height={150} placeholder="template preview" />
-              <div style={{ padding: 22 }}>
-                <div style={{ fontSize: 19, fontWeight: 600, marginBottom: 10 }}>{t.name}</div>
-                <div style={{ fontSize: 14, lineHeight: 1.6, color: colors.textDimmer }}>{t.tagline}</div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-        <p style={{ fontSize: 13, color: colors.textFaintest, marginTop: 22, fontStyle: "italic" }}>
-          Placeholder previews for now — real template screenshots and live demos are a follow-up, not part of this
-          pass.
-        </p>
-      </div>
 
       <FaqSection />
 

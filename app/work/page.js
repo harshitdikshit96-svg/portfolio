@@ -1,12 +1,23 @@
 import Work from "@/components/sections/Work";
+import { pageMetadata, breadcrumbJsonLd } from "@/lib/seo";
 
-export const metadata = {
-  title: "Work",
+export const metadata = pageMetadata({
+  title: "Website Projects & Case Studies",
   description:
-    "Case studies and shipped projects by Harshit Dixit — Next.js and React builds spanning a drone-show startup, freelance client sites, and side projects.",
-  alternates: { canonical: "/work" },
-};
+    "Real, live websites built for real businesses, plus concept builds that show what we can do for yours — see the work, not just a portfolio pitch.",
+  path: "/work",
+});
+
+const breadcrumbs = breadcrumbJsonLd([
+  { name: "Home", path: "/" },
+  { name: "Work", path: "/work" },
+]);
 
 export default function Page() {
-  return <Work />;
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }} />
+      <Work />
+    </>
+  );
 }

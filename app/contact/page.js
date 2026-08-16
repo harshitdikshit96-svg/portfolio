@@ -1,12 +1,23 @@
 import Contact from "@/components/sections/Contact";
+import { pageMetadata, breadcrumbJsonLd } from "@/lib/seo";
 
-export const metadata = {
-  title: "Contact",
+export const metadata = pageMetadata({
+  title: "Contact a Website Developer",
   description:
-    "Get in touch with Harshit Dixit for freelance website design and development, architecture reviews, performance audits, or fractional CTO / technical advisory work — based in Lucknow, open to remote clients.",
-  alternates: { canonical: "/contact" },
-};
+    "Book a free 30-minute call or send a message — websites start at ₹4,000, live in as fast as 24 hours once content is ready.",
+  path: "/contact",
+});
+
+const breadcrumbs = breadcrumbJsonLd([
+  { name: "Home", path: "/" },
+  { name: "Contact", path: "/contact" },
+]);
 
 export default function Page() {
-  return <Contact />;
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }} />
+      <Contact />
+    </>
+  );
 }

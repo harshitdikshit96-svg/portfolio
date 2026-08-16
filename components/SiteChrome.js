@@ -2,7 +2,6 @@ import { colors } from "@/lib/colors";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import StickyCta from "@/components/StickyCta";
-import DiscountBanner from "@/components/DiscountBanner";
 
 export default function SiteChrome({ children }) {
   return (
@@ -27,7 +26,6 @@ export default function SiteChrome({ children }) {
         }}
       />
 
-      <DiscountBanner />
       <Nav />
 
       <main style={{ position: "relative", zIndex: 1, maxWidth: 1180, margin: "0 auto", padding: "0 6vw 100px" }}>

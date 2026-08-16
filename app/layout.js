@@ -2,7 +2,7 @@ import Script from "next/script";
 import { Space_Grotesk, Public_Sans } from "next/font/google";
 import "./globals.css";
 import SiteChrome from "@/components/SiteChrome";
-import { SOCIAL, SKILL_GROUPS, SERVICES, GTM_ID } from "@/lib/data";
+import { SOCIAL, SKILL_GROUPS, SERVICES, GTM_ID, SITE_URL } from "@/lib/data";
 
 // Space Grotesk (headings) + Public Sans (body) replace the site's old
 // system-serif look as part of the "Harshit Creates" redesign — see
@@ -20,7 +20,7 @@ const publicSans = Public_Sans({
   display: "swap",
 });
 
-const siteUrl = "https://www.harshitcreates.in";
+const siteUrl = SITE_URL;
 const defaultTitle = "Harshit Dixit — Freelance Website Developer & Technical Consultant";
 // Leads with "for businesses anywhere" rather than the city — pricing and
 // process don't change by location, so the copy shouldn't over-index on

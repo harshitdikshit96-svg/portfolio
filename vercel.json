@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/refresh-screenshots",
+      "schedule": "0 3 * * *"
+    }
+  ]
+}
