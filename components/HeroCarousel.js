@@ -38,8 +38,8 @@ const STEPS = [
 // Auto-advance interval and crossfade duration for the two-slide hero.
 // Crossfade is kept shorter than the interval so each slide gets a moment
 // fully settled before the next transition starts.
-const SLIDE_MS = 4000;
-const CROSSFADE_MS = 700;
+const SLIDE_MS = 1200;
+const CROSSFADE_MS = 400;
 
 const kickerStyle = {
   display: "inline-block",
@@ -62,16 +62,59 @@ export default function HeroCarousel() {
   const [paused, setPaused] = useState(false);
   const reducedMotionRef = useRef(false);
   const rootRef = useRef(null);
+  const stackRef = useRef(null);
+  const scrollEndTimerRef = useRef(null);
 
   useEffect(() => {
     reducedMotionRef.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }, []);
+
+  // Matches app/globals.css's `@media (max-width: 640px)` block that turns
+  // .hero-slide-stack into a horizontally-scrollable, snap-to-slide strip
+  // instead of an opacity crossfade — see that rule's comment for why.
+  const isMobileScrollMode = () =>
+    typeof window !== "undefined" && window.matchMedia("(max-width: 640px)").matches;
+
+  // Dot clicks go through this instead of setSlide directly — kept as a
+  // named entry point (even though it's a one-line wrapper today) so the
+  // "how do I change slides" answer stays in one place rather than
+  // spreading across every click handler.
+  const goToSlide = (index) => setSlide(index);
 
   useEffect(() => {
     if (paused || reducedMotionRef.current) return;
     const id = setInterval(() => setSlide((s) => (s + 1) % 2), SLIDE_MS);
     return () => clearInterval(id);
   }, [paused]);
+
+  // The single place that actually moves the strip on mobile — fires for
+  // every path that changes `slide` (dot click, auto-swap tick, or a
+  // manual swipe settling on the nearest slide below), so there's exactly
+  // one scrollTo call per slide change instead of duplicating it per caller.
+  useEffect(() => {
+    const el = stackRef.current;
+    if (!isMobileScrollMode() || !el) return;
+    el.scrollTo({ left: slide * el.clientWidth, behavior: reducedMotionRef.current ? "auto" : "smooth" });
+  }, [slide]);
+
+  // Fires continuously while the user swipes; a real manual scroll (versus
+  // the smooth-scroll from an auto-swap tick) should both pause the
+  // auto-swap timer for its duration and, once it settles, update `slide`
+  // to whichever slide the swipe landed on so the dots stay accurate.
+  // There's no cross-browser "scroll finished" event to hook here, so this
+  // debounces on a short idle gap instead.
+  const handleStackScroll = () => {
+    const el = stackRef.current;
+    if (!isMobileScrollMode() || !el) return;
+    setPaused(true);
+    if (scrollEndTimerRef.current) clearTimeout(scrollEndTimerRef.current);
+    scrollEndTimerRef.current = setTimeout(() => {
+      const width = el.clientWidth || 1;
+      const nearest = Math.round(el.scrollLeft / width);
+      setSlide(Math.max(0, Math.min(1, nearest)));
+      setPaused(false);
+    }, 150);
+  };
 
   // Scrolls to whatever section follows the hero — used by the "scroll for
   // more" affordance beneath the slide dots.
@@ -97,7 +140,7 @@ export default function HeroCarousel() {
       onTouchCancel={() => setPaused(false)}
       style={{ "--hero-crossfade": `${CROSSFADE_MS}ms` }}
     >
-      <div className="hero-slide-stack">
+      <div className="hero-slide-stack" ref={stackRef} onScroll={handleStackScroll}>
         {/* Slide 1: how-it-works process banner */}
         <div className={`hero-slide hero-slide-process ${slide === 0 ? "is-active" : ""}`} aria-hidden={slide !== 0}>
           <div className="hero-process-badge">
@@ -187,7 +230,7 @@ export default function HeroCarousel() {
             aria-selected={slide === 0}
             aria-label="Show how it works"
             className={slide === 0 ? "is-active" : ""}
-            onClick={() => setSlide(0)}
+            onClick={() => goToSlide(0)}
           />
           <button
             type="button"
@@ -195,7 +238,7 @@ export default function HeroCarousel() {
             aria-selected={slide === 1}
             aria-label="Show intro"
             className={slide === 1 ? "is-active" : ""}
-            onClick={() => setSlide(1)}
+            onClick={() => goToSlide(1)}
           />
         </div>
 

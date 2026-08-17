@@ -569,13 +569,20 @@ select:focus-visible {
    "tap anywhere to close" affordance, a standard mobile-nav pattern. */
 .nav-mobile-backdrop {
   display: none;
+  z-index: 1;
 }
 @media (max-width: 1024px) {
   .nav-mobile-backdrop {
     display: block;
     position: fixed;
     inset: 0;
-    background: color-mix(in srgb, #1B2036 55%, transparent);
+    /* Was 55% — legible enough behind it (hero copy still readable through
+       the tint) that it read as a layout bug rather than an intentional
+       dim, confirmed via a real device screenshot showing the hero's "how
+       it works" steps clearly through the open menu. 85% still reads as a
+       tint rather than a flat panel, but is dark enough that the menu no
+       longer visually competes with whatever's behind it. */
+    background: color-mix(in srgb, #1B2036 85%, transparent);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease;
@@ -853,6 +860,31 @@ select:focus-visible {
   flex-shrink: 0;
 }
 
+.addon-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px dashed color-mix(in srgb, #3D52A0 35%, transparent);
+  border-radius: 10px;
+  background: transparent;
+  color: #3D52A0;
+  font-family: var(--font-heading);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+.addon-toggle:hover,
+.addon-toggle:focus-visible {
+  background: color-mix(in srgb, #3D52A0 6%, transparent);
+  border-color: #3D52A0;
+  outline: none;
+}
+
 .price-summary {
   position: sticky;
   bottom: 16px;
@@ -968,6 +1000,39 @@ select:focus-visible {
   }
 }
 
+/* Below 640px, the two slides stop crossfading in place and become a real
+   horizontal swipe instead. Reason: the two slides have completely
+   different layouts (a 3-step list vs. a headline+portrait), so an opacity
+   crossfade between them briefly overlaps two dissimilar blocks of text at
+   the same position — legible enough on a wide desktop screen but a
+   genuinely broken-looking jumble on a phone-width screen (confirmed via
+   screenshot mid-transition). Side-by-side + scroll-snap never overlaps
+   the two, and gives mobile the swipe gesture a carousel is expected to
+   have. HeroCarousel.js reads this same 640px breakpoint via matchMedia to
+   scroll the container instead of just toggling the opacity class. */
+@media (max-width: 640px) {
+  .hero-slide-stack {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .hero-slide-stack::-webkit-scrollbar {
+    display: none;
+  }
+  .hero-slide {
+    grid-area: auto;
+    flex: 0 0 100%;
+    min-width: 0;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    opacity: 1;
+    pointer-events: auto;
+    transition: none;
+  }
+}
+
 .hero-process-badge {
   display: inline-flex;
   align-items: center;
@@ -1056,15 +1121,30 @@ select:focus-visible {
   font-size: 18px;
 }
 @media (max-width: 860px) {
+  .hero-process-heading {
+    margin-bottom: 26px;
+  }
   .hero-process-steps {
     flex-direction: column;
-    gap: 24px;
+    gap: 18px;
   }
   .hero-process-step {
     width: 100%;
   }
   .hero-process-step-row {
+    /* Was a vertical stack (icon above title above body) inherited
+       unchanged from the desktop 3-across layout — full-height per step,
+       times three stacked steps, made this single hero slide run to
+       nearly 900px tall on a tablet-width screen (confirmed via
+       screenshot). Icon-beside-text instead of icon-above-text cuts each
+       step to roughly half that height with no loss of content. */
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
     max-width: none;
+  }
+  .hero-process-icon {
+    margin-bottom: 0;
   }
   .hero-process-arrow {
     display: none;

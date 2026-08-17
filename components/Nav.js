@@ -100,6 +100,13 @@ function Nav() {
     <nav style={{ position: "sticky", top: 0, zIndex: 20 }}>
       <div
         style={{
+          position: "relative",
+          // backdropFilter below creates its own stacking context, so this
+          // row needs an explicit z-index (above .nav-mobile-backdrop's) or
+          // the fixed, full-viewport backdrop — a later sibling — paints
+          // over this row once open and swallows clicks meant for the
+          // hamburger button inside it.
+          zIndex: 2,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",

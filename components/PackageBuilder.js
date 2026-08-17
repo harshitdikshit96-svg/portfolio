@@ -1,10 +1,19 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { colors } from "@/lib/colors";
 import { PACKAGE_TIERS, ADDONS, SOCIAL } from "@/lib/data";
 
 const formatRs = (n) => `₹${n.toLocaleString("en-IN")}`;
+
+// Below this width the 2-column add-on grid (see .addon-grid in
+// globals.css) drops to a single column, and all 12 add-ons stacked one
+// per row runs to nearly 1000px of scrolling before the price summary
+// comes into view. Collapsing to a short preview + "show all" toggle only
+// below this width keeps the 2-column desktop/tablet layout — already a
+// reasonable, bounded height — untouched.
+const COLLAPSE_BELOW_PX = 700;
+const COLLAPSED_COUNT = 4;
 
 /**
  * The multi-tier package + add-on selector: pick a base package, toggle
@@ -16,6 +25,19 @@ const formatRs = (n) => `₹${n.toLocaleString("en-IN")}`;
 export default function PackageBuilder() {
   const [tierId, setTierId] = useState(PACKAGE_TIERS[0].id);
   const [addonIds, setAddonIds] = useState([]);
+  const [isNarrow, setIsNarrow] = useState(false);
+  const [addonsExpanded, setAddonsExpanded] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${COLLAPSE_BELOW_PX}px)`);
+    const update = () => setIsNarrow(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  const isCollapsed = isNarrow && !addonsExpanded;
+  const visibleAddons = isCollapsed ? ADDONS.slice(0, COLLAPSED_COUNT) : ADDONS;
 
   const tier = PACKAGE_TIERS.find((t) => t.id === tierId);
   const selectedAddons = ADDONS.filter((a) => addonIds.includes(a.id));
@@ -98,7 +120,7 @@ export default function PackageBuilder() {
           Ask for it standalone.
         </p>
         <div className="addon-grid">
-          {ADDONS.map((a) => {
+          {visibleAddons.map((a) => {
             const checked = addonIds.includes(a.id);
             return (
               <label key={a.id} className={`addon-row ${checked ? "checked" : ""}`}>
@@ -119,6 +141,30 @@ export default function PackageBuilder() {
             );
           })}
         </div>
+        {isNarrow && (
+          <button
+            type="button"
+            className="addon-toggle"
+            onClick={() => setAddonsExpanded((v) => !v)}
+            aria-expanded={addonsExpanded}
+          >
+            {addonsExpanded ? "Show fewer add-ons" : `Show all ${ADDONS.length} add-ons`}
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{ transform: addonsExpanded ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}
+              aria-hidden="true"
+            >
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </button>
+        )}
       </div>
 
       <div className="price-summary">
