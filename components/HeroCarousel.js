@@ -35,11 +35,9 @@ const STEPS = [
   { Icon: RocketIcon, title: "Live in 24 hrs", body: "Feedback folded in, polished, and pushed live — start to finish, one day.", color: colors.accentDeep },
 ];
 
-// Auto-advance interval and crossfade duration for the two-slide hero.
-// Crossfade is kept shorter than the interval so each slide gets a moment
-// fully settled before the next transition starts.
-const SLIDE_MS = 1200;
-const CROSSFADE_MS = 400;
+// Duration of the slide animation (dot click, or a manual swipe settling
+// onto the nearest slide) for the two-slide hero.
+const SLIDE_ANIM_MS = 400;
 
 const kickerStyle = {
   display: "inline-block",
@@ -51,29 +49,78 @@ const kickerStyle = {
 };
 
 /**
- * Full-width, two-slide hero. Both slides stay mounted at all times —
- * visibility toggles via CSS opacity, not conditional rendering — so
+ * Full-width, two-slide hero. Both slides stay mounted at all times, sitting
+ * side by side in a horizontally-scrollable strip — the active one is
+ * whichever is scrolled into view (via a dot click or a manual swipe), so
  * slide 2's real <h1> (the only <h1> on the page) is always present in the
- * DOM for crawlers regardless of which slide is showing. Autoplay pauses on
- * hover/focus and is skipped entirely under prefers-reduced-motion.
+ * DOM for crawlers regardless of which slide is showing. No autoplay — the
+ * slide only changes when the visitor asks it to. Same slide mechanism at
+ * every width — an earlier version crossfaded in place on desktop and only
+ * used the horizontal swipe below 640px, but the two slides have completely
+ * different layouts (a 3-step list vs. a headline+portrait), so a crossfade
+ * between them briefly overlaps two dissimilar blocks of text at the same
+ * position. One mechanism everywhere avoids that.
  */
+// Eases a container's scrollLeft to `target` over a fixed `duration`, rather
+// than the browser's built-in `scrollTo({ behavior: "smooth" })` — whose
+// actual speed is a distance-based heuristic each engine picks on its own
+// and came out inconsistent across repeated auto-advance cycles. This keeps
+// every slide transition at the exact same duration/easing regardless of
+// engine or how many cycles have already run.
+//
+// `.hero-slide-stack`'s own `scroll-snap-type: x mandatory` +
+// `scroll-snap-stop: always` (see globals.css) turned out to fight this:
+// the engine kept snap-correcting every intermediate scrollLeft write back
+// toward the nearest slide boundary, so despite writing a smooth 400ms
+// ramp, the on-screen result still jumped almost straight to the end
+// (confirmed by comparing this function's own writes against the actual
+// rendered scrollLeft mid-animation). Suspending snap for the duration of
+// the animation and restoring it once we land exactly on the target
+// (itself always a valid snap point) avoids that fight entirely.
+function animateScrollTo(el, target, duration, tokenRef, programmaticRef) {
+  const token = Symbol();
+  tokenRef.current = token;
+  programmaticRef.current = true;
+  const start = el.scrollLeft;
+  const change = target - start;
+  if (change === 0) {
+    programmaticRef.current = false;
+    return;
+  }
+  const startTime = performance.now();
+  const easeInOutQuad = (t) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
+  el.style.scrollSnapType = "none";
+  const step = (now) => {
+    if (tokenRef.current !== token) return; // superseded by a newer scroll
+    const progress = Math.min((now - startTime) / duration, 1);
+    el.scrollLeft = start + change * easeInOutQuad(progress);
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    } else {
+      el.style.scrollSnapType = "";
+      programmaticRef.current = false;
+    }
+  };
+  requestAnimationFrame(step);
+}
+
 export default function HeroCarousel() {
   const [slide, setSlide] = useState(0);
-  const [paused, setPaused] = useState(false);
   const reducedMotionRef = useRef(false);
   const rootRef = useRef(null);
   const stackRef = useRef(null);
   const scrollEndTimerRef = useRef(null);
+  const scrollAnimTokenRef = useRef(null);
+  // Programmatic scrollLeft writes (dot clicks) fire native 'scroll'
+  // events on .hero-slide-stack same as a real manual swipe would.
+  // Without this flag, handleStackScroll below couldn't tell the
+  // difference and treated a dot-click's own animation as if the user had
+  // just swiped.
+  const isProgrammaticScrollRef = useRef(false);
 
   useEffect(() => {
     reducedMotionRef.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }, []);
-
-  // Matches app/globals.css's `@media (max-width: 640px)` block that turns
-  // .hero-slide-stack into a horizontally-scrollable, snap-to-slide strip
-  // instead of an opacity crossfade — see that rule's comment for why.
-  const isMobileScrollMode = () =>
-    typeof window !== "undefined" && window.matchMedia("(max-width: 640px)").matches;
 
   // Dot clicks go through this instead of setSlide directly — kept as a
   // named entry point (even though it's a one-line wrapper today) so the
@@ -81,38 +128,42 @@ export default function HeroCarousel() {
   // spreading across every click handler.
   const goToSlide = (index) => setSlide(index);
 
-  useEffect(() => {
-    if (paused || reducedMotionRef.current) return;
-    const id = setInterval(() => setSlide((s) => (s + 1) % 2), SLIDE_MS);
-    return () => clearInterval(id);
-  }, [paused]);
-
-  // The single place that actually moves the strip on mobile — fires for
-  // every path that changes `slide` (dot click, auto-swap tick, or a
-  // manual swipe settling on the nearest slide below), so there's exactly
-  // one scrollTo call per slide change instead of duplicating it per caller.
+  // The single place that actually moves the strip — fires for every path
+  // that changes `slide` (dot click, or a manual swipe settling on the
+  // nearest slide below), so there's exactly one scrollTo call per slide
+  // change instead of duplicating it per caller.
   useEffect(() => {
     const el = stackRef.current;
-    if (!isMobileScrollMode() || !el) return;
-    el.scrollTo({ left: slide * el.clientWidth, behavior: reducedMotionRef.current ? "auto" : "smooth" });
+    if (!el) return;
+    const target = slide * el.clientWidth;
+    if (reducedMotionRef.current) {
+      isProgrammaticScrollRef.current = true;
+      el.scrollTo({ left: target, behavior: "auto" });
+      // The resulting 'scroll' event can dispatch on a later tick than
+      // this synchronous call, so clear the flag next frame rather than
+      // immediately — otherwise it'd already be false by the time
+      // handleStackScroll's event fires.
+      requestAnimationFrame(() => {
+        isProgrammaticScrollRef.current = false;
+      });
+    } else {
+      animateScrollTo(el, target, SLIDE_ANIM_MS, scrollAnimTokenRef, isProgrammaticScrollRef);
+    }
   }, [slide]);
 
-  // Fires continuously while the user swipes; a real manual scroll (versus
-  // the smooth-scroll from an auto-swap tick) should both pause the
-  // auto-swap timer for its duration and, once it settles, update `slide`
-  // to whichever slide the swipe landed on so the dots stay accurate.
-  // There's no cross-browser "scroll finished" event to hook here, so this
-  // debounces on a short idle gap instead.
+  // Fires continuously while the user swipes; once it settles, updates
+  // `slide` to whichever slide the swipe landed on so the dots stay
+  // accurate. There's no cross-browser "scroll finished" event to hook
+  // here, so this debounces on a short idle gap instead.
   const handleStackScroll = () => {
+    if (isProgrammaticScrollRef.current) return; // our own animateScrollTo/scrollTo, not a real swipe
     const el = stackRef.current;
-    if (!isMobileScrollMode() || !el) return;
-    setPaused(true);
+    if (!el) return;
     if (scrollEndTimerRef.current) clearTimeout(scrollEndTimerRef.current);
     scrollEndTimerRef.current = setTimeout(() => {
       const width = el.clientWidth || 1;
       const nearest = Math.round(el.scrollLeft / width);
       setSlide(Math.max(0, Math.min(1, nearest)));
-      setPaused(false);
     }, 150);
   };
 
@@ -131,18 +182,21 @@ export default function HeroCarousel() {
     <div
       ref={rootRef}
       className="hero-carousel"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onFocus={() => setPaused(true)}
-      onBlur={() => setPaused(false)}
-      onTouchStart={() => setPaused(true)}
-      onTouchEnd={() => setPaused(false)}
-      onTouchCancel={() => setPaused(false)}
-      style={{ "--hero-crossfade": `${CROSSFADE_MS}ms` }}
+      onTouchStart={() => {
+        // Invalidates any in-flight animateScrollTo so it stops overwriting
+        // scrollLeft the instant a real finger takes over the scroll,
+        // restores native snapping (animateScrollTo suspends it while it
+        // runs) so the finger-driven scroll snaps normally on release, and
+        // clears the programmatic-scroll flag so handleStackScroll treats
+        // the finger's own scroll events as the real swipe they are.
+        scrollAnimTokenRef.current = null;
+        isProgrammaticScrollRef.current = false;
+        if (stackRef.current) stackRef.current.style.scrollSnapType = "";
+      }}
     >
       <div className="hero-slide-stack" ref={stackRef} onScroll={handleStackScroll}>
         {/* Slide 1: how-it-works process banner */}
-        <div className={`hero-slide hero-slide-process ${slide === 0 ? "is-active" : ""}`} aria-hidden={slide !== 0}>
+        <div className="hero-slide hero-slide-process" aria-hidden={slide !== 0}>
           <div className="hero-process-badge">
             <span className="hero-process-dot" />
             How it works
@@ -155,19 +209,20 @@ export default function HeroCarousel() {
                   <div className="hero-process-icon" style={{ borderColor: step.color, color: step.color }}>
                     <step.Icon />
                   </div>
-                  <div className="hero-process-title" style={{ color: i === 2 ? colors.text : colors.accent }}>
-                    {step.title}
+                  <div className="hero-process-text">
+                    <div className="hero-process-title" style={{ color: i === 2 ? colors.text : colors.accent }}>
+                      {step.title}
+                    </div>
+                    <div className="hero-process-body">{step.body}</div>
                   </div>
-                  <div className="hero-process-body">{step.body}</div>
                 </div>
-                {i < STEPS.length - 1 && <span className="hero-process-arrow" aria-hidden="true" />}
               </div>
             ))}
           </div>
         </div>
 
         {/* Slide 2: the site's real hero copy */}
-        <div className={`hero-slide hero-slide-main ${slide === 1 ? "is-active" : ""}`} aria-hidden={slide !== 1}>
+        <div className="hero-slide hero-slide-main" aria-hidden={slide !== 1}>
           <div className="hero-main-grid">
             <div>
               <span style={kickerStyle}>Websites · Local SEO · Booking Systems</span>

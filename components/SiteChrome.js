@@ -1,9 +1,20 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import { colors } from "@/lib/colors";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import StickyCta from "@/components/StickyCta";
 
 export default function SiteChrome({ children }) {
+  const pathname = usePathname();
+  // The admin panel is an internal tool, not a marketing page — it gets no
+  // nav links, footer, or "book a free call" bubble, and renders its own
+  // full-page background instead of this wrapper's.
+  if (pathname?.startsWith("/admin")) {
+    return children;
+  }
+
   return (
     <div
       style={{

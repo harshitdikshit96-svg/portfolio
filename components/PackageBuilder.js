@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { colors } from "@/lib/colors";
-import { PACKAGE_TIERS, ADDONS, SOCIAL } from "@/lib/data";
+import { PACKAGE_TIERS, ADDONS } from "@/lib/data";
+import PackageRequestSheet from "@/components/PackageRequestSheet";
 
 const formatRs = (n) => `₹${n.toLocaleString("en-IN")}`;
 
@@ -17,16 +18,19 @@ const COLLAPSED_COUNT = 4;
 
 /**
  * The multi-tier package + add-on selector: pick a base package, toggle
- * whichever add-ons apply, see a running "starting at" total, then send
- * that exact selection over email. No payment or scoping happens here —
- * this just turns browsing into a qualified, specific inbound lead instead
- * of a vague "tell me about your services" message.
+ * whichever add-ons apply, see a running "starting at" total, then submit
+ * that exact selection through PackageRequestSheet — a name + phone form
+ * that saves to the database and shows up in /admin, rather than opening
+ * an email client. No payment or scoping happens here — this just turns
+ * browsing into a qualified, specific inbound lead instead of a vague
+ * "tell me about your services" message.
  */
 export default function PackageBuilder() {
   const [tierId, setTierId] = useState(PACKAGE_TIERS[0].id);
   const [addonIds, setAddonIds] = useState([]);
   const [isNarrow, setIsNarrow] = useState(false);
   const [addonsExpanded, setAddonsExpanded] = useState(false);
+  const [showRequestSheet, setShowRequestSheet] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia(`(max-width: ${COLLAPSE_BELOW_PX}px)`);
@@ -50,21 +54,6 @@ export default function PackageBuilder() {
 
   const toggleAddon = (id) =>
     setAddonIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
-
-  const handleRequest = () => {
-    const subject = `Package inquiry: ${tier.name}${selectedAddons.length ? " + add-ons" : ""}`;
-    const lines = [
-      `Package: ${tier.name} (starting at ${formatRs(tierPrice)})`,
-      selectedAddons.length ? "Add-ons:" : null,
-      ...selectedAddons.map((a) => `  - ${a.name} (${formatRs(a.price)})`),
-      "",
-      `Estimated starting total: ${formatRs(total)} — negotiable, final scope/price confirmed after a free consultation.`,
-      "",
-      "A bit about what I need:",
-    ].filter(Boolean);
-    const mailto = `mailto:${SOCIAL.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join("\n"))}`;
-    window.location.href = mailto;
-  };
 
   return (
     <div>
@@ -178,7 +167,7 @@ export default function PackageBuilder() {
             <div style={{ fontSize: 26, fontWeight: 700 }}>{formatRs(total)}</div>
           </div>
         </div>
-        <button type="button" className="btn-primary" onClick={handleRequest}>
+        <button type="button" className="btn-primary" onClick={() => setShowRequestSheet(true)}>
           Request this package →
         </button>
       </div>
@@ -186,6 +175,15 @@ export default function PackageBuilder() {
         Every price here is a starting point, not a final quote — actual scope and cost are confirmed together on
         the free consultation call. Nothing is charged by selecting a package.
       </p>
+
+      {showRequestSheet && (
+        <PackageRequestSheet
+          tier={tier}
+          addons={selectedAddons}
+          total={total}
+          onClose={() => setShowRequestSheet(false)}
+        />
+      )}
     </div>
   );
 }
