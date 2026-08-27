@@ -1,308 +1,293 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { colors } from "@/lib/colors";
 import { CALENDLY_URL, PACKAGE_TIERS } from "@/lib/data";
-import ImageSlot from "@/components/ImageSlot";
 
-// Icon paths shared with UspBanner.js's "consultation"/"draft" icons for
-// visual consistency between the two.
-const PhoneIcon = () => (
-  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+// Icons — inline strokes/fills, no icon library, matching the pattern
+// already used across UspBanner/HeroCarousel's process-step icons.
+const ArrowRightIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M5 12h14" />
+    <path d="m12 5 7 7-7 7" />
   </svg>
 );
-const FileIcon = () => (
-  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M14 3v4a1 1 0 0 0 1 1h4" />
-    <path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z" />
-    <path d="M9 13h6" />
-    <path d="M9 17h6" />
+const ShieldCheckIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+    <path d="m9 12 2 2 4-4" />
   </svg>
 );
-const RocketIcon = () => (
-  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
-    <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
-    <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
-    <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+const StarIcon = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+    <path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.3-6.2 3.3L7 14.2l-5-4.9 6.9-1z" />
+  </svg>
+);
+const MapPinIcon = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+    <circle cx="12" cy="10" r="3" />
+  </svg>
+);
+const CalendarCheckIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+    <rect x="3" y="4" width="18" height="18" rx="2" />
+    <path d="M16 2v4M8 2v4M3 10h18m-9 5 2 2 3-3" />
+  </svg>
+);
+const CheckIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+    <path d="m5 12 5 5L20 7" />
+  </svg>
+);
+const ClockIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7091E6" strokeWidth="2">
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 7v5l3 2" />
+  </svg>
+);
+const ChevronLeftIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="m15 18-6-6 6-6" />
+  </svg>
+);
+const ChevronRightIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="m9 18 6-6-6-6" />
   </svg>
 );
 
-const STEPS = [
-  { Icon: PhoneIcon, title: "30-min call", body: "Book a slot, tell me what you need — no forms, no back-and-forth.", color: colors.accent },
-  { Icon: FileIcon, title: "Free draft in 3 hrs", body: "A real, working preview of your site — before you commit to anything.", color: colors.teal },
-  { Icon: RocketIcon, title: "Live in 24 hrs", body: "Feedback folded in, polished, and pushed live — start to finish, one day.", color: colors.accentDeep },
-];
-
-// Duration of the slide animation (dot click, or a manual swipe settling
-// onto the nearest slide) for the two-slide hero.
-const SLIDE_ANIM_MS = 400;
-
-const kickerStyle = {
-  display: "inline-block",
-  fontSize: 12,
-  fontWeight: 700,
-  letterSpacing: "0.08em",
-  textTransform: "uppercase",
-  color: colors.accentDeep,
-};
+const AUTOPLAY_MS = 8000;
+const SLIDE_COUNT = 2;
 
 /**
- * Full-width, two-slide hero. Both slides stay mounted at all times, sitting
- * side by side in a horizontally-scrollable strip — the active one is
- * whichever is scrolled into view (via a dot click or a manual swipe), so
- * slide 2's real <h1> (the only <h1> on the page) is always present in the
- * DOM for crawlers regardless of which slide is showing. No autoplay — the
- * slide only changes when the visitor asks it to. Same slide mechanism at
- * every width — an earlier version crossfaded in place on desktop and only
- * used the horizontal swipe below 640px, but the two slides have completely
- * different layouts (a 3-step list vs. a headline+portrait), so a crossfade
- * between them briefly overlaps two dissimilar blocks of text at the same
- * position. One mechanism everywhere avoids that.
+ * Two-slide auto-advancing hero. Only slide 0 mounts on first render (its
+ * <h1> is the page's one real, semantic heading), so a no-JS or pre-hydration
+ * view already has the real headline rather than depending on client state —
+ * slide 1 renders its otherwise-identical headline as a <p>, not a second
+ * <h1>. Autoplay pauses on hover/focus so it doesn't fight anyone reading a
+ * slide or tabbing through its controls, and every slide change restarts the
+ * autoplay clock so a manual dot/arrow click doesn't get immediately
+ * overridden by a timer from before the click.
  */
-// Eases a container's scrollLeft to `target` over a fixed `duration`, rather
-// than the browser's built-in `scrollTo({ behavior: "smooth" })` — whose
-// actual speed is a distance-based heuristic each engine picks on its own
-// and came out inconsistent across repeated auto-advance cycles. This keeps
-// every slide transition at the exact same duration/easing regardless of
-// engine or how many cycles have already run.
-//
-// `.hero-slide-stack`'s own `scroll-snap-type: x mandatory` +
-// `scroll-snap-stop: always` (see globals.css) turned out to fight this:
-// the engine kept snap-correcting every intermediate scrollLeft write back
-// toward the nearest slide boundary, so despite writing a smooth 400ms
-// ramp, the on-screen result still jumped almost straight to the end
-// (confirmed by comparing this function's own writes against the actual
-// rendered scrollLeft mid-animation). Suspending snap for the duration of
-// the animation and restoring it once we land exactly on the target
-// (itself always a valid snap point) avoids that fight entirely.
-function animateScrollTo(el, target, duration, tokenRef, programmaticRef) {
-  const token = Symbol();
-  tokenRef.current = token;
-  programmaticRef.current = true;
-  const start = el.scrollLeft;
-  const change = target - start;
-  if (change === 0) {
-    programmaticRef.current = false;
-    return;
-  }
-  const startTime = performance.now();
-  const easeInOutQuad = (t) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
-  el.style.scrollSnapType = "none";
-  const step = (now) => {
-    if (tokenRef.current !== token) return; // superseded by a newer scroll
-    const progress = Math.min((now - startTime) / duration, 1);
-    el.scrollLeft = start + change * easeInOutQuad(progress);
-    if (progress < 1) {
-      requestAnimationFrame(step);
-    } else {
-      el.style.scrollSnapType = "";
-      programmaticRef.current = false;
-    }
-  };
-  requestAnimationFrame(step);
-}
-
 export default function HeroCarousel() {
   const [slide, setSlide] = useState(0);
+  const [paused, setPaused] = useState(false);
   const reducedMotionRef = useRef(false);
-  const rootRef = useRef(null);
-  const stackRef = useRef(null);
-  const scrollEndTimerRef = useRef(null);
-  const scrollAnimTokenRef = useRef(null);
-  // Programmatic scrollLeft writes (dot clicks) fire native 'scroll'
-  // events on .hero-slide-stack same as a real manual swipe would.
-  // Without this flag, handleStackScroll below couldn't tell the
-  // difference and treated a dot-click's own animation as if the user had
-  // just swiped.
-  const isProgrammaticScrollRef = useRef(false);
+  const timerRef = useRef(null);
 
   useEffect(() => {
     reducedMotionRef.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }, []);
 
-  // Dot clicks go through this instead of setSlide directly — kept as a
-  // named entry point (even though it's a one-line wrapper today) so the
-  // "how do I change slides" answer stays in one place rather than
-  // spreading across every click handler.
-  const goToSlide = (index) => setSlide(index);
-
-  // The single place that actually moves the strip — fires for every path
-  // that changes `slide` (dot click, or a manual swipe settling on the
-  // nearest slide below), so there's exactly one scrollTo call per slide
-  // change instead of duplicating it per caller.
   useEffect(() => {
-    const el = stackRef.current;
-    if (!el) return;
-    const target = slide * el.clientWidth;
-    if (reducedMotionRef.current) {
-      isProgrammaticScrollRef.current = true;
-      el.scrollTo({ left: target, behavior: "auto" });
-      // The resulting 'scroll' event can dispatch on a later tick than
-      // this synchronous call, so clear the flag next frame rather than
-      // immediately — otherwise it'd already be false by the time
-      // handleStackScroll's event fires.
-      requestAnimationFrame(() => {
-        isProgrammaticScrollRef.current = false;
-      });
-    } else {
-      animateScrollTo(el, target, SLIDE_ANIM_MS, scrollAnimTokenRef, isProgrammaticScrollRef);
-    }
-  }, [slide]);
+    if (paused) return undefined;
+    timerRef.current = setTimeout(() => {
+      setSlide((s) => (s + 1) % SLIDE_COUNT);
+    }, AUTOPLAY_MS);
+    return () => clearTimeout(timerRef.current);
+  }, [slide, paused]);
 
-  // Fires continuously while the user swipes; once it settles, updates
-  // `slide` to whichever slide the swipe landed on so the dots stay
-  // accurate. There's no cross-browser "scroll finished" event to hook
-  // here, so this debounces on a short idle gap instead.
-  const handleStackScroll = () => {
-    if (isProgrammaticScrollRef.current) return; // our own animateScrollTo/scrollTo, not a real swipe
-    const el = stackRef.current;
-    if (!el) return;
-    if (scrollEndTimerRef.current) clearTimeout(scrollEndTimerRef.current);
-    scrollEndTimerRef.current = setTimeout(() => {
-      const width = el.clientWidth || 1;
-      const nearest = Math.round(el.scrollLeft / width);
-      setSlide(Math.max(0, Math.min(1, nearest)));
-    }, 150);
-  };
-
-  // Scrolls to whatever section follows the hero — used by the "scroll for
-  // more" affordance beneath the slide dots.
-  const scrollToNext = () => {
-    const next = rootRef.current?.nextElementSibling;
-    if (next) {
-      next.scrollIntoView({ behavior: reducedMotionRef.current ? "auto" : "smooth", block: "start" });
-    } else {
-      window.scrollTo({ top: window.innerHeight, behavior: reducedMotionRef.current ? "auto" : "smooth" });
-    }
-  };
+  const goTo = (index) => setSlide(((index % SLIDE_COUNT) + SLIDE_COUNT) % SLIDE_COUNT);
 
   return (
     <div
-      ref={rootRef}
       className="hero-carousel"
-      onTouchStart={() => {
-        // Invalidates any in-flight animateScrollTo so it stops overwriting
-        // scrollLeft the instant a real finger takes over the scroll,
-        // restores native snapping (animateScrollTo suspends it while it
-        // runs) so the finger-driven scroll snaps normally on release, and
-        // clears the programmatic-scroll flag so handleStackScroll treats
-        // the finger's own scroll events as the real swipe they are.
-        scrollAnimTokenRef.current = null;
-        isProgrammaticScrollRef.current = false;
-        if (stackRef.current) stackRef.current.style.scrollSnapType = "";
-      }}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={() => setPaused(false)}
     >
-      <div className="hero-slide-stack" ref={stackRef} onScroll={handleStackScroll}>
-        {/* Slide 1: how-it-works process banner */}
-        <div className="hero-slide hero-slide-process" aria-hidden={slide !== 0}>
-          <div className="hero-process-badge">
-            <span className="hero-process-dot" />
-            How it works
-          </div>
-          <p className="hero-process-heading">One call. A live website in 24 hours.</p>
-          <div className="hero-process-steps">
-            {STEPS.map((step, i) => (
-              <div className="hero-process-step" key={step.title}>
-                <div className="hero-process-step-row">
-                  <div className="hero-process-icon" style={{ borderColor: step.color, color: step.color }}>
-                    <step.Icon />
+      <div className="hero-bg-dots" aria-hidden="true" />
+      <div className="hero-bg-wash" aria-hidden="true" />
+
+      {/* key={slide} remounts this wrapper on every slide change, which
+          restarts the CSS entrance animation on its children for free —
+          no manual classList-remove/reflow/re-add trick needed. */}
+      <div className="hero-slide-grid" key={slide} role="group" aria-roledescription="slide" aria-label={`${slide + 1} of ${SLIDE_COUNT}`}>
+        {slide === 0 ? (
+          <>
+            <div className="hero-anim">
+              <p className="hero-eyebrow">Websites · Local SEO · Booking systems</p>
+              <h1 className="hero-heading">Your customers are searching. Your website isn&apos;t showing up.</h1>
+              <p className="hero-lede">
+                I build fast, bookable websites for dentists, clinics, salons and local service businesses — with
+                the local SEO that gets you found on Google. We&apos;ll agree on a direction on a 30-minute call,
+                then you&apos;ll see a working draft before you pay anything.
+              </p>
+              <div className="hero-cta-row">
+                <a className="btn-primary hero-btn" href={CALENDLY_URL} target="_blank" rel="noopener noreferrer">
+                  Book a free 30-min call
+                  <span className="hero-btn-arrow"><ArrowRightIcon /></span>
+                </a>
+              </div>
+              <div className="hero-chips">
+                <span className="tag tag-outline">Free first draft in ~3 hrs</span>
+                <span className="tag tag-outline">Local SEO included</span>
+                <span className="tag tag-outline">Online booking built in</span>
+                <span className="tag tag-outline">Remote-friendly</span>
+              </div>
+              <p className="hero-reassure">
+                <ShieldCheckIcon />
+                You pay nothing until you&apos;ve seen the real draft of your site.
+              </p>
+            </div>
+
+            <div className="hero-graphic">
+              <div className="hero-blob" style={{ left: -32, top: 40, width: 224, height: 224 }} />
+              <div className="hero-blob" style={{ right: -24, bottom: 32, width: 192, height: 192, opacity: 0.7 }} />
+
+              <div className="hero-card hero-search-card">
+                <p className="hero-kicker">Google · near me</p>
+                <p className="hero-search-name">Bright Smile Dental</p>
+                <div className="hero-search-rating">
+                  <span className="hero-search-score">4.9</span>
+                  <span className="hero-stars">
+                    <StarIcon /><StarIcon /><StarIcon /><StarIcon /><StarIcon />
+                  </span>
+                  <span className="hero-search-count">(182)</span>
+                </div>
+                <p className="hero-search-open">
+                  <MapPinIcon />
+                  Open now · 0.8 km away
+                </p>
+              </div>
+
+              <div className="hero-card hero-site-card">
+                <div className="hero-site-bar">
+                  <span className="hero-site-dot" /><span className="hero-site-dot" /><span className="hero-site-dot" />
+                  <span className="hero-site-url">brightsmiledental.in</span>
+                </div>
+                <div className="hero-site-body">
+                  <div className="hero-site-row">
+                    <span className="hero-site-brand">Bright Smile</span>
+                    <span className="hero-site-navlines">
+                      <span className="hero-line" style={{ width: 32, height: 6 }} />
+                      <span className="hero-line" style={{ width: 32, height: 6 }} />
+                    </span>
                   </div>
-                  <div className="hero-process-text">
-                    <div className="hero-process-title" style={{ color: i === 2 ? colors.text : colors.accent }}>
-                      {step.title}
-                    </div>
-                    <div className="hero-process-body">{step.body}</div>
+                  <div className="hero-site-headline">
+                    <div className="hero-headline-block" style={{ width: "80%" }} />
+                    <div className="hero-headline-block" style={{ width: "60%", opacity: 0.45 }} />
+                  </div>
+                  <div className="hero-site-lines">
+                    <div className="hero-line" />
+                    <div className="hero-line" style={{ width: "83%" }} />
+                  </div>
+                  <div className="hero-mini-btn">
+                    <CalendarCheckIcon />
+                    Book appointment
+                  </div>
+                  <div className="hero-tiles">
+                    <div className="hero-tile">Implants</div>
+                    <div className="hero-tile">Whitening</div>
+                    <div className="hero-tile">Braces</div>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
 
-        {/* Slide 2: the site's real hero copy */}
-        <div className="hero-slide hero-slide-main" aria-hidden={slide !== 1}>
-          <div className="hero-main-grid">
-            <div>
-              <span style={kickerStyle}>Websites · Local SEO · Booking Systems</span>
-              <h1
-                style={{
-                  fontSize: "clamp(32px, 4.2vw, 52px)",
-                  lineHeight: 1.1,
-                  margin: "14px 0 0",
-                  letterSpacing: "-0.01em",
-                }}
-              >
-                Websites &amp; local SEO for small, local businesses.
-              </h1>
-              <p style={{ fontSize: 17, lineHeight: 1.6, color: colors.textDim, maxWidth: "52ch", margin: "20px 0 0" }}>
-                For dentists, clinics, salons and local service businesses — same process and pricing wherever
-                you&apos;re based. Live in as fast as 24 hours, with a free first draft in about 3, so you see the
-                real thing before you pay for anything.
+              <div className="hero-card hero-pill hero-float">
+                <p className="hero-pill-label">Draft ready</p>
+                <p className="hero-pill-value">2h 47m</p>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="hero-anim">
+              <p className="hero-eyebrow">
+                24-hour delivery · Starts @ ₹{PACKAGE_TIERS[0].basePriceFrom.toLocaleString("en-IN")}
               </p>
-              <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginTop: 28 }}>
-                <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">
-                  Book a free call
-                </a>
-                <a href="#packages" className="btn-secondary">
+              {/* Styled identically to the real <h1> on slide 0, but kept as
+                  a <p> — a page should carry exactly one <h1>. */}
+              <p className="hero-heading">Everyone else quotes a week. Yours is live in 24 hours.</p>
+              <p className="hero-lede">
+                Most agencies take 1–3 weeks and thousands more. One 30-minute call, a free draft in ~3 hours, and
+                a complete site — pages, local SEO, WhatsApp and booking — live within 24 hours, from ₹
+                {PACKAGE_TIERS[0].basePriceFrom.toLocaleString("en-IN")}. Same process and pricing wherever
+                you&apos;re based.
+              </p>
+              <div className="hero-cta-row">
+                <a className="btn-primary hero-btn" href="#packages">
                   See packages &amp; prices
+                  <span className="hero-btn-arrow"><ArrowRightIcon /></span>
                 </a>
               </div>
-              <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 26 }}>
-                {[
-                  `Starts @ ₹${PACKAGE_TIERS[0].basePriceFrom.toLocaleString("en-IN")}`,
-                  "First draft in ~3 hrs",
-                  "Free 30-min call",
-                  "Remote-friendly",
-                ].map((tag) => (
-                  <span key={tag} className="tag tag-outline">
-                    {tag}
-                  </span>
-                ))}
+              <div className="hero-chips">
+                <span className="tag tag-outline">
+                  Complete site from ₹{PACKAGE_TIERS[0].basePriceFrom.toLocaleString("en-IN")}
+                </span>
+                <span className="tag tag-outline">Live in 24 hrs</span>
+                <span className="tag tag-outline">One 30-min call</span>
+                <span className="tag tag-outline">No advance payment</span>
+              </div>
+              <p className="hero-reassure">
+                <ShieldCheckIcon />
+                Fixed price agreed upfront — no hourly billing, no surprise add-ons.
+              </p>
+            </div>
+
+            <div className="hero-graphic">
+              <div className="hero-blob" style={{ right: -32, top: 24, width: 224, height: 224 }} />
+              <div className="hero-blob" style={{ left: -24, bottom: 16, width: 176, height: 176, opacity: 0.7 }} />
+
+              <div className="hero-card hero-compare-card">
+                <p className="hero-pill-label">Time to a live website</p>
+                <div className="hero-compare-row">
+                  <div className="hero-row-top"><span>Typical agency / freelancer</span><strong>1–3 weeks</strong></div>
+                  <div className="hero-meter"><span style={{ width: "100%", background: "#c9c4e2" }} /></div>
+                </div>
+                <div className="hero-compare-row">
+                  <div className="hero-row-top"><strong>Harshit Creates</strong><strong className="hero-row-highlight">24 hours</strong></div>
+                  <div className="hero-meter"><span style={{ width: "14%" }} /></div>
+                </div>
+                <hr className="hero-hr" />
+                <div className="hero-checks">
+                  <span className="hero-check"><CheckIcon />Free first draft in ~3 hrs</span>
+                  <span className="hero-check"><CheckIcon />No payment before you see it</span>
+                  <span className="hero-check"><CheckIcon />Local SEO set up</span>
+                  <span className="hero-check"><CheckIcon />Booking built in</span>
+                </div>
+              </div>
+
+              <div className="hero-card hero-price-card">
+                <p className="hero-pill-label">Complete site from</p>
+                <p className="hero-price-value">₹{PACKAGE_TIERS[0].basePriceFrom.toLocaleString("en-IN")}</p>
+              </div>
+
+              <div className="hero-card hero-pill hero-pill-top hero-float">
+                <p className="hero-pill-top-label">
+                  <ClockIcon />
+                  Live in 24 hrs
+                </p>
               </div>
             </div>
-            <div className="hero-portrait-wrap">
-              <ImageSlot
-                src="/images/hero-portrait.webp"
-                alt="Harshit Dixit"
-                fill
-                height={420}
-                shape="rounded"
-                radius={16}
-                preload
-              />
-            </div>
-          </div>
-        </div>
+          </>
+        )}
       </div>
 
-      <div className="hero-bottom-row">
-        <div className="hero-dots" role="tablist" aria-label="Hero slides">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={slide === 0}
-            aria-label="Show how it works"
-            className={slide === 0 ? "is-active" : ""}
-            onClick={() => goToSlide(0)}
-          />
-          <button
-            type="button"
-            role="tab"
-            aria-selected={slide === 1}
-            aria-label="Show intro"
-            className={slide === 1 ? "is-active" : ""}
-            onClick={() => goToSlide(1)}
-          />
+      <div className="hero-controls">
+        <div className="hero-dotsnav" role="tablist" aria-label="Hero slides">
+          {Array.from({ length: SLIDE_COUNT }, (_, i) => (
+            <button
+              key={i}
+              type="button"
+              role="tab"
+              aria-selected={slide === i}
+              aria-label={`Show slide ${i + 1}`}
+              className="hero-dotbtn"
+              data-active={slide === i}
+              onClick={() => goTo(i)}
+            />
+          ))}
         </div>
-
-        <button type="button" className="hero-scroll-cue" onClick={scrollToNext} aria-label="Scroll down for more">
-          <span className="hero-scroll-cue-label">Scroll</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M6 9l6 6 6-6" />
-          </svg>
-        </button>
+        <div className="hero-arrows">
+          <button type="button" className="hero-arrow" aria-label="Previous slide" onClick={() => goTo(slide - 1)}>
+            <ChevronLeftIcon />
+          </button>
+          <button type="button" className="hero-arrow" aria-label="Next slide" onClick={() => goTo(slide + 1)}>
+            <ChevronRightIcon />
+          </button>
+        </div>
       </div>
     </div>
   );

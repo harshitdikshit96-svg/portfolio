@@ -31,7 +31,7 @@ appears to target.
 | Keyword | Also placed in |
 |---|---|
 | web developer near me | — (metadata only) |
-| web developer in Lucknow | — (metadata only) |
+| web developer in Lucknow | `/work` intro copy ("a Next.js and React developer based in Lucknow") |
 | website design Lucknow | — (metadata only) |
 | website development Lucknow | — (metadata only) |
 | website development company Lucknow | — (metadata only) |
@@ -55,8 +55,8 @@ appears to target.
 | restaurant QR ordering system developer | `/services` page (Industry Solutions category) |
 | booking website development | `/services` page, Custom Web App package tier |
 | technical consultant | `app/layout.js` `personJsonLd.jobTitle` |
-| React developer | — (metadata only) |
-| Next.js developer | — (metadata only) |
+| React developer | `/work` intro copy |
+| Next.js developer | `/work` intro copy |
 | web solutions architect | `app/layout.js` `businessJsonLd.name`, `personJsonLd.jobTitle` |
 | fractional CTO | `lib/data.js` → `SERVICES` ("Technical Advisory / Fractional CTO") |
 | Harshit Dixit | `app/layout.js` `personJsonLd.name`, page titles |
@@ -70,6 +70,10 @@ appears to target.
   near-verbatim search-query phrasing (see the two Lucknow/portfolio
   entries above) specifically so both classic SEO (featured snippets) and
   AI answer engines can extract them directly.
+- `ItemList` of `CreativeWork` JSON-LD emitted by
+  `components/sections/Work.js`, one entry per live/template project —
+  lets search and answer engines extract "here are Harshit's actual
+  projects" as structured entities instead of only unstructured card copy.
 
 ## Not yet done
 

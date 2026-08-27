@@ -1,59 +1,31 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { colors } from "@/lib/colors";
 import { PACKAGE_TIERS, ADDONS } from "@/lib/data";
 import PackageRequestSheet from "@/components/PackageRequestSheet";
 
 const formatRs = (n) => `₹${n.toLocaleString("en-IN")}`;
 
-// Below this width the 2-column add-on grid (see .addon-grid in
-// globals.css) drops to a single column, and all 12 add-ons stacked one
-// per row runs to nearly 1000px of scrolling before the price summary
-// comes into view. Collapsing to a short preview + "show all" toggle only
-// below this width keeps the 2-column desktop/tablet layout — already a
-// reasonable, bounded height — untouched.
-const COLLAPSE_BELOW_PX = 700;
-const COLLAPSED_COUNT = 4;
-
 /**
- * The multi-tier package + add-on selector: pick a base package, toggle
- * whichever add-ons apply, see a running "starting at" total, then submit
- * that exact selection through PackageRequestSheet — a name + phone form
- * that saves to the database and shows up in /admin, rather than opening
- * an email client. No payment or scoping happens here — this just turns
- * browsing into a qualified, specific inbound lead instead of a vague
- * "tell me about your services" message.
+ * The package selector: pick a base package, see its "starting at" price,
+ * then submit a request through PackageRequestSheet — a name + phone form
+ * that saves to the database and shows up in /admin, rather than opening an
+ * email client. No payment or scoping happens here — this just turns
+ * browsing into a qualified, specific inbound lead instead of a vague "tell
+ * me about your services" message.
+ *
+ * Add-ons are listed underneath as plain, unpriced mentions rather than a
+ * checkbox-driven running total — the 4 package cards above already carry
+ * the only prices on this page; add-ons are scoped and quoted on the call,
+ * same as everything else.
  */
 export default function PackageBuilder() {
   const [tierId, setTierId] = useState(PACKAGE_TIERS[0].id);
-  const [addonIds, setAddonIds] = useState([]);
-  const [isNarrow, setIsNarrow] = useState(false);
-  const [addonsExpanded, setAddonsExpanded] = useState(false);
   const [showRequestSheet, setShowRequestSheet] = useState(false);
 
-  useEffect(() => {
-    const mq = window.matchMedia(`(max-width: ${COLLAPSE_BELOW_PX}px)`);
-    const update = () => setIsNarrow(mq.matches);
-    update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
-  }, []);
-
-  const isCollapsed = isNarrow && !addonsExpanded;
-  const visibleAddons = isCollapsed ? ADDONS.slice(0, COLLAPSED_COUNT) : ADDONS;
-
   const tier = PACKAGE_TIERS.find((t) => t.id === tierId);
-  const selectedAddons = ADDONS.filter((a) => addonIds.includes(a.id));
   const tierPrice = tier?.basePriceFrom ?? 0;
-
-  const total = useMemo(
-    () => tierPrice + selectedAddons.reduce((sum, a) => sum + a.price, 0),
-    [tierPrice, selectedAddons]
-  );
-
-  const toggleAddon = (id) =>
-    setAddonIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
 
   return (
     <div>
@@ -103,68 +75,27 @@ export default function PackageBuilder() {
       </div>
 
       <div style={{ marginBottom: 20 }}>
-        <h3 style={{ fontSize: 20, fontWeight: 700, margin: "0 0 6px" }}>Add-ons for {tier.name}</h3>
-        <p style={{ fontSize: 14, color: colors.textFaint, margin: "0 0 20px" }}>
-          Every add-on below is also sellable on its own — already have a site and just need one of these bolted on?
-          Ask for it standalone.
+        <h3 style={{ fontSize: 20, fontWeight: 700, margin: "0 0 6px" }}>Add-ons available on any package</h3>
+        <p style={{ fontSize: 14, color: colors.textFaint, margin: "0 0 16px" }}>
+          Login systems, admin panels, booking, payments and more — every add-on below can be bolted onto any
+          package above, or bought standalone if you already have a site. Scope and price for whichever ones you
+          need are confirmed together on the call.
         </p>
-        <div className="addon-grid">
-          {visibleAddons.map((a) => {
-            const checked = addonIds.includes(a.id);
-            return (
-              <label key={a.id} className={`addon-row ${checked ? "checked" : ""}`}>
-                <input
-                  type="checkbox"
-                  className="addon-checkbox"
-                  checked={checked}
-                  onChange={() => toggleAddon(a.id)}
-                />
-                <div>
-                  <div style={{ fontSize: 14.5, fontWeight: 600, display: "flex", justifyContent: "space-between", gap: 10 }}>
-                    <span>{a.name}</span>
-                    <span style={{ color: colors.accent, whiteSpace: "nowrap" }}>+{formatRs(a.price)}</span>
-                  </div>
-                  <div style={{ fontSize: 12.5, color: colors.textFaint, marginTop: 3 }}>{a.desc}</div>
-                </div>
-              </label>
-            );
-          })}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+          {ADDONS.map((a) => (
+            <span key={a.id} className="tag tag-outline">
+              {a.name}
+            </span>
+          ))}
         </div>
-        {isNarrow && (
-          <button
-            type="button"
-            className="addon-toggle"
-            onClick={() => setAddonsExpanded((v) => !v)}
-            aria-expanded={addonsExpanded}
-          >
-            {addonsExpanded ? "Show fewer add-ons" : `Show all ${ADDONS.length} add-ons`}
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              style={{ transform: addonsExpanded ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}
-              aria-hidden="true"
-            >
-              <path d="M6 9l6 6 6-6" />
-            </svg>
-          </button>
-        )}
       </div>
 
       <div className="price-summary">
         <div>
           <div style={{ fontSize: 11.5, color: colors.textFaint, fontWeight: 600, marginBottom: 2 }}>starts @</div>
-          <div style={{ fontSize: 13, color: colors.textFaint, marginBottom: 4 }}>
-            {tier.name}
-            {selectedAddons.length ? ` + ${selectedAddons.length} add-on${selectedAddons.length > 1 ? "s" : ""}` : ""}
-          </div>
+          <div style={{ fontSize: 13, color: colors.textFaint, marginBottom: 4 }}>{tier.name}</div>
           <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
-            <div style={{ fontSize: 26, fontWeight: 700 }}>{formatRs(total)}</div>
+            <div style={{ fontSize: 26, fontWeight: 700 }}>{formatRs(tierPrice)}</div>
           </div>
         </div>
         <button type="button" className="btn-primary" onClick={() => setShowRequestSheet(true)}>
@@ -179,8 +110,8 @@ export default function PackageBuilder() {
       {showRequestSheet && (
         <PackageRequestSheet
           tier={tier}
-          addons={selectedAddons}
-          total={total}
+          addons={[]}
+          total={tierPrice}
           onClose={() => setShowRequestSheet(false)}
         />
       )}

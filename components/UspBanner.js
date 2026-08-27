@@ -93,7 +93,10 @@ export default function UspBanner() {
 
   return (
     <div className="usp-carousel">
-      <Reveal className="usp-track" ref={trackRef}>
+      <Reveal
+        className={`usp-track${atStart ? " at-start" : ""}${atEnd ? " at-end" : ""}`}
+        ref={trackRef}
+      >
         {USPS.map((usp, i) => (
           <div key={usp.label} className="usp-tile">
             <div className="usp-tile-index">{String(i + 1).padStart(2, "0")}</div>

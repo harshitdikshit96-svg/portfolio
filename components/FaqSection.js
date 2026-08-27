@@ -33,7 +33,7 @@ export default function FaqSection() {
       <h2 style={{ fontSize: "clamp(26px,3vw,38px)", lineHeight: 1.18, margin: "12px 0 28px", maxWidth: "22ch", letterSpacing: "-0.01em" }}>
         Common questions, answered directly.
       </h2>
-      <div style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 760 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
         {FAQ_ITEMS.map((item) => (
           <details key={item.question} className="faq-item">
             <summary>{item.question}</summary>

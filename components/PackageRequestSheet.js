@@ -9,7 +9,7 @@ const formatRs = (n) => `₹${n.toLocaleString("en-IN")}`;
 /**
  * The "Request this package" form — a centered modal on wider screens, a
  * bottom sheet on phone widths (same markup, styled differently past the
- * breakpoint in globals.css, matching how .nav-mobile-panel/.addon-grid
+ * breakpoint in globals.css, matching how .nav-mobile-panel
  * already handle responsive presentation here without a JS breakpoint
  * check). Replaces the old mailto: link — submissions now save to the
  * database and show up in /admin instead of opening the visitor's email

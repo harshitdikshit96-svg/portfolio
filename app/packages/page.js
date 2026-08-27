@@ -66,8 +66,8 @@ export default function Page() {
       </h1>
       <p style={{ fontSize: 17, lineHeight: 1.75, color: colors.textDim, maxWidth: 620, margin: "0 0 40px" }}>
         Every project starts from one of four base packages. From there, add exactly the features your business
-        needs — login systems, admin panels, booking, payments, and more — each priced on its own. Already have a
-        site? Every add-on below is available standalone too.
+        needs — login systems, admin panels, booking, payments, and more. Already have a site? Every add-on below
+        is available standalone too.
       </p>
 
       <div style={{ marginBottom: 60 }}>

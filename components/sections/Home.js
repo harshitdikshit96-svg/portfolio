@@ -1,8 +1,8 @@
 import { colors } from "@/lib/colors";
 import { CALENDLY_URL, LIVE_PROJECTS, TEMPLATE_PROJECTS } from "@/lib/data";
 import { getScreenshotManifest, withScreenshots } from "@/lib/screenshots";
-import ImageSlot from "@/components/ImageSlot";
-import Reveal from "@/components/Reveal";
+import TileCarousel from "@/components/TileCarousel";
+import ProjectCard from "@/components/ProjectCard";
 import UspBanner from "@/components/UspBanner";
 import HeroCarousel from "@/components/HeroCarousel";
 import GuaranteeBlock from "@/components/GuaranteeBlock";
@@ -39,7 +39,15 @@ export default async function Home() {
   // See components/sections/Work.js for the full explanation — no-op until
   // the screenshot-refresh pipeline is set up.
   const manifest = await getScreenshotManifest();
-  const featuredWork = withScreenshots(FEATURED_WORK, manifest);
+  // This teaser mixes live and template projects, each independently
+  // numbered 01, 02... within its own category on /work — reusing that
+  // number here would put two "01" badges side by side. Renumbering by
+  // position in this specific curated list keeps the badges unique and
+  // reads as "here are 4 highlights," which is what this list actually is.
+  const featuredWork = withScreenshots(FEATURED_WORK, manifest).map((p, i) => ({
+    ...p,
+    index: String(i + 1).padStart(2, "0"),
+  }));
 
   return (
     <section data-screen-label="Home" style={{ animation: "fadeUp 0.25s ease both" }}>
@@ -60,42 +68,11 @@ export default async function Home() {
           A mix of live sites built for real businesses and capability demos showing the kind of work we can do for
           yours.
         </p>
-        <div className="card-grid-2">
+        <TileCarousel label="featured work">
           {featuredWork.map((p) => (
-            <Reveal key={p.slug} delay={p.delay}>
-              <div
-                className="work-card"
-                style={{
-                  background: colors.tileBg,
-                  borderRadius: 14,
-                  overflow: "hidden",
-                  color: colors.text,
-                }}
-              >
-                <div className="work-card-image-frame">
-                  <div className="work-card-image">
-                    <ImageSlot src={p.image} alt={`${p.name} screenshot`} fill height={170} placeholder="project screenshot" />
-                    {p.url && (
-                      <a
-                        href={p.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="work-card-visit"
-                        aria-label={`Open the live ${p.name} site in a new tab`}
-                      >
-                        <span>Visit live site ↗</span>
-                      </a>
-                    )}
-                  </div>
-                </div>
-                <Link href={`/work/${p.slug}`} style={{ display: "block", padding: 26, color: "inherit" }}>
-                  <div style={{ fontSize: 19, fontWeight: 600, marginBottom: 8 }}>{p.name}</div>
-                  <div style={{ fontSize: 14, lineHeight: 1.6, color: colors.textDimmer }}>{p.tagline}</div>
-                </Link>
-              </div>
-            </Reveal>
+            <ProjectCard key={p.slug} p={p} />
           ))}
-        </div>
+        </TileCarousel>
         <div style={{ marginTop: 24 }}>
           <Link href="/work" className="btn-secondary" style={{ display: "inline-block" }}>
             See all work →
@@ -103,12 +80,21 @@ export default async function Home() {
         </div>
       </div>
 
+      <div style={{ margin: "0 0 100px" }}>
+        <span style={kickerStyle}>Reviews</span>
+        <h2 style={h2Style}>Real feedback, from Google.</h2>
+        <p style={{ fontSize: 15.5, lineHeight: 1.6, color: colors.textDim, maxWidth: "62ch", margin: "14px 0 32px" }}>
+          No cherry-picked quotes here — real, verifiable reviews straight from Google.
+        </p>
+        <GbpSection />
+      </div>
+
       <div id="packages" style={{ margin: "0 0 100px", scrollMarginTop: 90 }}>
         <span style={kickerStyle}>Build your package</span>
         <h2 style={h2Style}>Start with a budget. Build up from there.</h2>
         <p style={{ fontSize: 15.5, lineHeight: 1.6, color: colors.textDim, maxWidth: "62ch", margin: "14px 0 40px" }}>
-          Pick a starting package, then add exactly what your business needs — the total updates as you go. Every
-          add-on is also sellable on its own.
+          Pick a starting package, then add exactly what your business needs on top of it. Every add-on is also
+          sellable on its own.
         </p>
         <GuaranteeBlock />
         <PackageBuilder />
@@ -150,10 +136,6 @@ export default async function Home() {
       />
 
       <FaqSection />
-
-      <div style={{ margin: "0 0 40px" }}>
-        <GbpSection />
-      </div>
     </section>
   );
 }
