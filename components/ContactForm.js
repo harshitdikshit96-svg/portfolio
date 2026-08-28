@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { colors } from "@/lib/colors";
 import { SOCIAL, SERVICES } from "@/lib/data";
+import { trackEvent } from "@/lib/analytics";
 
 const initialForm = { name: "", email: "", service: SERVICES[0].title, message: "" };
 
@@ -23,6 +24,7 @@ export default function ContactForm() {
       form.message,
     ].join("\n");
     const mailto = `mailto:${SOCIAL.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    trackEvent("generate_lead", { lead_type: "contact_form" });
     window.location.href = mailto;
     setSent(true);
   };

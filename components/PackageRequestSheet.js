@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { validateName, validatePhone } from "@/lib/validation";
+import { trackEvent } from "@/lib/analytics";
 
 const formatRs = (n) => `₹${n.toLocaleString("en-IN")}`;
 
@@ -78,6 +79,7 @@ export default function PackageRequestSheet({ tier, addons, total, onClose }) {
         return;
       }
       setStatus("success");
+      trackEvent("generate_lead", { lead_type: "package_request" });
     } catch {
       setServerError("Couldn't reach the server — check your connection and try again.");
       setStatus("error");

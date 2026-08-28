@@ -6,6 +6,7 @@ import { getScreenshotManifest, withScreenshot } from "@/lib/screenshots";
 import { pageMetadata, breadcrumbJsonLd } from "@/lib/seo";
 import ImageSlot from "@/components/ImageSlot";
 import CtaBand from "@/components/CtaBand";
+import TrackContentView from "@/components/TrackContentView";
 
 const ALL_PROJECTS = [...LIVE_PROJECTS, ...TEMPLATE_PROJECTS];
 
@@ -47,6 +48,7 @@ export default async function Page({ params }) {
   return (
     <section data-screen-label={project.name} style={{ padding: "80px 0 40px", animation: "fadeUp 0.25s ease both" }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }} />
+      <TrackContentView contentType="case_study" itemId={project.slug} />
 
       <Link href="/work" className="dashed-link" style={{ fontSize: 13, color: colors.accent, marginBottom: 20, display: "inline-block" }}>
         ← Back to work

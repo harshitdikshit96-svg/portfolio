@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { CALENDLY_URL, PACKAGE_TIERS } from "@/lib/data";
+import { PACKAGE_TIERS } from "@/lib/data";
+import CalendlyLink from "@/components/CalendlyLink";
 
 // Icons — inline strokes/fills, no icon library, matching the pattern
 // already used across UspBanner/HeroCarousel's process-step icons.
@@ -115,10 +116,10 @@ export default function HeroCarousel() {
                 then you&apos;ll see a working draft before you pay anything.
               </p>
               <div className="hero-cta-row">
-                <a className="btn-primary hero-btn" href={CALENDLY_URL} target="_blank" rel="noopener noreferrer">
+                <CalendlyLink className="btn-primary hero-btn">
                   Book a free 30-min call
                   <span className="hero-btn-arrow"><ArrowRightIcon /></span>
-                </a>
+                </CalendlyLink>
               </div>
               <div className="hero-chips">
                 <span className="tag tag-outline">Free first draft in ~3 hrs</span>

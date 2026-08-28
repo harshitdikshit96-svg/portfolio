@@ -1,8 +1,9 @@
 import { colors } from "@/lib/colors";
-import { CALENDLY_URL, LIVE_PROJECTS, TEMPLATE_PROJECTS } from "@/lib/data";
+import { LIVE_PROJECTS, TEMPLATE_PROJECTS } from "@/lib/data";
 import { getScreenshotManifest, withScreenshots } from "@/lib/screenshots";
 import TileCarousel from "@/components/TileCarousel";
 import ProjectCard from "@/components/ProjectCard";
+import CalendlyLink from "@/components/CalendlyLink";
 import UspBanner from "@/components/UspBanner";
 import HeroCarousel from "@/components/HeroCarousel";
 import GuaranteeBlock from "@/components/GuaranteeBlock";
@@ -124,9 +125,7 @@ export default async function Home() {
           }}
         >
           <p style={{ margin: 0, fontSize: 15 }}>Not sure where to start? The 30-minute discovery call is free.</p>
-          <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">
-            Book a free call
-          </a>
+          <CalendlyLink className="btn-primary">Book a free call</CalendlyLink>
         </div>
       </div>
 

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { colors } from "@/lib/colors";
 import { PACKAGE_TIERS, ADDONS } from "@/lib/data";
+import { trackEvent } from "@/lib/analytics";
 import PackageRequestSheet from "@/components/PackageRequestSheet";
 
 const formatRs = (n) => `₹${n.toLocaleString("en-IN")}`;
@@ -37,7 +38,10 @@ export default function PackageBuilder() {
             <button
               key={t.id}
               type="button"
-              onClick={() => setTierId(t.id)}
+              onClick={() => {
+                setTierId(t.id);
+                trackEvent("select_item", { item_id: t.id });
+              }}
               className={`package-card ${selected ? "selected" : ""}`}
               style={{
                 background: selected ? colors.accentTint : colors.bgCard,

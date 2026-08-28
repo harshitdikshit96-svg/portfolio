@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { colors } from "@/lib/colors";
-import { SERVICE_CATALOG, CALENDLY_URL } from "@/lib/data";
+import { SERVICE_CATALOG } from "@/lib/data";
 import { pageMetadata, breadcrumbJsonLd } from "@/lib/seo";
 import ConsultationCta from "@/components/ConsultationCta";
+import CalendlyLink from "@/components/CalendlyLink";
 
 export const metadata = pageMetadata({
   title: "Website & SEO Services",
@@ -82,9 +83,7 @@ export default function Page() {
         }}
       >
         <p style={{ margin: 0, fontSize: 15 }}>Not sure which of these applies to you? Ask on a free call.</p>
-        <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">
-          Book a free call
-        </a>
+        <CalendlyLink className="btn-primary">Book a free call</CalendlyLink>
       </div>
 
       <ConsultationCta />
