@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { colors } from "@/lib/colors";
-import { SERVICE_CATALOG } from "@/lib/data";
+import { SERVICE_CATALOG, LOCAL_LANDINGS } from "@/lib/data";
 import { pageMetadata, breadcrumbJsonLd } from "@/lib/seo";
 import ConsultationCta from "@/components/ConsultationCta";
 import CalendlyLink from "@/components/CalendlyLink";
@@ -33,6 +33,41 @@ export default function Page() {
         . This page is just a plain-language answer to &ldquo;what is this, and why would I need it,&rdquo; so you
         can pick what&apos;s relevant before we talk pricing.
       </p>
+
+      {/* Entry points to the four city-targeted service pages. /services
+          explains what each thing is; those pages sell one thing each to
+          someone who already searched for it by name. */}
+      <div style={{ marginBottom: 64 }}>
+        <h2 style={{ fontSize: "clamp(22px,2.6vw,28px)", fontWeight: 700, margin: "0 0 8px", letterSpacing: "-0.01em" }}>
+          Looking for something specific in Lucknow?
+        </h2>
+        <p style={{ fontSize: 15, color: colors.textDim, margin: "0 0 24px", maxWidth: 640 }}>
+          Each of these has its own page with pricing, real work and the questions people usually ask.
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 14 }}>
+          {LOCAL_LANDINGS.map((l) => (
+            <Link
+              key={l.slug}
+              href={`/${l.slug}`}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 6,
+                background: colors.bgCard,
+                border: `1px solid ${colors.border}`,
+                borderRadius: 10,
+                padding: "18px 22px",
+                textDecoration: "none",
+                color: "inherit",
+              }}
+            >
+              <span style={{ fontSize: 16.5, fontWeight: 600 }}>{l.navLabel}</span>
+              <span style={{ fontSize: 14, lineHeight: 1.55, color: colors.textDimmer }}>{l.h1}</span>
+              <span style={{ fontSize: 13.5, color: colors.accent, marginTop: 2 }}>See pricing →</span>
+            </Link>
+          ))}
+        </div>
+      </div>
 
       {SERVICE_CATALOG.map((group) => (
         <div key={group.category} id={group.slug} style={{ marginBottom: 64, scrollMarginTop: 90 }}>

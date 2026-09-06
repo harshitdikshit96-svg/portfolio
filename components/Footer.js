@@ -2,7 +2,7 @@
 
 import { memo, useMemo } from "react";
 import Link from "next/link";
-import { NAV_DEFS, SOCIAL } from "@/lib/data";
+import { NAV_DEFS, SOCIAL, LOCAL_LANDINGS } from "@/lib/data";
 
 // Deliberately its own dark island (neutral-900) rather than the site's
 // light `colors.*` tokens — matches the "Harshit Creates" design, which
@@ -58,6 +58,21 @@ function Footer() {
           {NAV_DEFS.map((item) => (
             <Link key={item.id} href={item.href} className="footer-link" style={linkStyle}>
               {item.label}
+            </Link>
+          ))}
+        </div>
+
+        {/* Sitewide links to the four local landing pages. These carry the
+            city-qualified keywords the Ads campaign bids on, so they need
+            an internal link from every page rather than being reachable
+            only by paid click. */}
+        <div style={{ flex: "0 1 200px", display: "flex", flexDirection: "column", gap: 10 }}>
+          <span style={{ fontSize: 12, letterSpacing: "0.08em", textTransform: "uppercase", color: footerColors.textFaint, marginBottom: 4 }}>
+            Lucknow
+          </span>
+          {LOCAL_LANDINGS.map((l) => (
+            <Link key={l.slug} href={`/${l.slug}`} className="footer-link" style={linkStyle}>
+              {l.navLabel}
             </Link>
           ))}
         </div>

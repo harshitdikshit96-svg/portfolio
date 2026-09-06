@@ -196,16 +196,18 @@ export default function HeroCarousel() {
           <>
             <div className="hero-anim">
               <p className="hero-eyebrow">
-                24-hour delivery · Starts @ ₹{PACKAGE_TIERS[0].basePriceFrom.toLocaleString("en-IN")}
+                24-hour delivery · Static sites from ₹{PACKAGE_TIERS[0].basePriceFrom.toLocaleString("en-IN")}
               </p>
               {/* Styled identically to the real <h1> on slide 0, but kept as
                   a <p> — a page should carry exactly one <h1>. */}
               <p className="hero-heading">Everyone else quotes a week. Yours is live in 24 hours.</p>
               <p className="hero-lede">
-                Most agencies take 1–3 weeks and thousands more. One 30-minute call, a free draft in ~3 hours, and
-                a complete site — pages, local SEO, WhatsApp and booking — live within 24 hours, from ₹
-                {PACKAGE_TIERS[0].basePriceFrom.toLocaleString("en-IN")}. Same process and pricing wherever
-                you&apos;re based.
+                Lucknow agencies start at ₹15,000 for a basic business site and take one to three weeks. Here a
+                1–5 page static site is ₹{PACKAGE_TIERS[0].basePriceFrom.toLocaleString("en-IN")} and a full
+                CMS-driven business site you can edit yourself is ₹
+                {PACKAGE_TIERS[1].basePriceFrom.toLocaleString("en-IN")} — one 30-minute call, a free working
+                draft in ~3 hours, live within 24 hours of your content arriving. Same process and pricing
+                wherever you&apos;re based.
               </p>
               <div className="hero-cta-row">
                 <a className="btn-primary hero-btn" href="#packages">
@@ -215,10 +217,12 @@ export default function HeroCarousel() {
               </div>
               <div className="hero-chips">
                 <span className="tag tag-outline">
-                  Complete site from ₹{PACKAGE_TIERS[0].basePriceFrom.toLocaleString("en-IN")}
+                  Static site from ₹{PACKAGE_TIERS[0].basePriceFrom.toLocaleString("en-IN")}
+                </span>
+                <span className="tag tag-outline">
+                  Business site from ₹{PACKAGE_TIERS[1].basePriceFrom.toLocaleString("en-IN")}
                 </span>
                 <span className="tag tag-outline">Live in 24 hrs</span>
-                <span className="tag tag-outline">One 30-min call</span>
                 <span className="tag tag-outline">No advance payment</span>
               </div>
               <p className="hero-reassure">

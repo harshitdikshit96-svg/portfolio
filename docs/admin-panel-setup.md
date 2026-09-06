@@ -63,7 +63,27 @@ Neon is the direct successor and what these instructions assume.
      total INTEGER NOT NULL,
      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
    );
+
+   CREATE TABLE IF NOT EXISTS contact_requests (
+     id SERIAL PRIMARY KEY,
+     name TEXT NOT NULL,
+     phone TEXT NOT NULL,
+     email TEXT,
+     service TEXT NOT NULL,
+     message TEXT NOT NULL,
+     source TEXT,
+     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+   );
    ```
+
+   `contact_requests` backs the contact form (`/contact`). It replaced the
+   old `mailto:` redirect, which only produced a lead if the visitor had a
+   mail client configured and then chose to press send — from a paid ad
+   click on a phone, essentially never. `email` is nullable on purpose:
+   phone is the required field and email is optional, because only a small
+   minority of the local businesses this site sells to publish an email
+   address at all. `source` records the page path the form was submitted
+   from, so paid-landing enquiries can be separated from organic ones.
 
 ### 2. Set the two auth env vars
 

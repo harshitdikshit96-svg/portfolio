@@ -1,4 +1,4 @@
-import { SITE_URL, LIVE_PROJECTS, TEMPLATE_PROJECTS } from "@/lib/data";
+import { SITE_URL, LIVE_PROJECTS, TEMPLATE_PROJECTS, LOCAL_LANDINGS } from "@/lib/data";
 
 const siteUrl = SITE_URL;
 
@@ -17,6 +17,13 @@ const routes = ["", "/packages", "/services", "/work", "/about", "/contact"];
 // from, so this can't drift out of sync with the actual route list.
 const workSlugs = [...LIVE_PROJECTS, ...TEMPLATE_PROJECTS].map((p) => p.slug);
 
+// The four keyword-targeted local landing pages (/digital-marketing-lucknow
+// and friends). These are the pages the Google Ads ad groups point at, so
+// they need to be crawlable and indexable in their own right — a paid
+// landing page that only exists for ad traffic wastes the organic half of
+// the same search demand.
+const landingSlugs = LOCAL_LANDINGS.map((l) => l.slug);
+
 // No `lastModified` field: stamping every route with `new Date()` on every
 // build claims the content changed on every deploy, which Google's own
 // guidance says is worse than omitting the field — it can train a crawler
@@ -32,5 +39,10 @@ export default function sitemap() {
     changeFrequency: "monthly",
     priority: 0.6,
   }));
-  return [...topLevel, ...caseStudies];
+  const landings = landingSlugs.map((slug) => ({
+    url: `${siteUrl}/${slug}`,
+    changeFrequency: "monthly",
+    priority: 0.9,
+  }));
+  return [...topLevel, ...landings, ...caseStudies];
 }
