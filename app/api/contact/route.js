@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { saveContactRequest } from "@/lib/db";
-import { validateName, validatePhone, validateEmailOptional, validateMessage } from "@/lib/validation";
+import { validateName, validatePhone, validateEmailOptional, validateMessageOptional } from "@/lib/validation";
 import { SERVICES } from "@/lib/data";
 
 export const dynamic = "force-dynamic";
@@ -30,7 +30,7 @@ export async function POST(request) {
     validateName(body.name) ||
     validatePhone(body.phone) ||
     validateEmailOptional(body.email) ||
-    validateMessage(body.message);
+    validateMessageOptional(body.message);
   if (error) {
     return NextResponse.json({ error }, { status: 400 });
   }
@@ -46,7 +46,9 @@ export async function POST(request) {
       phone: body.phone.trim(),
       email: (body.email ?? "").trim() || null,
       service,
-      message: body.message.trim(),
+      // Empty string, not null: the column is NOT NULL in the existing
+      // production table, and the message box is now optional.
+      message: (body.message ?? "").trim(),
       // Where on the site the form was submitted from, so enquiries from a
       // paid landing page can be told apart from organic ones later.
       source: typeof body.source === "string" ? body.source.slice(0, 120) : null,

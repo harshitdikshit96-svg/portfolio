@@ -11,6 +11,8 @@ import {
 import ContactForm from "@/components/ContactForm";
 import ConsultationCta from "@/components/ConsultationCta";
 import CalendlyLink from "@/components/CalendlyLink";
+import LeadActions from "@/components/LeadActions";
+import MobileLeadBar from "@/components/MobileLeadBar";
 
 const rs = (n) => `₹${Number(n).toLocaleString("en-IN")}`;
 
@@ -94,8 +96,13 @@ export default function LocalServiceLanding({ landing }) {
       </p>
 
       <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 20 }}>
-        <CalendlyLink className="btn-primary">Book a free 20-min check</CalendlyLink>
-        <Link href="#enquire" className="btn-secondary">
+        {/* Call and WhatsApp lead the row on purpose. A visitor arriving
+            from a search ad is closer to picking up a phone than to
+            choosing a slot in a calendar, and this is the only place on
+            the page they could do it before scrolling. */}
+        <LeadActions source={landing.slug} />
+        <CalendlyLink className="btn-ghost">Book a free 20-min check</CalendlyLink>
+        <Link href="#enquire" className="btn-ghost">
           Or send details →
         </Link>
       </div>
@@ -297,6 +304,7 @@ export default function LocalServiceLanding({ landing }) {
       </div>
 
       <ConsultationCta />
+      <MobileLeadBar />
     </section>
   );
 }

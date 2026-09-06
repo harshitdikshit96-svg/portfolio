@@ -11,9 +11,13 @@ import { trackEvent } from "@/lib/analytics";
  * same pattern already used for Reveal/ImageSlot elsewhere in this
  * codebase, so no page had to be converted to "use client" for this.
  *
- * Fires the same `generate_lead` event shroomly.in's GTM container
- * listens for (lead_type distinguishes this from the contact-form and
- * package-request leads fired elsewhere) — see docs/analytics-setup.md.
+ * This used to fire `generate_lead` on the click. It shouldn't have:
+ * opening a scheduling page is intent, not a booking, and most people who
+ * open it never pick a slot. Counting the click as a lead is the same
+ * mistake that made the Ads account report 29 conversions against zero
+ * real enquiries — so the click now fires its own engagement event, and
+ * `generate_lead` is left to CalendlyBookingTracker, which only fires when
+ * Calendly says a slot was actually booked.
  */
 export default function CalendlyLink({ className, children, ...rest }) {
   return (
@@ -22,7 +26,7 @@ export default function CalendlyLink({ className, children, ...rest }) {
       target="_blank"
       rel="noopener noreferrer"
       className={className}
-      onClick={() => trackEvent("generate_lead", { lead_type: "calendly_click" })}
+      onClick={() => trackEvent("book_call_click")}
       {...rest}
     >
       {children}

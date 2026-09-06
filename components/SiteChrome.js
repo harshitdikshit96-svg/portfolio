@@ -5,6 +5,7 @@ import { colors } from "@/lib/colors";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import StickyCta from "@/components/StickyCta";
+import CalendlyBookingTracker from "@/components/CalendlyBookingTracker";
 
 export default function SiteChrome({ children }) {
   const pathname = usePathname();
@@ -45,6 +46,7 @@ export default function SiteChrome({ children }) {
 
       <Footer />
       <StickyCta />
+      <CalendlyBookingTracker />
     </div>
   );
 }

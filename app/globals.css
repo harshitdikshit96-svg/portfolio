@@ -1902,3 +1902,77 @@ select:focus-visible {
 .admin-table tbody tr:hover {
   background: color-mix(in srgb, #3D52A0 4%, transparent);
 }
+
+/* ---------- Landing-page lead actions ----------
+
+   `.btn-ghost` is a third, quieter button rank. The paid landing pages now
+   lead with Call and WhatsApp (primary/secondary); "Book a free 20-min
+   check" and "Or send details" still sit beside them but must not compete
+   for the eye, and giving them .btn-secondary again would have produced a
+   row of four buttons with no hierarchy at all. */
+.btn-ghost {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 15px;
+  padding: 14px 22px;
+  background: transparent;
+  color: color-mix(in srgb, #1B2036 68%, transparent);
+  border: 1px solid color-mix(in srgb, #3D52A0 18%, transparent);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.btn-ghost:hover {
+  color: #1B2036;
+  border-color: color-mix(in srgb, #3D52A0 40%, transparent);
+}
+
+/* Fixed bottom bar on the landing pages, phones only. Desktop already has
+   the hero row in view for most of the fold; a phone loses it after one
+   swipe, which is where the enquiries were being lost. */
+.lead-bar {
+  display: none;
+}
+@media (max-width: 720px) {
+  .lead-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 70;
+    background: #FFFFFF;
+    border-top: 1px solid color-mix(in srgb, #3D52A0 18%, transparent);
+    box-shadow: 0 -8px 24px -18px color-mix(in srgb, #1B2036 60%, transparent);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .lead-bar-item {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 14px;
+    padding: 15px 6px;
+    text-align: center;
+    color: #1B2036;
+    border-right: 1px solid color-mix(in srgb, #3D52A0 12%, transparent);
+  }
+  .lead-bar-item:last-child {
+    border-right: none;
+  }
+  .lead-bar-call {
+    background: #3D52A0;
+    color: #EDE8F5;
+  }
+  .lead-bar-whatsapp {
+    color: #1F8A4C;
+  }
+  /* The Calendly bubble is fixed bottom-right and would sit on top of the
+     bar; lift it clear rather than hiding it, so both stay reachable. */
+  body.has-lead-bar .sticky-cta-wrap {
+    bottom: 78px;
+  }
+  /* Keep the last section of the page scrollable past the bar. */
+  body.has-lead-bar {
+    padding-bottom: 60px;
+  }
+}

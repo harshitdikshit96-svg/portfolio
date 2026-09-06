@@ -123,7 +123,7 @@ export default async function AdminPage() {
                   </td>
                   <td>{r.email ? <a href={`mailto:${r.email}`}>{r.email}</a> : "—"}</td>
                   <td>{r.service}</td>
-                  <td style={{ maxWidth: 380, whiteSpace: "pre-wrap" }}>{r.message}</td>
+                  <td style={{ maxWidth: 380, whiteSpace: "pre-wrap" }}>{r.message?.trim() ? r.message : "—"}</td>
                   <td>{r.source || "—"}</td>
                   <td>{formatWhen(r.created_at)}</td>
                 </tr>
