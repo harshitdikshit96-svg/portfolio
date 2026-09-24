@@ -12,10 +12,10 @@ export const contentType = "image/png";
 // The OG card uses a dark accent ground (rather than the site's light page
 // background) so it reads at social-preview thumbnail size — colors are
 // picked from the "Harshit Creates" palette in lib/colors.js.
-const bg = "#1B2036";
-const text = "#EDE8F5";
-const textMuted = "#ADBBDA";
-const accent = "#7091E6";
+const bg = "#06070A";
+const text = "#F3F5F8";
+const textMuted = "#949CA8";
+const accent = "#A8D832";
 
 export default function Image() {
   return new ImageResponse(

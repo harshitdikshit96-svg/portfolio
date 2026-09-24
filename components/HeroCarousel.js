@@ -41,7 +41,7 @@ const CheckIcon = () => (
   </svg>
 );
 const ClockIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7091E6" strokeWidth="2">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#44D4E2" strokeWidth="2">
     <circle cx="12" cy="12" r="9" />
     <path d="M12 7v5l3 2" />
   </svg>
@@ -239,7 +239,7 @@ export default function HeroCarousel() {
                 <p className="hero-pill-label">Time to a live website</p>
                 <div className="hero-compare-row">
                   <div className="hero-row-top"><span>Typical agency / freelancer</span><strong>1–3 weeks</strong></div>
-                  <div className="hero-meter"><span style={{ width: "100%", background: "#c9c4e2" }} /></div>
+                  <div className="hero-meter"><span style={{ width: "100%", background: "#A8D832" }} /></div>
                 </div>
                 <div className="hero-compare-row">
                   <div className="hero-row-top"><strong>Harshit Creates</strong><strong className="hero-row-highlight">24 hours</strong></div>

@@ -1,19 +1,22 @@
 import Script from "next/script";
-import { Space_Grotesk, Public_Sans } from "next/font/google";
+import { Space_Grotesk, DM_Sans } from "next/font/google";
 import "./globals.css";
 import SiteChrome from "@/components/SiteChrome";
 import { SOCIAL, SKILL_GROUPS, SERVICES, GTM_ID, SITE_URL, ROLE_TAGLINE } from "@/lib/data";
 
-// Space Grotesk (headings) + Public Sans (body) replace the site's old
-// system-serif look as part of the "Harshit Creates" redesign — see
-// docs/seo-assets-baseline.md for what the previous look/palette was.
+// Space Grotesk (headings) + DM Sans (body). Space Grotesk carries over from
+// the previous light theme — the dark reference build happens to use it too,
+// so the headings needed no change. DM Sans replaces Public Sans for body
+// copy to match that reference: it has a slightly larger x-height and looser
+// default tracking, which is what keeps long paragraphs readable on a dark
+// ground where thin strokes tend to fill in.
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   weight: ["500", "600", "700"],
   variable: "--font-heading",
   display: "swap",
 });
-const publicSans = Public_Sans({
+const dmSans = DM_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-body",
@@ -106,7 +109,7 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: "#EDE8F5",
+  themeColor: "#06070A",
 };
 
 const personJsonLd = {
@@ -170,7 +173,7 @@ const businessJsonLd = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" data-scroll-behavior="smooth" className={`${spaceGrotesk.variable} ${publicSans.variable}`}>
+    <html lang="en" data-scroll-behavior="smooth" className={`${spaceGrotesk.variable} ${dmSans.variable}`}>
       <body>
         {/* Google Tag Manager — GA4 and any future tags/pixels are configured
             inside the GTM container itself (tagmanager.google.com), not

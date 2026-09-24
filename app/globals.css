@@ -1,3 +1,44 @@
+/* ---------------------------------------------------------------------------
+   Theme tokens. Every colour in this file resolves through one of these, so a
+   future re-theme is a single block rather than a find-and-replace across ~180
+   literals (which is what this file was before the dark redesign).
+
+   Values come from the "automate-elevate" reference build, converted from its
+   OKLCH definitions. `lib/colors.js` carries the same palette for the inline
+   styles the components use — the two must be kept in step.
+
+   --c-line is a base for hairline rules, always consumed through color-mix()
+   at a low percentage: on a dark ground the separator is light, not dark.
+   --c-bg doubles as the ink colour on an accent fill, which is correct here —
+   the page ground IS the right text colour on a bright lime button.
+   --------------------------------------------------------------------------- */
+:root {
+  color-scheme: dark;
+
+  --c-bg: #06070A;
+  --c-card: #0D0E12;
+  --c-surface: #121417;
+  --c-chip: #16181D;
+
+  --c-ink: #F3F5F8;
+  --c-dim: #949CA8;
+
+  --c-accent: #A8D832;
+  --c-accent-hover: #BEEA63;
+  --c-accent-deep: #88AF2A;
+  --c-accent-tint: color-mix(in srgb, #A8D832 10%, #0D0E12);
+  --c-accent-line: color-mix(in srgb, #A8D832 32%, transparent);
+
+  --c-teal: #44D4E2;
+  --c-gold: #EAB532;
+
+  --c-line: #FFFFFF;
+  --c-shadow: #000000;
+  --c-scrim: #3A3A42;
+  --c-error: #FF6B6B;
+  --c-success: #56DB8F;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -12,8 +53,8 @@ body {
   padding: 0;
   max-width: 100vw;
   overflow-x: hidden;
-  background: #EDE8F5;
-  color: #1B2036;
+  background: var(--c-bg);
+  color: var(--c-ink);
   font-family: var(--font-body);
 }
 
@@ -23,16 +64,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::selection {
-  background: color-mix(in srgb, #3D52A0 35%, transparent);
+  background: color-mix(in srgb, var(--c-accent) 35%, transparent);
 }
 
 a {
-  color: #3D52A0;
+  color: var(--c-accent);
   text-decoration: none;
 }
 
 a:hover {
-  color: #32458A;
+  color: var(--c-accent-hover);
 }
 
 @keyframes blink {
@@ -60,7 +101,7 @@ a:hover {
 @keyframes pulseDot {
   0%,
   100% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, #3D52A0 50%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--c-shadow) 50%, transparent);
   }
   50% {
     box-shadow: 0 0 0 6px transparent;
@@ -69,11 +110,11 @@ a:hover {
 
 /* Real :hover rules replace the design tool's synthetic "style-hover" attribute. */
 .nav-link:hover {
-  color: #1B2036 !important;
+  color: var(--c-ink) !important;
 }
 
 .dashed-link:hover {
-  color: #1B2036 !important;
+  color: var(--c-ink) !important;
 }
 
 .nav-logo {
@@ -87,7 +128,7 @@ a:hover {
   transition: color 0.2s ease;
 }
 .footer-link:hover {
-  color: #C3CBEB !important;
+  color: var(--c-accent-line) !important;
 }
 
 /* Keyboard-navigation focus ring — most of this site's interactive elements
@@ -99,7 +140,7 @@ button:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
-  outline: 2px solid #3D52A0;
+  outline: 2px solid var(--c-line);
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -127,17 +168,17 @@ select:focus-visible {
   font-weight: 600;
   font-size: 15px;
   padding: 14px 28px;
-  background: #3D52A0;
-  color: #EDE8F5;
+  background: var(--c-accent);
+  color: var(--c-bg);
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
 }
 .btn-primary:hover {
-  background: #32458A;
+  background: var(--c-accent-hover);
   transform: translateY(-2px);
-  box-shadow: 0 12px 24px -12px color-mix(in srgb, #3D52A0 55%, transparent);
+  box-shadow: 0 12px 24px -12px color-mix(in srgb, var(--c-shadow) 55%, transparent);
 }
 .btn-primary:active {
   transform: translateY(0) scale(0.97);
@@ -149,14 +190,14 @@ select:focus-visible {
   font-size: 15px;
   padding: 14px 28px;
   background: transparent;
-  color: #1B2036;
-  border: 1px solid color-mix(in srgb, #3D52A0 35%, transparent);
+  color: var(--c-ink);
+  border: 1px solid color-mix(in srgb, var(--c-line) 35%, transparent);
   border-radius: 8px;
   cursor: pointer;
   transition: border-color 0.2s, transform 0.2s;
 }
 .btn-secondary:hover {
-  border-color: #3D52A0;
+  border-color: var(--c-line);
   transform: translateY(-2px);
 }
 .btn-secondary:active {
@@ -178,18 +219,18 @@ select:focus-visible {
   height: 56px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: #3D52A0;
-  color: #EDE8F5;
+  background: var(--c-accent);
+  color: var(--c-bg);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 12px 28px -10px color-mix(in srgb, #1B2036 50%, transparent);
+  box-shadow: 0 12px 28px -10px color-mix(in srgb, var(--c-shadow) 50%, transparent);
   transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.2s, box-shadow 0.25s;
 }
 .sticky-cta-fab:hover {
-  background: #32458A;
+  background: var(--c-accent-hover);
   transform: scale(1.08) rotate(-4deg);
-  box-shadow: 0 16px 32px -8px color-mix(in srgb, #1B2036 55%, transparent);
+  box-shadow: 0 16px 32px -8px color-mix(in srgb, var(--c-shadow) 55%, transparent);
 }
 .sticky-cta-fab:active {
   transform: scale(0.96);
@@ -198,19 +239,19 @@ select:focus-visible {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #1B2036;
-  color: #F7F7FB;
+  background: var(--c-chip);
+  color: var(--c-ink);
   font-size: 13px;
   padding: 10px 8px 10px 14px;
   border-radius: 8px;
-  box-shadow: 0 10px 24px -10px color-mix(in srgb, #1B2036 50%, transparent);
+  box-shadow: 0 10px 24px -10px color-mix(in srgb, var(--c-shadow) 50%, transparent);
   animation: fadeUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
   white-space: nowrap;
 }
 .sticky-cta-dismiss {
   background: transparent;
   border: none;
-  color: #8697C4;
+  color: var(--c-dim);
   cursor: pointer;
   font-size: 12px;
   width: 22px;
@@ -219,8 +260,8 @@ select:focus-visible {
   transition: background-color 0.2s, color 0.2s;
 }
 .sticky-cta-dismiss:hover {
-  background: color-mix(in srgb, #F7F7FB 15%, transparent);
-  color: #F7F7FB;
+  background: color-mix(in srgb, var(--c-ink) 15%, transparent);
+  color: var(--c-ink);
 }
 @media (max-width: 640px) {
   .sticky-cta-tooltip {
@@ -240,22 +281,22 @@ select:focus-visible {
   transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 .project-card:hover {
-  border-color: #3D52A0 !important;
+  border-color: var(--c-line) !important;
   transform: translateY(-3px);
-  box-shadow: 0 16px 32px -20px color-mix(in srgb, #1B2036 50%, transparent);
+  box-shadow: 0 16px 32px -20px color-mix(in srgb, var(--c-shadow) 50%, transparent);
 }
 .project-card:active {
   transform: translateY(-1px) scale(0.99);
 }
 
 .work-card {
-  box-shadow: 0 6px 16px -14px color-mix(in srgb, #1B2036 45%, transparent);
+  box-shadow: 0 6px 16px -14px color-mix(in srgb, var(--c-shadow) 45%, transparent);
   transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 .work-card:hover {
-  border-color: #7091E6 !important;
+  border-color: var(--c-teal) !important;
   transform: translateY(-4px);
-  box-shadow: 0 20px 36px -18px color-mix(in srgb, #1B2036 55%, transparent);
+  box-shadow: 0 20px 36px -18px color-mix(in srgb, var(--c-shadow) 55%, transparent);
 }
 .work-card:active {
   transform: translateY(-1px) scale(0.99);
@@ -289,14 +330,14 @@ select:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: color-mix(in srgb, #1B2036 62%, transparent);
+  background: color-mix(in srgb, var(--c-ink) 62%, transparent);
   opacity: 0;
   transition: opacity 0.25s ease;
   text-decoration: none;
 }
 .work-card-visit span {
-  background: #FFFFFF;
-  color: #1B2036;
+  background: var(--c-accent);
+  color: var(--c-bg);
   padding: 9px 16px;
   border-radius: 999px;
   font-size: 13.5px;
@@ -331,7 +372,7 @@ select:focus-visible {
   font-family: var(--font-heading);
   font-size: 13px;
   font-weight: 700;
-  color: #FFFFFF;
+  color: var(--c-bg);
   box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.4);
 }
 .work-tile-status {
@@ -343,11 +384,11 @@ select:focus-visible {
   gap: 6px;
   padding: 6px 11px;
   border-radius: 999px;
-  background: color-mix(in srgb, #FFFFFF 88%, transparent);
+  background: color-mix(in srgb, var(--c-surface) 88%, transparent);
   backdrop-filter: blur(4px);
   font-size: 11.5px;
   font-weight: 600;
-  color: #1B2036;
+  color: var(--c-ink);
 }
 .work-tile-status-dot {
   width: 6px;
@@ -369,9 +410,9 @@ select:focus-visible {
   transition: border-color 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
 }
 .template-card:hover {
-  border-color: #7091E6 !important;
+  border-color: var(--c-teal) !important;
   transform: translateY(-5px) scale(1.015);
-  box-shadow: 0 18px 36px -18px color-mix(in srgb, #1B2036 40%, transparent);
+  box-shadow: 0 18px 36px -18px color-mix(in srgb, var(--c-shadow) 40%, transparent);
 }
 .template-card:active {
   transform: translateY(-2px) scale(0.99);
@@ -381,9 +422,9 @@ select:focus-visible {
   transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 .service-card:hover {
-  border-color: #3D52A0 !important;
+  border-color: var(--c-line) !important;
   transform: translateY(-3px);
-  box-shadow: 0 16px 32px -20px color-mix(in srgb, #1B2036 50%, transparent);
+  box-shadow: 0 16px 32px -20px color-mix(in srgb, var(--c-shadow) 50%, transparent);
 }
 .service-card:active {
   transform: translateY(-1px) scale(0.99);
@@ -397,8 +438,8 @@ select:focus-visible {
   border-radius: 8px;
 }
 .tag-outline {
-  border: 1px solid color-mix(in srgb, #3D52A0 35%, transparent);
-  color: #1B2036;
+  border: 1px solid color-mix(in srgb, var(--c-line) 35%, transparent);
+  color: var(--c-ink);
 }
 
 /* Skill/tag pills — small hover lift so the site reads as interactive even
@@ -407,8 +448,8 @@ select:focus-visible {
   transition: border-color 0.2s, background-color 0.2s, transform 0.15s;
 }
 .tag-chip:hover {
-  border-color: #3D52A0 !important;
-  color: #1B2036 !important;
+  border-color: var(--c-line) !important;
+  color: var(--c-ink) !important;
 }
 
 .freelance-pill {
@@ -417,22 +458,22 @@ select:focus-visible {
   align-items: center;
   gap: 8px;
   padding: 9px 15px;
-  border: 1px solid color-mix(in srgb, #3D52A0 35%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c-line) 35%, transparent);
   border-radius: 10px;
-  color: #1B2036;
+  color: var(--c-ink);
   white-space: nowrap;
   flex-shrink: 0;
   transition: border-color 0.2s, transform 0.15s;
 }
 .freelance-pill:hover {
-  border-color: #3D52A0;
+  border-color: var(--c-line);
   transform: translateY(-1px);
 }
 .freelance-pill-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #3D52A0;
+  background: var(--c-accent);
   animation: pulseDot 2s infinite;
 }
 
@@ -466,7 +507,7 @@ select:focus-visible {
   position: absolute;
   bottom: -1px;
   height: 2px;
-  background: #3D52A0;
+  background: var(--c-accent);
   transition: left 0.3s ease, width 0.3s ease;
   pointer-events: none;
 }
@@ -499,7 +540,7 @@ select:focus-visible {
   transition: background-color 0.2s;
 }
 .nav-hamburger:hover {
-  background: color-mix(in srgb, #1B2036 6%, transparent);
+  background: color-mix(in srgb, var(--c-ink) 6%, transparent);
 }
 .nav-hamburger span {
   /* Fixed width (not 100%) so the icon itself stays the same visual size
@@ -508,7 +549,7 @@ select:focus-visible {
   display: block;
   width: 22px;
   height: 2px;
-  background: #1B2036;
+  background: var(--c-ink);
   transition: transform 0.25s ease, opacity 0.2s ease;
 }
 .nav-hamburger.open span:nth-child(1) {
@@ -558,9 +599,9 @@ select:focus-visible {
     top: 100%;
     left: 0;
     right: 0;
-    background: color-mix(in srgb, #F6F4FB 97%, transparent);
+    background: color-mix(in srgb, var(--c-card) 97%, transparent);
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid color-mix(in srgb, #3D52A0 20%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-line) 20%, transparent);
     opacity: 0;
     transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
   }
@@ -625,8 +666,8 @@ select:focus-visible {
 }
 .nav-mobile-link:hover,
 .nav-mobile-link:active {
-  background: color-mix(in srgb, #1B2036 5%, transparent);
-  color: #1B2036 !important;
+  background: color-mix(in srgb, var(--c-ink) 5%, transparent);
+  color: var(--c-ink) !important;
 }
 
 /* Dims the page behind the open mobile menu — also gives users an obvious
@@ -649,7 +690,7 @@ select:focus-visible {
        the part that was missing — blurring the content behind the menu
        (not just tinting it) is what actually erases readability while
        still letting a translucent glass effect show through. */
-    background: color-mix(in srgb, #52525B 70%, transparent);
+    background: color-mix(in srgb, var(--c-scrim) 70%, transparent);
     /* Only declare the unprefixed property, same as .nav-mobile-panel
        below — the build's own autoprefixing adds -webkit-backdrop-filter
        correctly. Writing both by hand here made the build tool drop the
@@ -763,7 +804,7 @@ select:focus-visible {
   overflow: hidden;
   flex: 0 0 216px;
   scroll-snap-align: start;
-  background: #F6F4FB;
+  background: var(--c-card);
   border: 1.5px solid transparent;
   border-radius: 10px;
   padding: 22px;
@@ -772,9 +813,9 @@ select:focus-visible {
 }
 .usp-tile:hover {
   transform: translateY(-6px) scale(1.02);
-  border-color: #3D52A0;
-  background: #EEF0FA;
-  box-shadow: 0 18px 36px -16px color-mix(in srgb, #1B2036 30%, transparent);
+  border-color: var(--c-line);
+  background: var(--c-accent-tint);
+  box-shadow: 0 18px 36px -16px color-mix(in srgb, var(--c-shadow) 30%, transparent);
 }
 .usp-tile-index {
   position: absolute;
@@ -784,18 +825,18 @@ select:focus-visible {
   font-size: 34px;
   font-weight: 700;
   line-height: 1;
-  color: #DCE1F5;
+  color: var(--c-dim);
   transition: color 0.3s ease;
 }
 .usp-tile:hover .usp-tile-index {
-  color: #C3CBEB;
+  color: var(--c-accent-line);
 }
 .usp-icon {
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: #EDE8F5;
-  border: 1.5px solid #C3CBEB;
+  background: var(--c-bg);
+  border: 1.5px solid var(--c-accent-line);
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -807,8 +848,8 @@ select:focus-visible {
 }
 .usp-tile:hover .usp-icon {
   transform: scale(1.15) rotate(-6deg);
-  border-color: #3D52A0;
-  background: #3D52A0;
+  border-color: var(--c-line);
+  background: var(--c-accent);
 }
 @media (max-width: 640px) {
   .usp-tile {
@@ -827,21 +868,21 @@ select:focus-visible {
   height: 38px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: #F6F4FB;
-  border: 1.5px solid #C3CBEB;
-  color: #3D52A0;
+  background: var(--c-card);
+  border: 1.5px solid var(--c-accent-line);
+  color: var(--c-accent);
   font-size: 20px;
   line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 10px 24px -14px color-mix(in srgb, #1B2036 40%, transparent);
+  box-shadow: 0 10px 24px -14px color-mix(in srgb, var(--c-shadow) 40%, transparent);
   transition: transform 0.2s, border-color 0.2s, opacity 0.2s;
   z-index: 2;
 }
 .usp-arrow:hover:not(:disabled) {
-  border-color: #3D52A0;
+  border-color: var(--c-line);
   transform: translateY(-50%) scale(1.08);
 }
 .usp-arrow:disabled {
@@ -905,21 +946,21 @@ select:focus-visible {
   height: 38px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: #F6F4FB;
-  border: 1.5px solid #C3CBEB;
-  color: #3D52A0;
+  background: var(--c-card);
+  border: 1.5px solid var(--c-accent-line);
+  color: var(--c-accent);
   font-size: 20px;
   line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 10px 24px -14px color-mix(in srgb, #1B2036 40%, transparent);
+  box-shadow: 0 10px 24px -14px color-mix(in srgb, var(--c-shadow) 40%, transparent);
   transition: transform 0.2s, border-color 0.2s, opacity 0.2s;
   z-index: 2;
 }
 .tile-arrow:hover:not(:disabled) {
-  border-color: #3D52A0;
+  border-color: var(--c-line);
   transform: translateY(-50%) scale(1.08);
 }
 .tile-arrow:disabled {
@@ -945,21 +986,21 @@ select:focus-visible {
   gap: 18px;
 }
 .pricing-card {
-  background: #F6F4FB;
+  background: var(--c-card);
   padding: 24px;
   border-radius: 10px;
   border: 1.5px solid transparent;
   display: flex;
   flex-direction: column;
   gap: 6px;
-  color: #1B2036;
+  color: var(--c-ink);
   text-decoration: none;
   transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, border-color 0.25s ease;
 }
 .pricing-card:hover {
   transform: translateY(-5px);
-  border-color: #3D52A0;
-  box-shadow: 0 14px 32px -16px color-mix(in srgb, #1B2036 26%, transparent);
+  border-color: var(--c-line);
+  box-shadow: 0 14px 32px -16px color-mix(in srgb, var(--c-shadow) 26%, transparent);
 }
 
 /* ---------- Packages / add-on selector ---------- */
@@ -987,8 +1028,8 @@ select:focus-visible {
   transform: translateY(-3px);
 }
 .package-card.selected {
-  border-color: #3D52A0 !important;
-  box-shadow: 0 16px 32px -20px color-mix(in srgb, #1B2036 50%, transparent);
+  border-color: var(--c-line) !important;
+  box-shadow: 0 16px 32px -20px color-mix(in srgb, var(--c-shadow) 50%, transparent);
 }
 
 .price-summary {
@@ -1001,9 +1042,9 @@ select:focus-visible {
   flex-wrap: wrap;
   padding: 20px 24px;
   border-radius: 10px;
-  background: #F6F4FB;
-  border: 1px solid color-mix(in srgb, #3D52A0 35%, transparent);
-  box-shadow: 0 20px 40px -20px color-mix(in srgb, #1B2036 55%, transparent);
+  background: var(--c-card);
+  border: 1px solid color-mix(in srgb, var(--c-line) 35%, transparent);
+  box-shadow: 0 20px 40px -20px color-mix(in srgb, var(--c-shadow) 55%, transparent);
 }
 
 /* ---------- Consultation / Calendly block ---------- */
@@ -1021,21 +1062,21 @@ select:focus-visible {
 .calendly-frame {
   width: 100%;
   min-height: 480px;
-  border: 1px solid color-mix(in srgb, #3D52A0 20%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c-line) 20%, transparent);
   border-radius: 10px;
-  background: #F6F4FB;
+  background: var(--c-card);
 }
 
 /* ---------- FAQ ---------- */
 .faq-item {
-  background: #F6F4FB;
+  background: var(--c-card);
   border: 1.5px solid transparent;
   border-radius: 10px;
   padding: 18px 22px;
   transition: border-color 0.2s ease;
 }
 .faq-item[open] {
-  border-color: #C3CBEB;
+  border-color: var(--c-accent-line);
 }
 .faq-item summary {
   cursor: pointer;
@@ -1055,7 +1096,7 @@ select:focus-visible {
   flex-shrink: 0;
   font-size: 20px;
   font-weight: 400;
-  color: #3D52A0;
+  color: var(--c-accent);
   transition: transform 0.25s ease;
 }
 .faq-item[open] summary::after {
@@ -1068,18 +1109,18 @@ select:focus-visible {
   font-family: "Times New Roman", Times, serif;
   font-size: 15px;
   padding: 13px 16px;
-  background: #F6F4FB;
-  border: 1px solid color-mix(in srgb, #3D52A0 20%, transparent);
+  background: var(--c-card);
+  border: 1px solid color-mix(in srgb, var(--c-line) 20%, transparent);
   border-radius: 8px;
-  color: #1B2036;
+  color: var(--c-ink);
   outline: none;
   transition: border-color 0.2s;
 }
 .contact-field:focus {
-  border-color: #3D52A0;
+  border-color: var(--c-line);
 }
 .contact-field::placeholder {
-  color: color-mix(in srgb, #1B2036 40%, transparent);
+  color: color-mix(in srgb, var(--c-ink) 40%, transparent);
 }
 
 /* ---------- Hero carousel ---------- */
@@ -1113,7 +1154,7 @@ select:focus-visible {
 }
 .hero-bg-dots {
   opacity: 0.6;
-  background-image: radial-gradient(color-mix(in srgb, #3D52A0 28%, transparent) 1px, transparent 1px);
+  background-image: radial-gradient(color-mix(in srgb, var(--c-accent) 28%, transparent) 1px, transparent 1px);
   background-size: 22px 22px;
 }
 .hero-bg-wash {
@@ -1124,7 +1165,7 @@ select:focus-visible {
   border-radius: 9999px;
   pointer-events: none;
   filter: blur(38px);
-  background: radial-gradient(circle at 30% 30%, color-mix(in srgb, #3D52A0 30%, transparent), transparent 70%);
+  background: radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--c-accent) 30%, transparent), transparent 70%);
 }
 
 .hero-slide-grid {
@@ -1172,7 +1213,7 @@ select:focus-visible {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #283770;
+  color: var(--c-accent-deep);
 }
 .hero-heading {
   margin: 14px 0 0;
@@ -1187,7 +1228,7 @@ select:focus-visible {
   max-width: 52ch;
   font-size: 17px;
   line-height: 1.6;
-  color: color-mix(in srgb, #1B2036 72%, transparent);
+  color: color-mix(in srgb, var(--c-ink) 72%, transparent);
 }
 .hero-cta-row {
   margin-top: 28px;
@@ -1221,10 +1262,10 @@ select:focus-visible {
   gap: 8px;
   font-size: 14px;
   font-weight: 500;
-  color: color-mix(in srgb, #1B2036 66%, transparent);
+  color: color-mix(in srgb, var(--c-ink) 66%, transparent);
 }
 .hero-reassure svg {
-  color: #7091E6;
+  color: var(--c-teal);
   flex-shrink: 0;
 }
 
@@ -1236,10 +1277,10 @@ select:focus-visible {
   max-width: 520px;
 }
 .hero-card {
-  background: #FFFFFF;
-  border: 1px solid color-mix(in srgb, #3D52A0 20%, transparent);
+  background: var(--c-surface);
+  border: 1px solid color-mix(in srgb, var(--c-line) 20%, transparent);
   border-radius: 16px;
-  box-shadow: 0 24px 60px -28px color-mix(in srgb, #1B2036 35%, transparent), 0 2px 6px color-mix(in srgb, #1B2036 6%, transparent);
+  box-shadow: 0 24px 60px -28px color-mix(in srgb, var(--c-shadow) 35%, transparent), 0 2px 6px color-mix(in srgb, var(--c-shadow) 6%, transparent);
 }
 .hero-float {
   animation: heroFloat 6s ease-in-out infinite;
@@ -1269,7 +1310,7 @@ select:focus-visible {
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #7091E6;
+  color: var(--c-teal);
 }
 .hero-search-name {
   margin: 8px 0 0;
@@ -1290,11 +1331,11 @@ select:focus-visible {
 .hero-stars {
   display: flex;
   gap: 2px;
-  color: #7091E6;
+  color: var(--c-teal);
 }
 .hero-search-count {
   font-size: 12px;
-  color: color-mix(in srgb, #1B2036 66%, transparent);
+  color: color-mix(in srgb, var(--c-ink) 66%, transparent);
 }
 .hero-search-open {
   margin: 8px 0 0;
@@ -1302,7 +1343,7 @@ select:focus-visible {
   align-items: center;
   gap: 6px;
   font-size: 12px;
-  color: color-mix(in srgb, #1B2036 66%, transparent);
+  color: color-mix(in srgb, var(--c-ink) 66%, transparent);
 }
 
 .hero-site-card {
@@ -1315,23 +1356,23 @@ select:focus-visible {
   display: flex;
   align-items: center;
   gap: 6px;
-  border-bottom: 1px solid color-mix(in srgb, #3D52A0 20%, transparent);
-  background: #F6F4FB;
+  border-bottom: 1px solid color-mix(in srgb, var(--c-line) 20%, transparent);
+  background: var(--c-card);
   padding: 12px 16px;
 }
 .hero-site-dot {
   width: 10px;
   height: 10px;
   border-radius: 9999px;
-  background: color-mix(in srgb, #3D52A0 20%, transparent);
+  background: color-mix(in srgb, var(--c-accent) 20%, transparent);
 }
 .hero-site-url {
   margin-left: 12px;
-  background: #FFFFFF;
+  background: var(--c-surface);
   border-radius: 6px;
   padding: 4px 10px;
   font-size: 11px;
-  color: color-mix(in srgb, #1B2036 66%, transparent);
+  color: color-mix(in srgb, var(--c-ink) 66%, transparent);
 }
 .hero-site-body {
   padding: 24px;
@@ -1355,7 +1396,7 @@ select:focus-visible {
 .hero-line {
   height: 8px;
   border-radius: 9999px;
-  background: color-mix(in srgb, #3D52A0 20%, transparent);
+  background: color-mix(in srgb, var(--c-accent) 20%, transparent);
 }
 .hero-site-headline,
 .hero-site-lines {
@@ -1368,14 +1409,14 @@ select:focus-visible {
 .hero-headline-block {
   height: 16px;
   border-radius: 6px;
-  background: #3D52A0;
+  background: var(--c-accent);
 }
 .hero-mini-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #3D52A0;
-  color: #fff;
+  background: var(--c-accent);
+  color: var(--c-bg);
   border-radius: 8px;
   padding: 10px 16px;
   font-size: 12px;
@@ -1388,14 +1429,14 @@ select:focus-visible {
   gap: 8px;
 }
 .hero-tile {
-  border: 1px solid color-mix(in srgb, #3D52A0 20%, transparent);
-  background: #F6F4FB;
+  border: 1px solid color-mix(in srgb, var(--c-line) 20%, transparent);
+  background: var(--c-card);
   border-radius: 8px;
   padding: 12px 8px;
   text-align: center;
   font-size: 10px;
   font-weight: 500;
-  color: color-mix(in srgb, #1B2036 66%, transparent);
+  color: color-mix(in srgb, var(--c-ink) 66%, transparent);
 }
 
 .hero-pill {
@@ -1417,14 +1458,14 @@ select:focus-visible {
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: color-mix(in srgb, #1B2036 66%, transparent);
+  color: color-mix(in srgb, var(--c-ink) 66%, transparent);
 }
 .hero-pill-value {
   margin: 0;
   font-family: var(--font-heading);
   font-size: 18px;
   font-weight: 700;
-  color: #7091E6;
+  color: var(--c-teal);
 }
 
 /* ----- slide 2 graphic ----- */
@@ -1443,25 +1484,25 @@ select:focus-visible {
   font-size: 15px;
 }
 .hero-row-highlight {
-  color: #7091E6;
+  color: var(--c-teal);
 }
 .hero-meter {
   margin-top: 10px;
   height: 8px;
   border-radius: 9999px;
-  background: #EEF0FA;
+  background: var(--c-accent-tint);
   overflow: hidden;
 }
 .hero-meter span {
   display: block;
   height: 100%;
   border-radius: 9999px;
-  background: #3D52A0;
+  background: var(--c-accent);
 }
 .hero-hr {
   margin: 20px 0 0;
   border: 0;
-  border-top: 1px solid color-mix(in srgb, #3D52A0 20%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--c-line) 20%, transparent);
 }
 .hero-checks {
   margin-top: 20px;
@@ -1469,7 +1510,7 @@ select:focus-visible {
   grid-template-columns: 1fr;
   gap: 12px;
   font-size: 15px;
-  color: color-mix(in srgb, #1B2036 66%, transparent);
+  color: color-mix(in srgb, var(--c-ink) 66%, transparent);
 }
 @media (min-width: 560px) {
   .hero-checks {
@@ -1482,7 +1523,7 @@ select:focus-visible {
   align-items: flex-start;
 }
 .hero-check svg {
-  color: #7091E6;
+  color: var(--c-teal);
   flex-shrink: 0;
   margin-top: 3px;
 }
@@ -1545,13 +1586,13 @@ select:focus-visible {
   border: 0;
   padding: 0;
   border-radius: 9999px;
-  background: color-mix(in srgb, #3D52A0 25%, transparent);
+  background: color-mix(in srgb, var(--c-accent) 25%, transparent);
   cursor: pointer;
   transition: width 0.3s ease, background-color 0.3s ease;
 }
 .hero-dotbtn[data-active="true"] {
   width: 32px;
-  background: #3D52A0;
+  background: var(--c-accent);
 }
 .hero-arrows {
   display: flex;
@@ -1564,15 +1605,15 @@ select:focus-visible {
   align-items: center;
   justify-content: center;
   border-radius: 9999px;
-  border: 1px solid color-mix(in srgb, #3D52A0 20%, transparent);
-  background: color-mix(in srgb, #FFFFFF 70%, transparent);
-  color: #1B2036;
+  border: 1px solid color-mix(in srgb, var(--c-line) 20%, transparent);
+  background: color-mix(in srgb, var(--c-surface) 70%, transparent);
+  color: var(--c-ink);
   cursor: pointer;
   transition: background-color 0.2s ease, border-color 0.2s;
 }
 .hero-arrow:hover {
-  background: #FFFFFF;
-  border-color: #3D52A0;
+  background: var(--c-surface);
+  border-color: var(--c-line);
 }
 
 /* ---------- Google reviews marquee ---------- */
@@ -1616,11 +1657,11 @@ select:focus-visible {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  background: #FFFFFF;
-  border: 1px solid color-mix(in srgb, #3D52A0 18%, transparent);
+  background: var(--c-surface);
+  border: 1px solid color-mix(in srgb, var(--c-line) 18%, transparent);
   border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 16px 36px -22px color-mix(in srgb, #1B2036 30%, transparent);
+  box-shadow: 0 16px 36px -22px color-mix(in srgb, var(--c-shadow) 30%, transparent);
 }
 @media (max-width: 640px) {
   .review-card {
@@ -1631,7 +1672,7 @@ select:focus-visible {
   margin: 0;
   font-size: 14.5px;
   line-height: 1.65;
-  color: #1B2036;
+  color: var(--c-ink);
   display: -webkit-box;
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
@@ -1643,7 +1684,7 @@ select:focus-visible {
   gap: 10px;
   margin-top: auto;
   padding-top: 14px;
-  border-top: 1px solid color-mix(in srgb, #3D52A0 14%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--c-line) 14%, transparent);
 }
 .review-avatar {
   width: 34px;
@@ -1652,7 +1693,7 @@ select:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: var(--c-bg);
   font-size: 13px;
   font-weight: 700;
   flex-shrink: 0;
@@ -1679,8 +1720,8 @@ select:focus-visible {
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  background: #3D52A0;
-  color: #EDE8F5;
+  background: var(--c-accent);
+  color: var(--c-bg);
   font-family: var(--font-heading);
   font-weight: 700;
   font-size: 13px;
@@ -1696,7 +1737,7 @@ select:focus-visible {
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: color-mix(in srgb, #1B2036 60%, transparent);
+  background: color-mix(in srgb, var(--c-ink) 60%, transparent);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -1714,10 +1755,10 @@ select:focus-visible {
   width: min(440px, 100%);
   max-height: 85vh;
   overflow-y: auto;
-  background: #FFFFFF;
+  background: var(--c-surface);
   border-radius: 16px;
   padding: 32px;
-  box-shadow: 0 30px 60px -20px color-mix(in srgb, #1B2036 45%, transparent);
+  box-shadow: 0 30px 60px -20px color-mix(in srgb, var(--c-shadow) 45%, transparent);
   animation: requestSheetInDesktop 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 @keyframes requestSheetInDesktop {
@@ -1737,17 +1778,17 @@ select:focus-visible {
   height: 32px;
   border-radius: 8px;
   border: none;
-  background: color-mix(in srgb, #1B2036 6%, transparent);
-  color: #1B2036;
+  background: color-mix(in srgb, var(--c-ink) 6%, transparent);
+  color: var(--c-ink);
   font-size: 14px;
   cursor: pointer;
 }
 .request-sheet-close:hover {
-  background: color-mix(in srgb, #1B2036 12%, transparent);
+  background: color-mix(in srgb, var(--c-ink) 12%, transparent);
 }
 .request-sheet-summary {
   font-size: 14px;
-  color: color-mix(in srgb, #1B2036 66%, transparent);
+  color: color-mix(in srgb, var(--c-ink) 66%, transparent);
   margin: 0 0 22px;
 }
 .request-sheet-form {
@@ -1758,12 +1799,12 @@ select:focus-visible {
 .request-sheet-field-error {
   margin: 6px 0 0;
   font-size: 12.5px;
-  color: #B3261E;
+  color: var(--c-error);
 }
 .request-sheet-disclaimer {
   margin: 0;
   font-size: 12px;
-  color: color-mix(in srgb, #1B2036 46%, transparent);
+  color: color-mix(in srgb, var(--c-ink) 46%, transparent);
 }
 .request-sheet-success {
   padding-top: 8px;
@@ -1790,7 +1831,7 @@ select:focus-visible {
     width: 40px;
     height: 4px;
     border-radius: 2px;
-    background: color-mix(in srgb, #1B2036 18%, transparent);
+    background: color-mix(in srgb, var(--c-ink) 18%, transparent);
     margin: 0 auto 16px;
   }
   .request-sheet-close {
@@ -1808,8 +1849,8 @@ select:focus-visible {
    Nav/Footer/StickyCta, see components/SiteChrome.js) ---------- */
 .admin-shell {
   min-height: 100vh;
-  background: #EDE8F5;
-  color: #1B2036;
+  background: var(--c-bg);
+  color: var(--c-ink);
   padding: 40px 6vw 80px;
 }
 .admin-shell-centered {
@@ -1824,14 +1865,14 @@ select:focus-visible {
   letter-spacing: -0.02em;
 }
 .admin-login-brand-accent {
-  color: #3D52A0;
+  color: var(--c-accent);
 }
 .admin-login-card {
   width: min(360px, 100%);
-  background: #FFFFFF;
+  background: var(--c-surface);
   border-radius: 16px;
   padding: 32px;
-  box-shadow: 0 30px 60px -20px color-mix(in srgb, #1B2036 35%, transparent);
+  box-shadow: 0 30px 60px -20px color-mix(in srgb, var(--c-shadow) 35%, transparent);
 }
 .admin-login-form {
   display: flex;
@@ -1843,13 +1884,13 @@ select:focus-visible {
   display: block;
   font-size: 12.5px;
   font-weight: 600;
-  color: color-mix(in srgb, #1B2036 66%, transparent);
+  color: color-mix(in srgb, var(--c-ink) 66%, transparent);
   margin-bottom: 6px;
 }
 .admin-login-error {
   margin: 0;
   font-size: 13px;
-  color: #B3261E;
+  color: var(--c-error);
 }
 .admin-header {
   display: flex;
@@ -1868,14 +1909,14 @@ select:focus-visible {
   margin: 0 0 24px;
 }
 .admin-empty {
-  color: color-mix(in srgb, #1B2036 55%, transparent);
+  color: color-mix(in srgb, var(--c-ink) 55%, transparent);
   font-size: 15px;
 }
 .admin-table-wrap {
   overflow-x: auto;
   border-radius: 12px;
-  border: 1px solid color-mix(in srgb, #3D52A0 18%, transparent);
-  background: #FFFFFF;
+  border: 1px solid color-mix(in srgb, var(--c-line) 18%, transparent);
+  background: var(--c-surface);
 }
 .admin-table {
   width: 100%;
@@ -1887,20 +1928,20 @@ select:focus-visible {
 .admin-table td {
   text-align: left;
   padding: 12px 16px;
-  border-bottom: 1px solid color-mix(in srgb, #3D52A0 12%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--c-line) 12%, transparent);
 }
 .admin-table th {
   font-family: var(--font-heading);
   font-size: 11.5px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: color-mix(in srgb, #1B2036 55%, transparent);
+  color: color-mix(in srgb, var(--c-ink) 55%, transparent);
 }
 .admin-table tbody tr:last-child td {
   border-bottom: none;
 }
 .admin-table tbody tr:hover {
-  background: color-mix(in srgb, #3D52A0 4%, transparent);
+  background: color-mix(in srgb, var(--c-accent) 4%, transparent);
 }
 
 /* ---------- Landing-page lead actions ----------
@@ -1916,15 +1957,15 @@ select:focus-visible {
   font-size: 15px;
   padding: 14px 22px;
   background: transparent;
-  color: color-mix(in srgb, #1B2036 68%, transparent);
-  border: 1px solid color-mix(in srgb, #3D52A0 18%, transparent);
+  color: color-mix(in srgb, var(--c-ink) 68%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c-line) 18%, transparent);
   border-radius: 8px;
   cursor: pointer;
   transition: color 0.2s, border-color 0.2s;
 }
 .btn-ghost:hover {
-  color: #1B2036;
-  border-color: color-mix(in srgb, #3D52A0 40%, transparent);
+  color: var(--c-ink);
+  border-color: color-mix(in srgb, var(--c-line) 40%, transparent);
 }
 
 /* Fixed bottom bar on the landing pages, phones only. Desktop already has
@@ -1942,9 +1983,9 @@ select:focus-visible {
     right: 0;
     bottom: 0;
     z-index: 70;
-    background: #FFFFFF;
-    border-top: 1px solid color-mix(in srgb, #3D52A0 18%, transparent);
-    box-shadow: 0 -8px 24px -18px color-mix(in srgb, #1B2036 60%, transparent);
+    background: var(--c-surface);
+    border-top: 1px solid color-mix(in srgb, var(--c-line) 18%, transparent);
+    box-shadow: 0 -8px 24px -18px color-mix(in srgb, var(--c-shadow) 60%, transparent);
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
   .lead-bar-item {
@@ -1953,18 +1994,18 @@ select:focus-visible {
     font-size: 14px;
     padding: 15px 6px;
     text-align: center;
-    color: #1B2036;
-    border-right: 1px solid color-mix(in srgb, #3D52A0 12%, transparent);
+    color: var(--c-ink);
+    border-right: 1px solid color-mix(in srgb, var(--c-line) 12%, transparent);
   }
   .lead-bar-item:last-child {
     border-right: none;
   }
   .lead-bar-call {
-    background: #3D52A0;
-    color: #EDE8F5;
+    background: var(--c-accent);
+    color: var(--c-bg);
   }
   .lead-bar-whatsapp {
-    color: #1F8A4C;
+    color: var(--c-success);
   }
   /* The Calendly bubble is fixed bottom-right and would sit on top of the
      bar; lift it clear rather than hiding it, so both stay reachable. */

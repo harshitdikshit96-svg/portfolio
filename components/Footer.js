@@ -8,12 +8,16 @@ import { NAV_DEFS, SOCIAL, LOCAL_LANDINGS } from "@/lib/data";
 // light `colors.*` tokens — matches the "Harshit Creates" design, which
 // keeps the footer dark for contrast regardless of page theme.
 const footerColors = {
-  bg: "#1B2036",
-  heading: "#F7F7FB",
-  text: "#EBEBF5",
-  textMuted: "#8697C4",
-  textFaint: "#6B7AA8",
-  accentHover: "#C3CBEB",
+  // On the light theme the footer differentiated itself by being darker than
+  // the page. On a dark page that reads as a hole, so it now differentiates by
+  // sitting one step ABOVE the ground (card surface + a hairline top rule)
+  // instead of below it.
+  bg: "#0D0E12",
+  heading: "#F3F5F8",
+  text: "#D6DAE0",
+  textMuted: "#949CA8",
+  textFaint: "#79818D",
+  accentHover: "#A8D832",
 };
 
 const linkStyle = { color: footerColors.text, fontSize: 14, textDecoration: "none" };
@@ -46,7 +50,7 @@ function Footer() {
             className="freelance-pill"
             style={{ marginTop: 16, borderColor: footerColors.textFaint, color: footerColors.text }}
           >
-            <span className="freelance-pill-dot" style={{ background: "#7091E6" }} />
+            <span className="freelance-pill-dot" style={{ background: "#44D4E2" }} />
             open to freelance
           </a>
         </div>
