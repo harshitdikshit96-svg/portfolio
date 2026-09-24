@@ -33,7 +33,11 @@ export default function ProjectCard({ p }) {
       <div className="work-card-image-frame">
         <div className="work-card-image">
           <ImageSlot src={p.imageLg} alt={`${p.name} website screenshot`} fill height={200} placeholder="project screenshot" />
-          <span className="work-tile-index" style={{ background: p.tint }} aria-hidden="true">
+          <span
+            className="work-tile-index"
+            style={{ color: p.tint, background: `color-mix(in srgb, ${p.tint} 14%, var(--c-surface))`, boxShadow: `inset 0 0 0 1px color-mix(in srgb, ${p.tint} 30%, transparent)` }}
+            aria-hidden="true"
+          >
             {p.index}
           </span>
           <span className="work-tile-status">

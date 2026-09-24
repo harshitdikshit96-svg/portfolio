@@ -32,7 +32,7 @@
   --c-teal: #44D4E2;
   --c-gold: #EAB532;
 
-  --c-line: #FFFFFF;
+  --c-line: rgba(255, 255, 255, 0.45);
   --c-shadow: #000000;
   --c-scrim: #3A3A42;
   --c-error: #FF6B6B;
@@ -140,7 +140,7 @@ button:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
-  outline: 2px solid var(--c-line);
+  outline: 2px solid var(--c-accent);
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -307,6 +307,22 @@ select:focus-visible {
    the card's edges. */
 .work-card-image-frame {
   padding: 14px 14px 0;
+}
+.work-card-image {
+  background: var(--c-surface);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c-line) 16%, transparent);
+}
+.work-card-image img {
+  filter: brightness(0.82) saturate(0.92);
+}
+.work-card:hover .work-card-image img,
+.work-card:focus-within .work-card-image img {
+  filter: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-card-image img {
+    filter: none;
+  }
 }
 
 /* Image area of a work-card: crops/zooms the screenshot slightly on hover
@@ -1364,7 +1380,7 @@ select:focus-visible {
   width: 10px;
   height: 10px;
   border-radius: 9999px;
-  background: color-mix(in srgb, var(--c-accent) 20%, transparent);
+  background: color-mix(in srgb, var(--c-line) 40%, transparent);
 }
 .hero-site-url {
   margin-left: 12px;
@@ -1396,7 +1412,14 @@ select:focus-visible {
 .hero-line {
   height: 8px;
   border-radius: 9999px;
-  background: color-mix(in srgb, var(--c-accent) 20%, transparent);
+  /* These bars stand in for body copy inside the website mock, so they read as
+     neutral text — not as something interactive. Only the mock's own
+     "Book appointment" button carries the accent, which is the point the
+     graphic is making. */
+  background: color-mix(in srgb, var(--c-line) 34%, transparent);
+}
+.hero-line:first-child {
+  background: color-mix(in srgb, var(--c-line) 52%, transparent);
 }
 .hero-site-headline,
 .hero-site-lines {
@@ -1409,7 +1432,9 @@ select:focus-visible {
 .hero-headline-block {
   height: 16px;
   border-radius: 6px;
-  background: var(--c-accent);
+  /* The mock site's headline — text, so it takes the ink ramp rather than the
+     accent. Leaving it lime made the graphic look like a highlighted page. */
+  background: color-mix(in srgb, var(--c-line) 78%, transparent);
 }
 .hero-mini-btn {
   display: inline-flex;
