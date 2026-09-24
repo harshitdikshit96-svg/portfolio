@@ -5,7 +5,6 @@ import { createPortal } from "react-dom";
 import { validateName, validatePhone } from "@/lib/validation";
 import { trackEvent } from "@/lib/analytics";
 
-const formatRs = (n) => `₹${n.toLocaleString("en-IN")}`;
 
 /**
  * The "Request this package" form — a centered modal on wider screens, a
@@ -28,7 +27,7 @@ const formatRs = (n) => `₹${n.toLocaleString("en-IN")}`;
  * entirely, which is the standard fix for this class of bug regardless of
  * this specific cause.
  */
-export default function PackageRequestSheet({ tier, addons, total, onClose }) {
+export default function PackageRequestSheet({ tier, addons, onClose }) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [errors, setErrors] = useState({});
@@ -123,9 +122,9 @@ export default function PackageRequestSheet({ tier, addons, total, onClose }) {
               Request {tier.name}
             </h3>
             <p className="request-sheet-summary">
-              {formatRs(total)}
-              {addons.length ? ` — ${tier.name} + ${addons.length} add-on${addons.length > 1 ? "s" : ""}` : ""}, starting
-              price
+              {tier.scope}
+              {addons.length ? ` + ${addons.length} add-on${addons.length > 1 ? "s" : ""}` : ""} — quoted on the
+              call, fixed before work starts
             </p>
 
             <form onSubmit={handleSubmit} className="request-sheet-form">

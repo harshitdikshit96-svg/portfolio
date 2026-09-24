@@ -19,11 +19,15 @@ const breadcrumbs = breadcrumbJsonLd([
   { name: "Packages", path: "/packages" },
 ]);
 
-// One Service+Offer per package tier — derived from PACKAGE_TIERS so the
-// schema price can never drift from what's actually rendered on the page.
-// priceSpecification uses `minPrice` rather than a flat `price` because
-// these are "starts @" figures, not fixed quotes — advertising a fixed
-// price in schema the page doesn't actually charge is a manual-action risk.
+// One Service per package tier, derived from PACKAGE_TIERS so the list can
+// never drift from what's rendered on the page.
+//
+// These used to carry an Offer with a minPrice. The page no longer shows a
+// price anywhere, and Google's structured-data policy requires markup to
+// match what's visible — asserting a figure only a crawler can see is the
+// manual-action risk the previous version of this comment warned about, just
+// inverted. The Offer is gone rather than left empty; Service is valid
+// without one.
 const servicesJsonLd = PACKAGE_TIERS.map((tier) => ({
   "@context": "https://schema.org",
   "@type": "Service",
@@ -35,16 +39,6 @@ const servicesJsonLd = PACKAGE_TIERS.map((tier) => ({
     { "@type": "State", name: "Uttar Pradesh" },
     { "@type": "Place", name: "Remote (India-wide)" },
   ],
-  offers: {
-    "@type": "Offer",
-    priceCurrency: "INR",
-    availability: "https://schema.org/InStock",
-    priceSpecification: {
-      "@type": "UnitPriceSpecification",
-      priceCurrency: "INR",
-      minPrice: tier.basePriceFrom,
-    },
-  },
 }));
 
 export default function Page() {
@@ -59,7 +53,7 @@ export default function Page() {
         />
       ))}
       <div style={{ fontSize: 13, color: colors.accent, marginBottom: 12 }}>
-        {"// packages & pricing"}
+        {"// packages & scope"}
       </div>
       <h1 style={{ fontSize: "clamp(32px, 4.4vw, 48px)", margin: "0 0 18px", fontWeight: 700, letterSpacing: "-0.02em", maxWidth: 700 }}>
         Pick a base package, add what you need.
@@ -76,7 +70,7 @@ export default function Page() {
 
       {/* GuaranteeBlock and PackageBuilder each open with an h3 — correct
           when Home.js wraps them in its own visible h2 ("Start with a
-          budget..."), but here on /packages they'd otherwise sit directly
+          shape..."), but here on /packages they'd otherwise sit directly
           under the page h1 with no h2 between, a real heading-hierarchy
           skip. An sr-only h2 closes the gap without adding visible copy
           that wasn't asked for. */}

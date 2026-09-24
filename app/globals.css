@@ -2042,3 +2042,25 @@ select:focus-visible {
     padding-bottom: 60px;
   }
 }
+
+/* The hero footnote is the only qualifier for the only prices left on the
+   site, so it has to be readable rather than fine print — it sits at the ink
+   ramp's quiet end, not below it. */
+.hero-price-note {
+  margin: 14px 0 0;
+  max-width: 52ch;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--c-dim);
+}
+.hero-price-star {
+  margin-left: 2px;
+  font-size: 0.6em;
+  vertical-align: super;
+  color: var(--c-accent);
+}
+@media (max-width: 640px) {
+  .hero-price-note {
+    font-size: 12.5px;
+  }
+}

@@ -196,7 +196,7 @@ export default function HeroCarousel() {
           <>
             <div className="hero-anim">
               <p className="hero-eyebrow">
-                24-hour delivery · Static sites from ₹{PACKAGE_TIERS[0].basePriceFrom.toLocaleString("en-IN")}
+                24-hour delivery · Static sites from ₹{PACKAGE_TIERS[0].basePriceFrom.toLocaleString("en-IN")}*
               </p>
               {/* Styled identically to the real <h1> on slide 0, but kept as
                   a <p> — a page should carry exactly one <h1>. */}
@@ -211,7 +211,7 @@ export default function HeroCarousel() {
               </p>
               <div className="hero-cta-row">
                 <a className="btn-primary hero-btn" href="#packages">
-                  See packages &amp; prices
+                  See packages
                   <span className="hero-btn-arrow"><ArrowRightIcon /></span>
                 </a>
               </div>
@@ -229,6 +229,10 @@ export default function HeroCarousel() {
                 <ShieldCheckIcon />
                 Fixed price agreed upfront — no hourly billing, no surprise add-ons.
               </p>
+              <p className="hero-price-note">
+                * Reference prices. The final number depends on the scope of your project and is agreed
+                together on a free call before anything starts.
+              </p>
             </div>
 
             <div className="hero-graphic">
@@ -239,7 +243,7 @@ export default function HeroCarousel() {
                 <p className="hero-pill-label">Time to a live website</p>
                 <div className="hero-compare-row">
                   <div className="hero-row-top"><span>Typical agency / freelancer</span><strong>1–3 weeks</strong></div>
-                  <div className="hero-meter"><span style={{ width: "100%", background: "#A8D832" }} /></div>
+                  <div className="hero-meter"><span style={{ width: "100%", background: "color-mix(in srgb, var(--c-line) 30%, transparent)" }} /></div>
                 </div>
                 <div className="hero-compare-row">
                   <div className="hero-row-top"><strong>Harshit Creates</strong><strong className="hero-row-highlight">24 hours</strong></div>
@@ -256,7 +260,10 @@ export default function HeroCarousel() {
 
               <div className="hero-card hero-price-card">
                 <p className="hero-pill-label">Complete site from</p>
-                <p className="hero-price-value">₹{PACKAGE_TIERS[0].basePriceFrom.toLocaleString("en-IN")}</p>
+                <p className="hero-price-value">
+                  ₹{PACKAGE_TIERS[0].basePriceFrom.toLocaleString("en-IN")}
+                  <span className="hero-price-star" aria-hidden="true">*</span>
+                </p>
               </div>
 
               <div className="hero-card hero-pill hero-pill-top hero-float">

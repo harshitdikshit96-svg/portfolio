@@ -92,10 +92,10 @@ export default async function Home() {
 
       <div id="packages" style={{ margin: "0 0 100px", scrollMarginTop: 90 }}>
         <span style={kickerStyle}>Build your package</span>
-        <h2 style={h2Style}>Start with a budget. Build up from there.</h2>
+        <h2 style={h2Style}>Start with a shape. Build up from there.</h2>
         <p style={{ fontSize: 15.5, lineHeight: 1.6, color: colors.textDim, maxWidth: "62ch", margin: "14px 0 40px" }}>
-          Pick a starting package, then add exactly what your business needs on top of it. Every add-on is also
-          sellable on its own.
+          Pick the package closest to what you need, then add exactly what your business requires on top of it.
+          Every add-on is also sellable on its own. Send the scope and you get one fixed quote on the call.
         </p>
         <GuaranteeBlock />
         <PackageBuilder />
@@ -131,7 +131,7 @@ export default async function Home() {
 
       <ConsultationCta
         heading="Let's talk about your website — free, no pressure."
-        subtext="30 minutes, on a call. Bring your questions; leave with a clear price and a plan."
+        subtext="30 minutes, on a call. Bring your questions; leave with a clear quote and a plan."
       />
 
       <FaqSection />

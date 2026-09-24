@@ -14,7 +14,6 @@ import CalendlyLink from "@/components/CalendlyLink";
 import LeadActions from "@/components/LeadActions";
 import MobileLeadBar from "@/components/MobileLeadBar";
 
-const rs = (n) => `₹${Number(n).toLocaleString("en-IN")}`;
 
 /**
  * One keyword-targeted local landing page, rendered from a LOCAL_LANDINGS
@@ -24,14 +23,16 @@ const rs = (n) => `₹${Number(n).toLocaleString("en-IN")}`;
  * to speak to everybody at once, so paid traffic arrived on copy that
  * answered none of the question the visitor had just typed into Google.
  * These pages exist so each ad group can land on a page that repeats its
- * own search back to the visitor, states the price, shows real work, and
- * puts the enquiry form on the same screen.
+ * own search back to the visitor, shows real work, and puts the enquiry
+ * form on the same screen.
  *
- * Prices come from RETAINERS and PACKAGE_TIERS rather than being written
- * into the copy, so a price change lands everywhere at once — and each one
- * is shown beside what Lucknow agencies charge for the same thing, because
- * a lower number on its own reads as "not a real vendor" while the same
- * number next to the going rate reads as the saving it is.
+ * These pages no longer show prices. They previously listed every retainer
+ * and package price beside what Lucknow agencies charge for the same work;
+ * that comparison went with them, since a competitor's number with none of
+ * ours next to it is just an unanchored figure. The engagements themselves
+ * still come from RETAINERS and PACKAGE_TIERS, so the list stays in step
+ * with the rest of the site — only the numbers are gone. The one place a
+ * figure still appears is the homepage hero, under an asterisk.
  */
 export default function LocalServiceLanding({ landing }) {
   const retainers = landing.retainerIds
@@ -152,13 +153,13 @@ export default function LocalServiceLanding({ landing }) {
         ))}
       </div>
 
-      {/* ---- pricing ---- */}
+      {/* ---- what's included ---- */}
       <h2 style={{ fontSize: "clamp(22px,2.6vw,28px)", fontWeight: 700, margin: "0 0 8px", letterSpacing: "-0.01em" }}>
-        What it costs
+        What you get
       </h2>
       <p style={{ fontSize: 15, color: colors.textDim, margin: "0 0 28px", maxWidth: 640 }}>
-        Starting prices, published up front. Every one is scoped, and the final number is confirmed together on a
-        free call before anything begins.
+        Every engagement is scoped to what your business actually needs, then quoted as one fixed number on a
+        free call — before anything begins.
       </p>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 24 }}>
@@ -174,11 +175,10 @@ export default function LocalServiceLanding({ landing }) {
           >
             <div style={{ display: "flex", justifyContent: "space-between", gap: 20, flexWrap: "wrap", alignItems: "baseline" }}>
               <div style={{ fontSize: 18, fontWeight: 600 }}>{r.name}</div>
-              <div style={{ fontSize: 17, fontWeight: 600, color: colors.accent, whiteSpace: "nowrap" }}>
-                from {rs(r.priceFrom)}/mo
+              <div style={{ fontSize: 13.5, fontWeight: 600, color: colors.accentDeep, whiteSpace: "nowrap" }}>
+                {r.scope}
               </div>
             </div>
-            <div style={{ fontSize: 13.5, color: colors.textFaint, marginTop: 4 }}>{r.scope}</div>
             <p style={{ fontSize: 15, lineHeight: 1.7, color: colors.textDimmer, margin: "12px 0 12px" }}>{r.summary}</p>
             <ul style={{ margin: 0, paddingLeft: 18, display: "flex", flexDirection: "column", gap: 5 }}>
               {r.includes.map((inc) => (
@@ -187,11 +187,6 @@ export default function LocalServiceLanding({ landing }) {
                 </li>
               ))}
             </ul>
-            {r.marketFrom && (
-              <div style={{ fontSize: 13.5, color: colors.textFaint, marginTop: 14 }}>
-                Lucknow agencies start at {rs(r.marketFrom)}/mo for the same work.
-              </div>
-            )}
           </div>
         ))}
 
@@ -207,18 +202,17 @@ export default function LocalServiceLanding({ landing }) {
           >
             <div style={{ display: "flex", justifyContent: "space-between", gap: 20, flexWrap: "wrap", alignItems: "baseline" }}>
               <div style={{ fontSize: 18, fontWeight: 600 }}>{p.name}</div>
-              <div style={{ fontSize: 17, fontWeight: 600, color: colors.accent, whiteSpace: "nowrap" }}>
-                from {rs(p.basePriceFrom)}
+              <div style={{ fontSize: 13.5, fontWeight: 600, color: colors.accentDeep, whiteSpace: "nowrap" }}>
+                {p.scope}
               </div>
             </div>
-            <div style={{ fontSize: 13.5, color: colors.textFaint, marginTop: 4 }}>{p.scope}</div>
             <p style={{ fontSize: 15, lineHeight: 1.7, color: colors.textDimmer, margin: "12px 0 0" }}>{p.tagline}</p>
           </div>
         ))}
       </div>
 
       <p style={{ fontSize: 14.5, color: colors.textFaint, margin: "0 0 64px", maxWidth: 640 }}>
-        Full breakdown and add-ons on{" "}
+        Full list of packages and add-ons on{" "}
         <Link href="/packages" style={{ color: colors.accent }}>
           the packages page
         </Link>

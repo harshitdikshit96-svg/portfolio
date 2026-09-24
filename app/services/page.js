@@ -26,12 +26,13 @@ export default function Page() {
         What each service is, and what it actually does for you.
       </h1>
       <p style={{ fontSize: 17, lineHeight: 1.75, color: colors.textDim, maxWidth: 660, margin: "0 0 60px" }}>
-        No jargon, no fixed price list here — packages are priced on{" "}
+        No jargon and no price list — every project is quoted as one fixed number on a free call, once the scope
+        is clear. What each package covers is on{" "}
         <Link href="/packages" style={{ color: colors.accent }}>
           the packages page
         </Link>
         . This page is just a plain-language answer to &ldquo;what is this, and why would I need it,&rdquo; so you
-        can pick what&apos;s relevant before we talk pricing.
+        can pick what&apos;s relevant before we talk.
       </p>
 
       {/* Entry points to the four city-targeted service pages. /services
