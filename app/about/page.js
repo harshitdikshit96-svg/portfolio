@@ -1,5 +1,6 @@
 import About from "@/components/sections/About";
 import { pageMetadata, breadcrumbJsonLd } from "@/lib/seo";
+import JsonLd from "@/components/JsonLd";
 
 export const metadata = pageMetadata({
   title: "About",
@@ -16,7 +17,7 @@ const breadcrumbs = breadcrumbJsonLd([
 export default function Page() {
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }} />
+      <JsonLd schema={breadcrumbs} />
       <About />
     </>
   );

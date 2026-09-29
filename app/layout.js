@@ -2,7 +2,9 @@ import Script from "next/script";
 import { Space_Grotesk, DM_Sans } from "next/font/google";
 import "./globals.css";
 import SiteChrome from "@/components/SiteChrome";
-import { SOCIAL, SKILL_GROUPS, SERVICES, GTM_ID, SITE_URL, ROLE_TAGLINE } from "@/lib/data";
+import JsonLd from "@/components/JsonLd";
+import { personSchema, professionalServiceSchema, webSiteSchema } from "@/lib/schema";
+import { GTM_ID, SITE_URL, ROLE_TAGLINE } from "@/lib/data";
 
 // Space Grotesk (headings) + DM Sans (body). Space Grotesk carries over from
 // the previous light theme — the dark reference build happens to use it too,
@@ -112,64 +114,22 @@ export const viewport = {
   themeColor: "#06070A",
 };
 
-const personJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Harshit Dixit",
-  url: siteUrl,
-  // Deliberately fuller than ROLE_TAGLINE (which the <title> tag and OG
-  // image use — those have hard display-length limits this field doesn't).
-  // docs/seo-keywords.md tracks "web solutions architect" and "technical
-  // consultant" as placed here specifically; don't collapse this to
-  // ROLE_TAGLINE or that keyword placement is lost for no display benefit.
-  jobTitle: "Freelance Web Developer, Technical Consultant & Web Solutions Architect",
-  description: defaultDescription,
-  image: `${siteUrl}/images/hero-portrait.webp`,
-  email: `mailto:${SOCIAL.email}`,
-  sameAs: [SOCIAL.linkedin, SOCIAL.github],
-  alumniOf: {
-    "@type": "CollegeOrUniversity",
-    name: "IIIT Lucknow",
-  },
-  knowsAbout: SKILL_GROUPS.flatMap((group) => group.items),
-};
-
-// A service-area business (no storefront), so `areaServed` stands in for a
-// street address per Google's structured-data guidance for businesses like
-// this. Linked to the Person node above via `founder` rather than merged
-// into it, since a person and a service offering are different entities.
-const businessJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "ProfessionalService",
-  "@id": `${siteUrl}/#business`,
-  name: "Harshit Dixit — Freelance Web Developer & Fractional CTO",
-  description: defaultDescription,
-  url: siteUrl,
-  image: `${siteUrl}/images/hero-portrait.webp`,
-  logo: `${siteUrl}/icon.svg`,
-  email: `mailto:${SOCIAL.email}`,
-  founder: {
-    "@type": "Person",
-    name: "Harshit Dixit",
-    url: siteUrl,
-    sameAs: [SOCIAL.linkedin, SOCIAL.github],
-  },
-  sameAs: [SOCIAL.linkedin, SOCIAL.github, SOCIAL.gbpUrl].filter(Boolean),
-  areaServed: [
-    { "@type": "City", name: "Lucknow" },
-    { "@type": "State", name: "Uttar Pradesh" },
-    { "@type": "Place", name: "Remote (Worldwide)" },
-  ],
-  makesOffer: SERVICES.map((service) => ({
-    "@type": "Offer",
-    itemOffered: {
-      "@type": "Service",
-      name: service.title,
-      description: service.desc,
-      areaServed: ["Lucknow", "Remote"],
-    },
-  })),
-};
+// The graph is built in lib/schema.js so every node has one definition and
+// one @id. These three are emitted site-wide; leaf routes add their own
+// Service / FAQPage / BreadcrumbList nodes that reference these by @id
+// rather than restating the business.
+const siteGraph = [
+  personSchema({
+    description: defaultDescription,
+    image: `${siteUrl}/images/hero-portrait.webp`,
+  }),
+  professionalServiceSchema({
+    description: defaultDescription,
+    image: `${siteUrl}/images/hero-portrait.webp`,
+    logo: `${siteUrl}/icon.svg`,
+  }),
+  webSiteSchema({ description: defaultDescription }),
+];
 
 export default function RootLayout({ children }) {
   return (
@@ -195,14 +155,7 @@ export default function RootLayout({ children }) {
           />
         </noscript>
 
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(businessJsonLd) }}
-        />
+        <JsonLd schema={siteGraph} />
         <SiteChrome>{children}</SiteChrome>
       </body>
     </html>

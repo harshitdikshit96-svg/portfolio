@@ -4,6 +4,7 @@ import { SERVICE_CATALOG, LOCAL_LANDINGS } from "@/lib/data";
 import { pageMetadata, breadcrumbJsonLd } from "@/lib/seo";
 import ConsultationCta from "@/components/ConsultationCta";
 import CalendlyLink from "@/components/CalendlyLink";
+import JsonLd from "@/components/JsonLd";
 
 export const metadata = pageMetadata({
   title: "Website & SEO Services",
@@ -20,7 +21,7 @@ const breadcrumbs = breadcrumbJsonLd([
 export default function Page() {
   return (
     <section data-screen-label="Services" style={{ padding: "80px 0 40px", animation: "fadeUp 0.25s ease both" }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }} />
+      <JsonLd schema={breadcrumbs} />
       <div style={{ fontSize: 13, color: colors.accent, marginBottom: 12 }}>{"// services, explained"}</div>
       <h1 style={{ fontSize: "clamp(32px, 4.4vw, 48px)", margin: "0 0 18px", fontWeight: 700, letterSpacing: "-0.02em", maxWidth: 720 }}>
         What each service is, and what it actually does for you.

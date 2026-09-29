@@ -13,6 +13,8 @@ import ConsultationCta from "@/components/ConsultationCta";
 import CalendlyLink from "@/components/CalendlyLink";
 import LeadActions from "@/components/LeadActions";
 import MobileLeadBar from "@/components/MobileLeadBar";
+import JsonLd from "@/components/JsonLd";
+import { serviceSchema, faqPageSchema } from "@/lib/schema";
 
 
 /**
@@ -44,39 +46,28 @@ export default function LocalServiceLanding({ landing }) {
   const allProjects = [...LIVE_PROJECTS, ...TEMPLATE_PROJECTS];
   const proof = landing.proofSlugs.map((s) => allProjects.find((p) => p.slug === s)).filter(Boolean);
 
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: landing.faqs.map((f) => ({
-      "@type": "Question",
-      name: f.question,
-      acceptedAnswer: { "@type": "Answer", text: f.answer },
-    })),
-  };
-
-  const serviceJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    name: landing.h1,
-    serviceType: landing.serviceType,
-    url: `${SITE_URL}/${landing.slug}`,
-    description: landing.metaDescription,
-    provider: {
-      "@type": "ProfessionalService",
-      name: "Harshit Creates",
-      url: SITE_URL,
-    },
-    areaServed: {
-      "@type": "City",
-      name: "Lucknow",
-      containedInPlace: { "@type": "State", name: "Uttar Pradesh" },
-    },
-  };
+  // Both graphs come from lib/schema.js. The Service node's `provider` is an
+  // @id reference to the single business node in the root layout — this used
+  // to mint a second, thinner ProfessionalService inline, which reads to a
+  // crawler as two different businesses sharing a name.
+  const pageGraph = [
+    serviceSchema({
+      name: landing.h1,
+      serviceType: landing.serviceType,
+      description: landing.metaDescription,
+      path: `/${landing.slug}`,
+      areaServed: {
+        "@type": "City",
+        name: "Lucknow",
+        containedInPlace: { "@type": "State", name: "Uttar Pradesh" },
+      },
+    }),
+    faqPageSchema(landing.faqs),
+  ];
 
   return (
     <section data-screen-label={landing.navLabel} style={{ padding: "72px 0 40px", animation: "fadeUp 0.25s ease both" }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <JsonLd schema={pageGraph} />
 
       {/* ---- opener ---- */}
       <div style={{ fontSize: 13, color: colors.accent, marginBottom: 12 }}>{"// lucknow · remote-friendly"}</div>

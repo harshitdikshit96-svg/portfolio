@@ -5,6 +5,7 @@ import TileCarousel from "@/components/TileCarousel";
 import ProjectCard from "@/components/ProjectCard";
 import CtaBand from "@/components/CtaBand";
 import GbpSection from "@/components/GbpSection";
+import JsonLd from "@/components/JsonLd";
 
 // One ListItem/CreativeWork per project so both classic search and answer
 // engines can extract "here are Harshit's actual projects" as structured
@@ -42,7 +43,7 @@ export default async function Work() {
 
   return (
     <section data-screen-label="Work" style={{ padding: "80px 0 40px", animation: "fadeUp 0.25s ease both" }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(allProjectsJsonLd) }} />
+      <JsonLd schema={allProjectsJsonLd} />
 
       <div style={{ fontSize: 13, color: colors.accent, marginBottom: 12 }}>
         {"// things I've built"}

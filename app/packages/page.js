@@ -6,6 +6,7 @@ import GuaranteeBlock from "@/components/GuaranteeBlock";
 import ConsultationCta from "@/components/ConsultationCta";
 import UspBanner from "@/components/UspBanner";
 import Services from "@/components/sections/Services";
+import JsonLd from "@/components/JsonLd";
 
 export const metadata = pageMetadata({
   title: "Packages & Pricing",
@@ -44,13 +45,9 @@ const servicesJsonLd = PACKAGE_TIERS.map((tier) => ({
 export default function Page() {
   return (
     <section data-screen-label="Packages" style={{ padding: "80px 0 40px", animation: "fadeUp 0.25s ease both" }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }} />
+      <JsonLd schema={breadcrumbs} />
       {servicesJsonLd.map((service) => (
-        <script
-          key={service.name}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(service) }}
-        />
+        <JsonLd key={service.name} schema={service} />
       ))}
       <div style={{ fontSize: 13, color: colors.accent, marginBottom: 12 }}>
         {"// packages & scope"}
