@@ -4,7 +4,7 @@ import { memo, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { colors } from "@/lib/colors";
-import { NAV_DEFS } from "@/lib/data";
+import { NAV_DEFS } from "@/lib/site";
 
 const navLinkStyle = (active) => ({
   fontSize: 14,

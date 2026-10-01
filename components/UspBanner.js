@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect, useCallback } from "react";
 import { colors } from "@/lib/colors";
-import { USPS } from "@/lib/data";
+import { USPS } from "@/lib/site";
 import Reveal from "@/components/Reveal";
 
 // Inline stroke icons — replaces the previous per-tile emoji, two of which

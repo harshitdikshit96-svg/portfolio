@@ -1,8 +1,8 @@
-"use client";
-
-import { memo, useMemo } from "react";
+// Server component: nothing here needs the browser, so none of it ships as
+// client JavaScript. SiteChrome (a client component) receives it already
+// rendered, via its `footer` prop, from app/layout.js.
 import Link from "next/link";
-import { NAV_DEFS, SOCIAL, LOCAL_LANDINGS } from "@/lib/data";
+import { NAV_DEFS, SOCIAL } from "@/lib/data";
 
 // Deliberately its own dark island (neutral-900) rather than the site's
 // light `colors.*` tokens — matches the "Harshit Creates" design, which
@@ -22,8 +22,8 @@ const footerColors = {
 
 const linkStyle = { color: footerColors.text, fontSize: 14, textDecoration: "none" };
 
-function Footer() {
-  const year = useMemo(() => new Date().getFullYear(), []);
+export default function Footer({ links = { lucknow: [], india: [] } }) {
+  const year = new Date().getFullYear();
 
   return (
     <footer style={{ position: "relative", zIndex: 1, background: footerColors.bg, color: footerColors.text }}>
@@ -66,20 +66,26 @@ function Footer() {
           ))}
         </div>
 
-        {/* Sitewide links to the four local landing pages. These carry the
-            city-qualified keywords the Ads campaign bids on, so they need
-            an internal link from every page rather than being reachable
-            only by paid click. */}
-        <div style={{ flex: "0 1 200px", display: "flex", flexDirection: "column", gap: 10 }}>
-          <span style={{ fontSize: 12, letterSpacing: "0.08em", textTransform: "uppercase", color: footerColors.textFaint, marginBottom: 4 }}>
-            Lucknow
-          </span>
-          {LOCAL_LANDINGS.map((l) => (
-            <Link key={l.slug} href={`/${l.slug}`} className="footer-link" style={linkStyle}>
-              {l.navLabel}
-            </Link>
-          ))}
-        </div>
+        {/* Sitewide links to every landing page. These carry the keywords
+            the site is built to rank for, so each needs an internal link
+            from every page rather than being reachable only by paid click.
+            The lists arrive as props from app/layout.js — see the note
+            there on why they aren't imported here. */}
+        {[
+          ["Lucknow", links.lucknow],
+          ["Across India", links.india],
+        ].map(([heading, items]) => (
+          <div key={heading} style={{ flex: "0 1 200px", display: "flex", flexDirection: "column", gap: 10 }}>
+            <span style={{ fontSize: 12, letterSpacing: "0.08em", textTransform: "uppercase", color: footerColors.textFaint, marginBottom: 4 }}>
+              {heading}
+            </span>
+            {items.map((l) => (
+              <Link key={l.href} href={l.href} className="footer-link" style={linkStyle}>
+                {l.label}
+              </Link>
+            ))}
+          </div>
+        ))}
 
         <div style={{ flex: "0 1 220px", display: "flex", flexDirection: "column", gap: 10 }}>
           <span style={{ fontSize: 12, letterSpacing: "0.08em", textTransform: "uppercase", color: footerColors.textFaint, marginBottom: 4 }}>
@@ -106,10 +112,9 @@ function Footer() {
         </div>
       </div>
       <div style={{ maxWidth: 1180, margin: "0 auto", padding: "16px 6vw 28px", fontSize: 12, color: footerColors.textFaint }}>
-        © {year} harshitcreates. Every price is starting at · negotiable.
+        © {year} harshitcreates · Lucknow, India. Every project is quoted as one fixed figure before work starts.
       </div>
     </footer>
   );
 }
 
-export default memo(Footer);

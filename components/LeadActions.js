@@ -1,6 +1,6 @@
 "use client";
 
-import { PHONE_URL, PHONE_DISPLAY, WHATSAPP_URL } from "@/lib/data";
+import { PHONE_URL, PHONE_DISPLAY, WHATSAPP_URL } from "@/lib/site";
 import { trackEvent } from "@/lib/analytics";
 
 /**

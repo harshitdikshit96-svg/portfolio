@@ -87,24 +87,35 @@ a:hover {
   }
 }
 
+/* Motion only — no opacity. Every page's main section uses this on load,
+   and starting from opacity: 0 made the whole page's content ineligible as
+   the Largest Contentful Paint element (Chrome ignores anything painted at
+   zero opacity). LCP then fell back to the nav logo and was only recorded
+   after the JavaScript had run: 3.3s in Lighthouse's mobile simulation
+   against a real first paint of 0.8s. A slide without the fade keeps the
+   entrance and lets the content count from its first paint. */
 @keyframes fadeUp {
   from {
-    opacity: 0;
     transform: translateY(14px);
   }
   to {
-    opacity: 1;
     transform: translateY(0);
   }
 }
 
+/* Pulse ring for status dots. It used to animate box-shadow, which forces a
+   repaint on every frame for as long as the page is open (it's infinite);
+   the ring is now a pseudo-element that only changes transform and opacity,
+   both of which the compositor animates without touching the main thread. */
 @keyframes pulseDot {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--c-shadow) 50%, transparent);
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
   }
-  50% {
-    box-shadow: 0 0 0 6px transparent;
+  70%,
+  100% {
+    transform: scale(2.7);
+    opacity: 0;
   }
 }
 
@@ -412,8 +423,28 @@ select:focus-visible {
   border-radius: 50%;
   flex-shrink: 0;
 }
-.work-tile-status-dot.pulse {
+.work-tile-status-dot.pulse,
+.freelance-pill-dot {
+  position: relative;
+}
+.work-tile-status-dot.pulse::after,
+.freelance-pill-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  /* The dot's own colour. The old box-shadow ring used --c-shadow (black),
+     a leftover from the light theme that was invisible on the dark one. */
+  background: inherit;
   animation: pulseDot 2s infinite;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-tile-status-dot.pulse::after,
+  .freelance-pill-dot::after {
+    animation: none;
+    opacity: 0;
+  }
 }
 .work-tile-tagline {
   display: -webkit-box;
@@ -490,7 +521,6 @@ select:focus-visible {
   height: 7px;
   border-radius: 50%;
   background: var(--c-accent);
-  animation: pulseDot 2s infinite;
 }
 
 /* ---------- Scroll-reveal (see components/Reveal.js) ---------- */
@@ -1180,8 +1210,12 @@ select:focus-visible {
   position: absolute;
   border-radius: 9999px;
   pointer-events: none;
-  filter: blur(38px);
-  background: radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--c-accent) 30%, transparent), transparent 70%);
+  /* No filter: blur — the radial gradient already fades to transparent, and
+     a 38px blur on top of it was an expensive full-layer paint for an edge
+     the gradient softens anyway. */
+  /* closest-side + centred: the gradient reaches full transparency exactly
+     at the circle's edge, so the shape has no visible rim without a blur. */
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--c-accent) 45%, transparent), transparent);
 }
 
 .hero-slide-grid {
@@ -1199,8 +1233,10 @@ select:focus-visible {
   }
 }
 
+/* Same reasoning as fadeUp above: the hero headline is the homepage's LCP
+   element, so it must be visible (opacity 1) from the first paint. The
+   staggered rise is kept; only the fade-in from zero is gone. */
 .hero-anim > * {
-  opacity: 0;
   transform: translateY(18px);
   animation: heroRise 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
@@ -1210,7 +1246,7 @@ select:focus-visible {
 .hero-anim > *:nth-child(4) { animation-delay: 0.2s; }
 .hero-anim > *:nth-child(5) { animation-delay: 0.26s; }
 @keyframes heroRise {
-  to { opacity: 1; transform: none; }
+  to { transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-anim > * {
@@ -2063,4 +2099,88 @@ select:focus-visible {
   .hero-price-note {
     font-size: 12.5px;
   }
+}
+
+/* ── Blog post body ───────────────────────────────────────────────────────
+   Long-form prose. Posts are plain JSX (lib/blog/posts/*.js), so these
+   element selectors are scoped under .post-body rather than styled per
+   call site. Measure is ~70ch for comfortable reading on the dark ground. */
+.post-body {
+  max-width: 70ch;
+  font-size: 17px;
+  line-height: 1.8;
+  color: color-mix(in srgb, var(--c-ink) 78%, transparent);
+}
+.post-body > * + * {
+  margin-top: 1.1em;
+}
+.post-body h2 {
+  margin-top: 2.2em;
+  font-size: clamp(22px, 2.6vw, 28px);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--c-ink);
+}
+.post-body h3 {
+  margin-top: 1.8em;
+  font-size: 19px;
+  color: var(--c-ink);
+}
+.post-body h2 + *,
+.post-body h3 + * {
+  margin-top: 0.6em;
+}
+.post-body ul,
+.post-body ol {
+  padding-left: 1.3em;
+}
+.post-body li + li {
+  margin-top: 0.4em;
+}
+.post-body strong {
+  color: var(--c-ink);
+}
+.post-body code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.88em;
+  padding: 0.12em 0.36em;
+  border-radius: 5px;
+  background: var(--c-chip);
+  color: var(--c-ink);
+}
+.post-body pre {
+  overflow-x: auto;
+  padding: 18px 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--c-card);
+  font-size: 14px;
+  line-height: 1.65;
+}
+.post-body pre code {
+  padding: 0;
+  background: none;
+  font-size: inherit;
+}
+.post-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  display: block;
+  overflow-x: auto;
+}
+.post-body th,
+.post-body td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  vertical-align: top;
+}
+.post-body th {
+  color: var(--c-ink);
+}
+.post-body blockquote {
+  margin-left: 0;
+  padding: 4px 0 4px 18px;
+  border-left: 3px solid var(--c-accent-line);
 }

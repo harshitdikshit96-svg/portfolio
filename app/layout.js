@@ -2,9 +2,11 @@ import Script from "next/script";
 import { Space_Grotesk, DM_Sans } from "next/font/google";
 import "./globals.css";
 import SiteChrome from "@/components/SiteChrome";
+import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
 import { personSchema, professionalServiceSchema, webSiteSchema } from "@/lib/schema";
-import { GTM_ID, SITE_URL, ROLE_TAGLINE } from "@/lib/data";
+import { GTM_ID, SITE_URL } from "@/lib/data";
+import { LOCAL_LANDINGS, NATIONAL_LANDINGS } from "@/lib/landings";
 
 // Space Grotesk (headings) + DM Sans (body). Space Grotesk carries over from
 // the previous light theme — the dark reference build happens to use it too,
@@ -36,14 +38,16 @@ const siteUrl = SITE_URL;
 // — sitting past character 160 and never actually rendering). Fixed by
 // tightening the title and moving that line to the front of the
 // description so it's inside the part that reliably displays.
-const defaultTitle = `Harshit Dixit — ${ROLE_TAGLINE}`;
-// Leads with the Acko/Bigbasket credibility line, then "for businesses
-// anywhere" rather than the city — pricing and process don't change by
-// location, so the copy shouldn't over-index on Lucknow either (the real
-// local signals — areaServed, GBP — still live in the JSON-LD below and
-// don't need repeating in prose).
+// Leads with the head term the homepage is meant to rank for. ROLE_TAGLINE
+// stays as-is for the OG image and the Person node, where the broader
+// "web developer & tech consultant" framing still fits.
+const defaultTitle = "Harshit Dixit — Freelance Website Developer in Lucknow";
+// Names the city once, because the homepage is the page the Google Business
+// Profile links to and the one most likely to rank for "website developer
+// in Lucknow"; then "across India", because most of the national work is
+// remote and the India landing pages hang off this one.
 const defaultDescription =
-  "Freelance web developer — 5+ years shipping production systems at Acko and Bigbasket. Website design, development, technical consulting and audits, remote-friendly for businesses anywhere.";
+  "Freelance website and software developer in Lucknow, ex-Acko and ex-Bigbasket. Websites, custom software and SEO for businesses across India.";
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
@@ -131,6 +135,15 @@ const siteGraph = [
   webSiteSchema({ description: defaultDescription }),
 ];
 
+// Footer link lists, reduced to what a link needs. The footer is a server
+// component rendered here and handed to SiteChrome (a client component) as
+// a prop, so neither the footer nor lib/landings.js ships to the browser.
+const toLink = (l) => ({ href: `/${l.slug}`, label: l.navLabel });
+const footerLinks = {
+  lucknow: LOCAL_LANDINGS.map(toLink),
+  india: NATIONAL_LANDINGS.map(toLink),
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" data-scroll-behavior="smooth" className={`${spaceGrotesk.variable} ${dmSans.variable}`}>
@@ -138,7 +151,17 @@ export default function RootLayout({ children }) {
         {/* Google Tag Manager — GA4 and any future tags/pixels are configured
             inside the GTM container itself (tagmanager.google.com), not
             hardcoded here. See GTM_ID in lib/data.js. */}
-        <Script id="gtm-script" strategy="afterInteractive">
+        {/* lazyOnload, not afterInteractive: GTM + GA4 are ~950 KB of
+            script, and loading them during hydration competed with the
+            page's own JavaScript for the main thread (INP). Nothing is
+            lost by waiting — every event on this site goes through
+            lib/analytics.js as a dataLayer.push, and the dataLayer is a
+            plain array that GTM drains when it arrives. The one trade-off
+            is a visitor who closes the tab within a second or two of
+            landing may not register a pageview. The App Router has no
+            stable way to run GTM in a web worker (next/script's `worker`
+            strategy is Pages-Router-only and experimental). */}
+        <Script id="gtm-script" strategy="lazyOnload">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
           new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
           j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -156,7 +179,7 @@ export default function RootLayout({ children }) {
         </noscript>
 
         <JsonLd schema={siteGraph} />
-        <SiteChrome>{children}</SiteChrome>
+        <SiteChrome footer={<Footer links={footerLinks} />}>{children}</SiteChrome>
       </body>
     </html>
   );

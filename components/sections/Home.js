@@ -13,6 +13,7 @@ import ConsultationCta from "@/components/ConsultationCta";
 import FaqSection from "@/components/FaqSection";
 import GbpSection from "@/components/GbpSection";
 import Link from "next/link";
+import { LOCAL_LANDINGS, NATIONAL_LANDINGS } from "@/lib/landings";
 
 const kickerStyle = {
   display: "inline-block",
@@ -126,6 +127,42 @@ export default async function Home() {
         >
           <p style={{ margin: 0, fontSize: 15 }}>Not sure where to start? The 30-minute discovery call is free.</p>
           <CalendlyLink className="btn-primary">Book a free call</CalendlyLink>
+        </div>
+      </div>
+
+      {/* Keyword-anchored links into every landing page. The homepage holds
+          most of the site's authority (the Google Business Profile and most
+          external links point here), and a descriptive in-content link is
+          how that authority reaches the pages built to rank for each
+          search — the footer links alone are weaker. */}
+      <div style={{ margin: "0 0 100px" }}>
+        <span style={kickerStyle}>Find the right service</span>
+        <h2 style={h2Style}>In Lucknow, and across India.</h2>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+            gap: "28px 48px",
+            marginTop: 32,
+          }}
+        >
+          {[
+            ["For businesses in Lucknow", LOCAL_LANDINGS],
+            ["For startups and teams across India", NATIONAL_LANDINGS],
+          ].map(([heading, items]) => (
+            <div key={heading}>
+              <h3 style={{ fontSize: 15, fontWeight: 600, color: colors.textDim, margin: "0 0 14px" }}>{heading}</h3>
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
+                {items.map((l) => (
+                  <li key={l.slug}>
+                    <Link href={`/${l.slug}`} style={{ fontSize: 16 }}>
+                      {l.h1} →
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </div>
 

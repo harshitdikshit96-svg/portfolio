@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { PHONE_URL, WHATSAPP_URL } from "@/lib/data";
+import { PHONE_URL, WHATSAPP_URL } from "@/lib/site";
 import { trackEvent } from "@/lib/analytics";
 
 /**

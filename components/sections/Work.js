@@ -49,7 +49,7 @@ export default async function Work() {
         {"// things I've built"}
       </div>
       <h1 style={{ fontSize: "clamp(34px, 4.4vw, 50px)", margin: "0 0 16px", fontWeight: 700, letterSpacing: "-0.02em" }}>
-        Work
+        Website &amp; Software Projects
       </h1>
       <p style={{ fontSize: 17, color: colors.textDimmer, maxWidth: 640, margin: "0 0 60px", lineHeight: 1.65 }}>
         Real, live websites built for real businesses — plus capability demos that show what a Next.js and React
