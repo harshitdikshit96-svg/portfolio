@@ -2,9 +2,14 @@
 
 import { useState } from "react";
 import { colors } from "@/lib/colors";
-import { PACKAGE_TIERS, ADDONS } from "@/lib/data";
+import { PACKAGE_TIERS, ADDONS } from "@/lib/packages";
 import { trackEvent } from "@/lib/analytics";
-import PackageRequestSheet from "@/components/PackageRequestSheet";
+import dynamic from "next/dynamic";
+
+// The request sheet only exists after a click, so its code (form,
+// validation, submit logic) is split into its own chunk and fetched on
+// first open instead of shipping with every page that shows the builder.
+const PackageRequestSheet = dynamic(() => import("@/components/PackageRequestSheet"), { ssr: false });
 
 
 /**

@@ -1,6 +1,6 @@
 "use client";
 
-import { CALENDLY_URL } from "@/lib/data";
+import { CALENDLY_URL } from "@/lib/site";
 import { trackEvent } from "@/lib/analytics";
 
 /**

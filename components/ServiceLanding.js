@@ -1,23 +1,38 @@
 import Link from "next/link";
 import { colors } from "@/lib/colors";
-import {
-  SITE_URL,
-  USPS,
-  RETAINERS,
-  PACKAGE_TIERS,
-  LIVE_PROJECTS,
-  TEMPLATE_PROJECTS,
-} from "@/lib/data";
+import { USPS, RETAINERS, PACKAGE_TIERS, LIVE_PROJECTS, TEMPLATE_PROJECTS } from "@/lib/data";
+import { findLanding } from "@/lib/landings";
+import { findPost } from "@/lib/blog";
 import ContactForm from "@/components/ContactForm";
 import ConsultationCta from "@/components/ConsultationCta";
 import CalendlyLink from "@/components/CalendlyLink";
 import LeadActions from "@/components/LeadActions";
 import MobileLeadBar from "@/components/MobileLeadBar";
+import JsonLd from "@/components/JsonLd";
+import { serviceSchema, faqPageSchema } from "@/lib/schema";
+import { pageMetadata, breadcrumbJsonLd } from "@/lib/seo";
 
+// Per-region framing. `areaServed` feeds the page's Service node, so a
+// national page doesn't claim to serve only Lucknow and a local one doesn't
+// dilute its city signal with the whole country.
+const REGIONS = {
+  lucknow: {
+    kicker: "// lucknow · remote-friendly",
+    areaServed: {
+      "@type": "City",
+      name: "Lucknow",
+      containedInPlace: { "@type": "State", name: "Uttar Pradesh" },
+    },
+  },
+  india: {
+    kicker: "// remote · across india",
+    areaServed: { "@type": "Country", name: "India" },
+  },
+};
 
 /**
- * One keyword-targeted local landing page, rendered from a LOCAL_LANDINGS
- * entry in lib/data.js.
+ * One keyword-targeted landing page, rendered from a LOCAL_LANDINGS or
+ * NATIONAL_LANDINGS entry in lib/landings.js.
  *
  * Every Google Ads ad group used to point at the homepage. A homepage has
  * to speak to everybody at once, so paid traffic arrived on copy that
@@ -34,7 +49,7 @@ import MobileLeadBar from "@/components/MobileLeadBar";
  * with the rest of the site — only the numbers are gone. The one place a
  * figure still appears is the homepage hero, under an asterisk.
  */
-export default function LocalServiceLanding({ landing }) {
+export default function ServiceLanding({ landing }) {
   const retainers = landing.retainerIds
     .map((id) => RETAINERS.find((r) => r.id === id))
     .filter(Boolean);
@@ -43,43 +58,34 @@ export default function LocalServiceLanding({ landing }) {
     .filter(Boolean);
   const allProjects = [...LIVE_PROJECTS, ...TEMPLATE_PROJECTS];
   const proof = landing.proofSlugs.map((s) => allProjects.find((p) => p.slug === s)).filter(Boolean);
+  const related = (landing.related || []).map(findLanding).filter(Boolean);
+  const posts = (landing.posts || []).map(findPost).filter(Boolean);
+  // Inline offers (national pages) and RETAINERS share one shape, so they
+  // render through the same card.
+  const engagements = [...(landing.offers || []), ...retainers];
+  const region = REGIONS[landing.region] || REGIONS.lucknow;
 
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: landing.faqs.map((f) => ({
-      "@type": "Question",
-      name: f.question,
-      acceptedAnswer: { "@type": "Answer", text: f.answer },
-    })),
-  };
-
-  const serviceJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    name: landing.h1,
-    serviceType: landing.serviceType,
-    url: `${SITE_URL}/${landing.slug}`,
-    description: landing.metaDescription,
-    provider: {
-      "@type": "ProfessionalService",
-      name: "Harshit Creates",
-      url: SITE_URL,
-    },
-    areaServed: {
-      "@type": "City",
-      name: "Lucknow",
-      containedInPlace: { "@type": "State", name: "Uttar Pradesh" },
-    },
-  };
+  // Both graphs come from lib/schema.js. The Service node's `provider` is an
+  // @id reference to the single business node in the root layout — this used
+  // to mint a second, thinner ProfessionalService inline, which reads to a
+  // crawler as two different businesses sharing a name.
+  const pageGraph = [
+    serviceSchema({
+      name: landing.h1,
+      serviceType: landing.serviceType,
+      description: landing.metaDescription,
+      path: `/${landing.slug}`,
+      areaServed: region.areaServed,
+    }),
+    faqPageSchema(landing.faqs),
+  ];
 
   return (
     <section data-screen-label={landing.navLabel} style={{ padding: "72px 0 40px", animation: "fadeUp 0.25s ease both" }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <JsonLd schema={pageGraph} />
 
       {/* ---- opener ---- */}
-      <div style={{ fontSize: 13, color: colors.accent, marginBottom: 12 }}>{"// lucknow · remote-friendly"}</div>
+      <div style={{ fontSize: 13, color: colors.accent, marginBottom: 12 }}>{region.kicker}</div>
       <h1
         style={{
           fontSize: "clamp(32px, 4.6vw, 52px)",
@@ -153,6 +159,30 @@ export default function LocalServiceLanding({ landing }) {
         ))}
       </div>
 
+      {/* ---- body ---- the depth that lets the page answer its search,
+          rather than only restate it */}
+      {(landing.sections || []).map((section) => (
+        <div key={section.heading} style={{ maxWidth: 700, marginBottom: 56 }}>
+          <h2 style={{ fontSize: "clamp(22px,2.6vw,28px)", fontWeight: 700, margin: "0 0 16px", letterSpacing: "-0.01em" }}>
+            {section.heading}
+          </h2>
+          {(section.paragraphs || []).map((para) => (
+            <p key={para} style={{ fontSize: 16, lineHeight: 1.8, color: colors.textDimmer, margin: "0 0 16px" }}>
+              {para}
+            </p>
+          ))}
+          {section.bullets && (
+            <ul style={{ margin: 0, paddingLeft: 20, display: "flex", flexDirection: "column", gap: 8 }}>
+              {section.bullets.map((b) => (
+                <li key={b} style={{ fontSize: 15.5, lineHeight: 1.7, color: colors.textDimmer }}>
+                  {b}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ))}
+
       {/* ---- what's included ---- */}
       <h2 style={{ fontSize: "clamp(22px,2.6vw,28px)", fontWeight: 700, margin: "0 0 8px", letterSpacing: "-0.01em" }}>
         What you get
@@ -163,9 +193,9 @@ export default function LocalServiceLanding({ landing }) {
       </p>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 24 }}>
-        {retainers.map((r) => (
+        {engagements.map((r) => (
           <div
-            key={r.id}
+            key={r.name}
             style={{
               background: colors.bgCard,
               border: `1px solid ${colors.border}`,
@@ -212,11 +242,16 @@ export default function LocalServiceLanding({ landing }) {
       </div>
 
       <p style={{ fontSize: 14.5, color: colors.textFaint, margin: "0 0 64px", maxWidth: 640 }}>
-        Full list of packages and add-ons on{" "}
-        <Link href="/packages" style={{ color: colors.accent }}>
-          the packages page
-        </Link>
-        . Anything bigger or unusual is scoped on a call — you get a fixed quote before work starts.
+        {packages.length > 0 ? (
+          <>
+            Full list of packages and add-ons on{" "}
+            <Link href="/packages" style={{ color: colors.accent }}>
+              the packages page
+            </Link>
+            .{" "}
+          </>
+        ) : null}
+        Anything bigger or unusual is scoped on a call — you get a fixed quote before work starts.
       </p>
 
       {/* ---- proof ---- */}
@@ -297,8 +332,70 @@ export default function LocalServiceLanding({ landing }) {
         ))}
       </div>
 
+      {/* ---- related ---- sibling pages, so each landing page is linked
+          from the others by a descriptive anchor, not only from the footer */}
+      {related.length > 0 && (
+        <nav aria-label="Related services" style={{ marginBottom: 56 }}>
+          <h2 style={{ fontSize: "clamp(20px,2.2vw,24px)", fontWeight: 700, margin: "0 0 16px", letterSpacing: "-0.01em" }}>
+            Related services
+          </h2>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+            {related.map((r) => (
+              <Link key={r.slug} href={`/${r.slug}`} className="btn-ghost">
+                {r.h1} →
+              </Link>
+            ))}
+          </div>
+        </nav>
+      )}
+
+      {/* ---- further reading ---- the guides that show the depth behind
+          this service, and the main internal links into the blog */}
+      {posts.length > 0 && (
+        <nav aria-label="Further reading" style={{ marginBottom: 56 }}>
+          <h2 style={{ fontSize: "clamp(20px,2.2vw,24px)", fontWeight: 700, margin: "0 0 16px", letterSpacing: "-0.01em" }}>
+            Further reading
+          </h2>
+          <ul style={{ margin: 0, paddingLeft: 18, display: "flex", flexDirection: "column", gap: 8 }}>
+            {posts.map((p) => (
+              <li key={p.slug} style={{ fontSize: 15.5, lineHeight: 1.6 }}>
+                <Link href={`/blog/${p.slug}`}>{p.title}</Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+
       <ConsultationCta />
       <MobileLeadBar />
     </section>
+  );
+}
+
+/**
+ * Route glue shared by every landing page, so each app/<slug>/page.js is
+ * two lines and the pages can't drift apart in metadata or breadcrumbs.
+ */
+export function landingMetadata(slug) {
+  const landing = findLanding(slug);
+  return pageMetadata({
+    title: landing.metaTitle,
+    description: landing.metaDescription,
+    path: `/${landing.slug}`,
+  });
+}
+
+export function LandingRoute({ slug }) {
+  const landing = findLanding(slug);
+  return (
+    <>
+      <JsonLd
+        schema={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: landing.navLabel, path: `/${landing.slug}` },
+        ])}
+      />
+      <ServiceLanding landing={landing} />
+    </>
   );
 }

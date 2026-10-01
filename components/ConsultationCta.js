@@ -1,11 +1,12 @@
 import { colors } from "@/lib/colors";
 import { CALENDLY_URL } from "@/lib/data";
+import DeferredFrame from "@/components/DeferredFrame";
 
 /**
  * The frictionless "book a free call" block — a real embedded scheduler,
  * not another form that adds a reply-wait step. Uses Calendly's inline
- * embed (an iframe, no client JS needed) so it works even before we wire
- * up anything fancier.
+ * embed (an iframe), loaded through DeferredFrame so its heavy script
+ * bundle starts only after the page itself has finished loading.
  *
  * CALENDLY_URL in lib/data.js is a placeholder until the real Calendly
  * account exists — swap it there and this block picks it up everywhere.
@@ -46,12 +47,10 @@ export default function ConsultationCta({
             )}
           </ul>
         </div>
-        <iframe
-          className="calendly-frame"
-          src={CALENDLY_URL}
-          title="Book a free consultation"
-          loading="lazy"
-        />
+        {/* Deferred until the page has loaded and gone idle — see
+            components/DeferredFrame.js for why plain loading="lazy"
+            wasn't enough on /contact. */}
+        <DeferredFrame className="calendly-frame" src={CALENDLY_URL} title="Book a free consultation" />
       </div>
     </div>
   );

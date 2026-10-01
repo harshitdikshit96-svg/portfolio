@@ -1,8 +1,6 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
-import { PACKAGE_TIERS } from "@/lib/data";
+import { PACKAGE_TIERS } from "@/lib/packages";
 import CalendlyLink from "@/components/CalendlyLink";
+import HeroSlider from "@/components/HeroSlider";
 
 // Icons — inline strokes/fills, no icon library, matching the pattern
 // already used across UspBanner/HeroCarousel's process-step icons.
@@ -46,261 +44,193 @@ const ClockIcon = () => (
     <path d="M12 7v5l3 2" />
   </svg>
 );
-const ChevronLeftIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="m15 18-6-6 6-6" />
-  </svg>
-);
-const ChevronRightIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="m9 18 6-6-6-6" />
-  </svg>
-);
-
-const AUTOPLAY_MS = 8000;
-const SLIDE_COUNT = 2;
 
 /**
- * Two-slide auto-advancing hero. Only slide 0 mounts on first render (its
- * <h1> is the page's one real, semantic heading), so a no-JS or pre-hydration
- * view already has the real headline rather than depending on client state —
- * slide 1 renders its otherwise-identical headline as a <p>, not a second
- * <h1>. Autoplay pauses on hover/focus so it doesn't fight anyone reading a
- * slide or tabbing through its controls, and every slide change restarts the
- * autoplay clock so a manual dot/arrow click doesn't get immediately
- * overridden by a timer from before the click.
+ * The homepage hero. A SERVER component: both slides are rendered here, on
+ * the server, and handed to HeroSlider (the small client component that
+ * only switches between them). That keeps all of this markup — copy,
+ * icons, the mock browser and search cards — out of the client JavaScript
+ * bundle. Before the split, the whole carousel was one "use client" file
+ * and every byte of it shipped as JS that had to download before the
+ * page's first paint counted as complete on a throttled phone.
+ *
+ * Slide 0 is what renders first, with or without JavaScript; its eyebrow
+ * line is the page's one semantic <h1>. Slide 1 has no <h1> at all.
  */
 export default function HeroCarousel() {
-  const [slide, setSlide] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const reducedMotionRef = useRef(false);
-  const timerRef = useRef(null);
-
-  useEffect(() => {
-    reducedMotionRef.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  }, []);
-
-  useEffect(() => {
-    if (paused) return undefined;
-    timerRef.current = setTimeout(() => {
-      setSlide((s) => (s + 1) % SLIDE_COUNT);
-    }, AUTOPLAY_MS);
-    return () => clearTimeout(timerRef.current);
-  }, [slide, paused]);
-
-  const goTo = (index) => setSlide(((index % SLIDE_COUNT) + SLIDE_COUNT) % SLIDE_COUNT);
-
-  return (
-    <div
-      className="hero-carousel"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onFocus={() => setPaused(true)}
-      onBlur={() => setPaused(false)}
-    >
-      <div className="hero-bg-dots" aria-hidden="true" />
-      <div className="hero-bg-wash" aria-hidden="true" />
-
-      {/* key={slide} remounts this wrapper on every slide change, which
-          restarts the CSS entrance animation on its children for free —
-          no manual classList-remove/reflow/re-add trick needed. */}
-      <div className="hero-slide-grid" key={slide} role="group" aria-roledescription="slide" aria-label={`${slide + 1} of ${SLIDE_COUNT}`}>
-        {slide === 0 ? (
-          <>
-            <div className="hero-anim">
-              <p className="hero-eyebrow">Websites · Local SEO · Booking systems</p>
-              <h1 className="hero-heading">Your customers are searching. Your website isn&apos;t showing up.</h1>
-              <p className="hero-lede">
-                I build fast, bookable websites for dentists, clinics, salons and local service businesses — with
-                the local SEO that gets you found on Google. We&apos;ll agree on a direction on a 30-minute call,
-                then you&apos;ll see a working draft before you pay anything.
-              </p>
-              <div className="hero-cta-row">
-                <CalendlyLink className="btn-primary hero-btn">
-                  Book a free 30-min call
-                  <span className="hero-btn-arrow"><ArrowRightIcon /></span>
-                </CalendlyLink>
-              </div>
-              <div className="hero-chips">
-                <span className="tag tag-outline">Free first draft in ~3 hrs</span>
-                <span className="tag tag-outline">Local SEO included</span>
-                <span className="tag tag-outline">Online booking built in</span>
-                <span className="tag tag-outline">Remote-friendly</span>
-              </div>
-              <p className="hero-reassure">
-                <ShieldCheckIcon />
-                You pay nothing until you&apos;ve seen the real draft of your site.
-              </p>
-            </div>
-
-            <div className="hero-graphic">
-              <div className="hero-blob" style={{ left: -32, top: 40, width: 224, height: 224 }} />
-              <div className="hero-blob" style={{ right: -24, bottom: 32, width: 192, height: 192, opacity: 0.7 }} />
-
-              <div className="hero-card hero-search-card">
-                <p className="hero-kicker">Google · near me</p>
-                <p className="hero-search-name">Bright Smile Dental</p>
-                <div className="hero-search-rating">
-                  <span className="hero-search-score">4.9</span>
-                  <span className="hero-stars">
-                    <StarIcon /><StarIcon /><StarIcon /><StarIcon /><StarIcon />
-                  </span>
-                  <span className="hero-search-count">(182)</span>
-                </div>
-                <p className="hero-search-open">
-                  <MapPinIcon />
-                  Open now · 0.8 km away
-                </p>
-              </div>
-
-              <div className="hero-card hero-site-card">
-                <div className="hero-site-bar">
-                  <span className="hero-site-dot" /><span className="hero-site-dot" /><span className="hero-site-dot" />
-                  <span className="hero-site-url">brightsmiledental.in</span>
-                </div>
-                <div className="hero-site-body">
-                  <div className="hero-site-row">
-                    <span className="hero-site-brand">Bright Smile</span>
-                    <span className="hero-site-navlines">
-                      <span className="hero-line" style={{ width: 32, height: 6 }} />
-                      <span className="hero-line" style={{ width: 32, height: 6 }} />
-                    </span>
-                  </div>
-                  <div className="hero-site-headline">
-                    <div className="hero-headline-block" style={{ width: "80%" }} />
-                    <div className="hero-headline-block" style={{ width: "60%", opacity: 0.45 }} />
-                  </div>
-                  <div className="hero-site-lines">
-                    <div className="hero-line" />
-                    <div className="hero-line" style={{ width: "83%" }} />
-                  </div>
-                  <div className="hero-mini-btn">
-                    <CalendarCheckIcon />
-                    Book appointment
-                  </div>
-                  <div className="hero-tiles">
-                    <div className="hero-tile">Implants</div>
-                    <div className="hero-tile">Whitening</div>
-                    <div className="hero-tile">Braces</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="hero-card hero-pill hero-float">
-                <p className="hero-pill-label">Draft ready</p>
-                <p className="hero-pill-value">2h 47m</p>
-              </div>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="hero-anim">
-              <p className="hero-eyebrow">
-                24-hour delivery · Static sites from ₹{PACKAGE_TIERS[0].basePriceFrom.toLocaleString("en-IN")}*
-              </p>
-              {/* Styled identically to the real <h1> on slide 0, but kept as
-                  a <p> — a page should carry exactly one <h1>. */}
-              <p className="hero-heading">Everyone else quotes a week. Yours is live in 24 hours.</p>
-              <p className="hero-lede">
-                Lucknow agencies start at ₹15,000 for a basic business site and take one to three weeks. Here a
-                1–5 page static site is ₹{PACKAGE_TIERS[0].basePriceFrom.toLocaleString("en-IN")} and a full
-                CMS-driven business site you can edit yourself is ₹
-                {PACKAGE_TIERS[1].basePriceFrom.toLocaleString("en-IN")} — one 30-minute call, a free working
-                draft in ~3 hours, live within 24 hours of your content arriving. Same process and pricing
-                wherever you&apos;re based.
-              </p>
-              <div className="hero-cta-row">
-                <a className="btn-primary hero-btn" href="#packages">
-                  See packages
-                  <span className="hero-btn-arrow"><ArrowRightIcon /></span>
-                </a>
-              </div>
-              <div className="hero-chips">
-                <span className="tag tag-outline">
-                  Static site from ₹{PACKAGE_TIERS[0].basePriceFrom.toLocaleString("en-IN")}
-                </span>
-                <span className="tag tag-outline">
-                  Business site from ₹{PACKAGE_TIERS[1].basePriceFrom.toLocaleString("en-IN")}
-                </span>
-                <span className="tag tag-outline">Live in 24 hrs</span>
-                <span className="tag tag-outline">No advance payment</span>
-              </div>
-              <p className="hero-reassure">
-                <ShieldCheckIcon />
-                Fixed price agreed upfront — no hourly billing, no surprise add-ons.
-              </p>
-              <p className="hero-price-note">
-                * Reference prices. The final number depends on the scope of your project and is agreed
-                together on a free call before anything starts.
-              </p>
-            </div>
-
-            <div className="hero-graphic">
-              <div className="hero-blob" style={{ right: -32, top: 24, width: 224, height: 224 }} />
-              <div className="hero-blob" style={{ left: -24, bottom: 16, width: 176, height: 176, opacity: 0.7 }} />
-
-              <div className="hero-card hero-compare-card">
-                <p className="hero-pill-label">Time to a live website</p>
-                <div className="hero-compare-row">
-                  <div className="hero-row-top"><span>Typical agency / freelancer</span><strong>1–3 weeks</strong></div>
-                  <div className="hero-meter"><span style={{ width: "100%", background: "color-mix(in srgb, var(--c-line) 30%, transparent)" }} /></div>
-                </div>
-                <div className="hero-compare-row">
-                  <div className="hero-row-top"><strong>Harshit Creates</strong><strong className="hero-row-highlight">24 hours</strong></div>
-                  <div className="hero-meter"><span style={{ width: "14%" }} /></div>
-                </div>
-                <hr className="hero-hr" />
-                <div className="hero-checks">
-                  <span className="hero-check"><CheckIcon />Free first draft in ~3 hrs</span>
-                  <span className="hero-check"><CheckIcon />No payment before you see it</span>
-                  <span className="hero-check"><CheckIcon />Local SEO set up</span>
-                  <span className="hero-check"><CheckIcon />Booking built in</span>
-                </div>
-              </div>
-
-              <div className="hero-card hero-price-card">
-                <p className="hero-pill-label">Complete site from</p>
-                <p className="hero-price-value">
-                  ₹{PACKAGE_TIERS[0].basePriceFrom.toLocaleString("en-IN")}
-                  <span className="hero-price-star" aria-hidden="true">*</span>
-                </p>
-              </div>
-
-              <div className="hero-card hero-pill hero-pill-top hero-float">
-                <p className="hero-pill-top-label">
-                  <ClockIcon />
-                  Live in 24 hrs
-                </p>
-              </div>
-            </div>
-          </>
-        )}
+  const slides = [
+    <>
+      <div className="hero-anim">
+        {/* The <h1> is the small eyebrow line, not the big headline.
+            The headline is a hook with no search term in it; the
+            eyebrow names what the page is actually about, which is
+            what the one <h1> should tell a search engine. Styling is
+            class-based, so swapping the tags changes nothing visually. */}
+        <h1 className="hero-eyebrow">Freelance website developer in Lucknow</h1>
+        <p className="hero-heading">Your customers are searching. Your website isn&apos;t showing up.</p>
+        <p className="hero-lede">
+          I build fast, bookable websites for dentists, clinics, salons and local service businesses — with
+          the local SEO that gets you found on Google. We&apos;ll agree on a direction on a 30-minute call,
+          then you&apos;ll see a working draft before you pay anything.
+        </p>
+        <div className="hero-cta-row">
+          <CalendlyLink className="btn-primary hero-btn">
+            Book a free 30-min call
+            <span className="hero-btn-arrow"><ArrowRightIcon /></span>
+          </CalendlyLink>
+        </div>
+        <div className="hero-chips">
+          <span className="tag tag-outline">Free first draft in ~3 hrs</span>
+          <span className="tag tag-outline">Local SEO included</span>
+          <span className="tag tag-outline">Online booking built in</span>
+          <span className="tag tag-outline">Remote-friendly</span>
+        </div>
+        <p className="hero-reassure">
+          <ShieldCheckIcon />
+          You pay nothing until you&apos;ve seen the real draft of your site.
+        </p>
       </div>
 
-      <div className="hero-controls">
-        <div className="hero-dotsnav" role="tablist" aria-label="Hero slides">
-          {Array.from({ length: SLIDE_COUNT }, (_, i) => (
-            <button
-              key={i}
-              type="button"
-              role="tab"
-              aria-selected={slide === i}
-              aria-label={`Show slide ${i + 1}`}
-              className="hero-dotbtn"
-              data-active={slide === i}
-              onClick={() => goTo(i)}
-            />
-          ))}
+      <div className="hero-graphic">
+        <div className="hero-blob" style={{ left: -32, top: 40, width: 224, height: 224 }} />
+        <div className="hero-blob" style={{ right: -24, bottom: 32, width: 192, height: 192, opacity: 0.7 }} />
+
+        <div className="hero-card hero-search-card">
+          <p className="hero-kicker">Google · near me</p>
+          <p className="hero-search-name">Bright Smile Dental</p>
+          <div className="hero-search-rating">
+            <span className="hero-search-score">4.9</span>
+            <span className="hero-stars">
+              <StarIcon /><StarIcon /><StarIcon /><StarIcon /><StarIcon />
+            </span>
+            <span className="hero-search-count">(182)</span>
+          </div>
+          <p className="hero-search-open">
+            <MapPinIcon />
+            Open now · 0.8 km away
+          </p>
         </div>
-        <div className="hero-arrows">
-          <button type="button" className="hero-arrow" aria-label="Previous slide" onClick={() => goTo(slide - 1)}>
-            <ChevronLeftIcon />
-          </button>
-          <button type="button" className="hero-arrow" aria-label="Next slide" onClick={() => goTo(slide + 1)}>
-            <ChevronRightIcon />
-          </button>
+
+        <div className="hero-card hero-site-card">
+          <div className="hero-site-bar">
+            <span className="hero-site-dot" /><span className="hero-site-dot" /><span className="hero-site-dot" />
+            <span className="hero-site-url">brightsmiledental.in</span>
+          </div>
+          <div className="hero-site-body">
+            <div className="hero-site-row">
+              <span className="hero-site-brand">Bright Smile</span>
+              <span className="hero-site-navlines">
+                <span className="hero-line" style={{ width: 32, height: 6 }} />
+                <span className="hero-line" style={{ width: 32, height: 6 }} />
+              </span>
+            </div>
+            <div className="hero-site-headline">
+              <div className="hero-headline-block" style={{ width: "80%" }} />
+              <div className="hero-headline-block" style={{ width: "60%", opacity: 0.45 }} />
+            </div>
+            <div className="hero-site-lines">
+              <div className="hero-line" />
+              <div className="hero-line" style={{ width: "83%" }} />
+            </div>
+            <div className="hero-mini-btn">
+              <CalendarCheckIcon />
+              Book appointment
+            </div>
+            <div className="hero-tiles">
+              <div className="hero-tile">Implants</div>
+              <div className="hero-tile">Whitening</div>
+              <div className="hero-tile">Braces</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="hero-card hero-pill hero-float">
+          <p className="hero-pill-label">Draft ready</p>
+          <p className="hero-pill-value">2h 47m</p>
         </div>
       </div>
-    </div>
-  );
+    </>,
+    <>
+      <div className="hero-anim">
+        <p className="hero-eyebrow">
+          24-hour delivery · Static sites from ₹{PACKAGE_TIERS[0].basePriceFrom.toLocaleString("en-IN")}*
+        </p>
+        {/* Styled identically to the real <h1> on slide 0, but kept as
+            a <p> — a page should carry exactly one <h1>. */}
+        <p className="hero-heading">Everyone else quotes a week. Yours is live in 24 hours.</p>
+        <p className="hero-lede">
+          Lucknow agencies start at ₹15,000 for a basic business site and take one to three weeks. Here a
+          1–5 page static site is ₹{PACKAGE_TIERS[0].basePriceFrom.toLocaleString("en-IN")} and a full
+          CMS-driven business site you can edit yourself is ₹
+          {PACKAGE_TIERS[1].basePriceFrom.toLocaleString("en-IN")} — one 30-minute call, a free working
+          draft in ~3 hours, live within 24 hours of your content arriving. Same process and pricing
+          wherever you&apos;re based.
+        </p>
+        <div className="hero-cta-row">
+          <a className="btn-primary hero-btn" href="#packages">
+            See packages
+            <span className="hero-btn-arrow"><ArrowRightIcon /></span>
+          </a>
+        </div>
+        <div className="hero-chips">
+          <span className="tag tag-outline">
+            Static site from ₹{PACKAGE_TIERS[0].basePriceFrom.toLocaleString("en-IN")}
+          </span>
+          <span className="tag tag-outline">
+            Business site from ₹{PACKAGE_TIERS[1].basePriceFrom.toLocaleString("en-IN")}
+          </span>
+          <span className="tag tag-outline">Live in 24 hrs</span>
+          <span className="tag tag-outline">No advance payment</span>
+        </div>
+        <p className="hero-reassure">
+          <ShieldCheckIcon />
+          Fixed price agreed upfront — no hourly billing, no surprise add-ons.
+        </p>
+        <p className="hero-price-note">
+          * Reference prices. The final number depends on the scope of your project and is agreed
+          together on a free call before anything starts.
+        </p>
+      </div>
+
+      <div className="hero-graphic">
+        <div className="hero-blob" style={{ right: -32, top: 24, width: 224, height: 224 }} />
+        <div className="hero-blob" style={{ left: -24, bottom: 16, width: 176, height: 176, opacity: 0.7 }} />
+
+        <div className="hero-card hero-compare-card">
+          <p className="hero-pill-label">Time to a live website</p>
+          <div className="hero-compare-row">
+            <div className="hero-row-top"><span>Typical agency / freelancer</span><strong>1–3 weeks</strong></div>
+            <div className="hero-meter"><span style={{ width: "100%", background: "color-mix(in srgb, var(--c-line) 30%, transparent)" }} /></div>
+          </div>
+          <div className="hero-compare-row">
+            <div className="hero-row-top"><strong>Harshit Creates</strong><strong className="hero-row-highlight">24 hours</strong></div>
+            <div className="hero-meter"><span style={{ width: "14%" }} /></div>
+          </div>
+          <hr className="hero-hr" />
+          <div className="hero-checks">
+            <span className="hero-check"><CheckIcon />Free first draft in ~3 hrs</span>
+            <span className="hero-check"><CheckIcon />No payment before you see it</span>
+            <span className="hero-check"><CheckIcon />Local SEO set up</span>
+            <span className="hero-check"><CheckIcon />Booking built in</span>
+          </div>
+        </div>
+
+        <div className="hero-card hero-price-card">
+          <p className="hero-pill-label">Complete site from</p>
+          <p className="hero-price-value">
+            ₹{PACKAGE_TIERS[0].basePriceFrom.toLocaleString("en-IN")}
+            <span className="hero-price-star" aria-hidden="true">*</span>
+          </p>
+        </div>
+
+        <div className="hero-card hero-pill hero-pill-top hero-float">
+          <p className="hero-pill-top-label">
+            <ClockIcon />
+            Live in 24 hrs
+          </p>
+        </div>
+      </div>
+    </>,
+  ];
+  return <HeroSlider slides={slides} />;
 }

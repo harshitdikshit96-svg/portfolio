@@ -3,11 +3,16 @@
 import { usePathname } from "next/navigation";
 import { colors } from "@/lib/colors";
 import Nav from "@/components/Nav";
-import Footer from "@/components/Footer";
-import StickyCta from "@/components/StickyCta";
+import dynamic from "next/dynamic";
+
+// Floating "book a call" bubble. Loaded as its own chunk after hydration
+// rather than in the initial bundle: it floats over the page, so it has no
+// reason to be part of what has to download before first paint — on a
+// throttled phone, every script requested up front counts against LCP.
+const StickyCta = dynamic(() => import("@/components/StickyCta"), { ssr: false });
 import CalendlyBookingTracker from "@/components/CalendlyBookingTracker";
 
-export default function SiteChrome({ children }) {
+export default function SiteChrome({ children, footer }) {
   const pathname = usePathname();
   // The admin panel is an internal tool, not a marketing page — it gets no
   // nav links, footer, or "book a free call" bubble, and renders its own
@@ -44,7 +49,7 @@ export default function SiteChrome({ children }) {
         {children}
       </main>
 
-      <Footer />
+      {footer}
       <StickyCta />
       <CalendlyBookingTracker />
     </div>

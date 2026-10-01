@@ -1,5 +1,56 @@
 # SEO keyword targets
 
+## Keyword → page map (September 2026)
+
+One page per search intent. If a new keyword fits an existing page's
+intent, add it to that page's `keywords` in `lib/landings.js` rather than
+creating a second page for it — two pages chasing one query split the
+signal. Landing-page copy lives in `lib/landings.js`; posts in `lib/blog/`.
+
+### Lucknow
+
+| Page | Head term | Also written for |
+|---|---|---|
+| `/` (homepage) | freelance website developer in Lucknow | website developer near me (mostly won by the Google Business Profile, which links here) |
+| `/website-design-lucknow` | website design lucknow | website developer in lucknow, best website developer in lucknow, website developer near me |
+| `/seo-services-lucknow` | seo services lucknow | seo expert in lucknow, best seo company in lucknow, local seo services in lucknow |
+| `/software-development-lucknow` | custom software development lucknow | custom software developer in lucknow, software development company in lucknow near me |
+| `/ecommerce-website-development-lucknow` | ecommerce website development lucknow | ecommerce website developer lucknow |
+| `/website-redesign-lucknow` | website redesign services lucknow | website redesign lucknow |
+| `/digital-marketing-lucknow` | digital marketing agency lucknow | google ads management lucknow |
+
+### India / remote
+
+| Page | Head term | Also written for |
+|---|---|---|
+| `/hire-full-stack-developer-india` | hire freelance full stack developer india | hire remote full stack engineer india, react node js developer india, react js developer for hire india, full stack nextjs developer freelance |
+| `/nextjs-development-company-india` | next js development company india | hire nextjs developer india, nextjs seo expert india |
+| `/mvp-development-startups-india` | mvp development for startups india | custom software development services india, scalable web application development india |
+| `/technical-seo-consultant-india` | technical seo consultant india | website speed optimization services india, web application performance audit india, nextjs seo expert india |
+| `/fractional-cto-india` | fractional cto for early stage startups india | fractional cto india |
+
+### Blog (informational)
+
+| Post | Keyword |
+|---|---|
+| `/blog/fix-core-web-vitals-nextjs` | fix core web vitals nextjs |
+| `/blog/nextjs-app-router-seo` | nextjs app router seo optimization |
+| `/blog/nodejs-memory-leak-debugging` | node js memory leak debugging guide |
+| `/blog/react-state-management-best-practices` | react state management best practices |
+| `/blog/optimize-postgresql-query-performance` | how to optimize postgresql query performance |
+
+### Considered and dropped
+
+- **white label web development services india** — an agency-reseller offer the site doesn't make.
+- **programmatic seo services india** — no proof on the site to back it.
+- **tailwind css developer india**, **supabase developer india** — tool-level searches with low buying intent; the stack is mentioned on the pages that fit.
+- **system design for high traffic applications**, **distributed systems architecture for startups** — dominated by large publishers and course platforms; not winnable from this domain yet.
+
+---
+
+## Earlier notes (kept for history)
+
+
 Tracking doc for every keyword this site is optimized for — created per the
 explicit ask to document the full list and where each one is placed. All of
 these live in `app/layout.js`'s `metadata.keywords` array (low ranking

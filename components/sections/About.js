@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { colors } from "@/lib/colors";
 import { EXPERIENCE, SKILL_GROUPS, TALKS, SOCIAL } from "@/lib/data";
 import ImageSlot from "@/components/ImageSlot";
@@ -11,14 +12,14 @@ export default function About() {
         {"// who I am"}
       </div>
       <h1 style={{ fontSize: "clamp(34px, 4.4vw, 50px)", margin: "0 0 22px", fontWeight: 700, letterSpacing: "-0.02em" }}>
-        About
+        Harshit Dixit — freelance full-stack developer in Lucknow
       </h1>
 
       <div className="about-bio-grid" style={{ marginBottom: 20 }}>
         <div>
           <p style={{ fontSize: 17.5, lineHeight: 1.8, color: colors.textMuted, maxWidth: 700, margin: "0 0 20px" }}>
             I&apos;m Harshit — a frontend-leaning software engineer out of IIIT Lucknow, five-plus years into building
-            consumer-facing web products for large-scale platforms. I&apos;ve spent that time on both sides of the
+            consumer-facing web products on platforms serving more than ten million users. I&apos;ve spent that time on both sides of the
             stack: React and Next.js up front, Node.js and infra underneath, with a habit of caring more than average
             about how fast a page actually feels.
           </p>
@@ -29,6 +30,16 @@ export default function About() {
             </a>{" "}
             — a drone-swarm light-show startup — as Director, and contribute to a government-affiliated research
             initiative I keep off the public record for now.
+          </p>
+          <p style={{ fontSize: 17.5, lineHeight: 1.8, color: colors.textMuted, maxWidth: 700, margin: "20px 0 0" }}>
+            Through harshitcreates I work with two kinds of clients. Local businesses in Lucknow come for{" "}
+            <Link href="/website-design-lucknow">websites</Link>, <Link href="/seo-services-lucknow">local SEO</Link>{" "}
+            and <Link href="/software-development-lucknow">custom software</Link> like booking and ordering systems.
+            Startups and teams across India come for{" "}
+            <Link href="/hire-full-stack-developer-india">senior full-stack help</Link>,{" "}
+            <Link href="/mvp-development-startups-india">MVP builds</Link> and{" "}
+            <Link href="/fractional-cto-india">technical leadership</Link>. Either way, the person on the first call
+            is the person who does the work.
           </p>
         </div>
         <ImageSlot

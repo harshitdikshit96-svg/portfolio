@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { colors } from "@/lib/colors";
-import { SERVICES, WHATSAPP_URL, CALENDLY_URL } from "@/lib/data";
+import { SERVICES } from "@/lib/services";
+import { WHATSAPP_URL, CALENDLY_URL } from "@/lib/site";
 import { trackEvent } from "@/lib/analytics";
 import { validateName, validatePhone, validateEmailOptional, validateMessage } from "@/lib/validation";
 
