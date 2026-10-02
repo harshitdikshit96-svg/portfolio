@@ -94,6 +94,14 @@ a:hover {
    after the JavaScript had run: 3.3s in Lighthouse's mobile simulation
    against a real first paint of 0.8s. A slide without the fade keeps the
    entrance and lets the content count from its first paint. */
+/* Same reasoning for the page-level entrance: it plays on in-app
+   navigation (SiteChrome sets data-navigated on <html> after the first
+   route change), not on the first page load. Inline `style` animations
+   need !important to be overridden from a stylesheet. */
+html:not([data-navigated]) [style*="fadeUp"] {
+  animation: none !important;
+}
+
 @keyframes fadeUp {
   from {
     transform: translateY(14px);
@@ -1236,15 +1244,20 @@ select:focus-visible {
 /* Same reasoning as fadeUp above: the hero headline is the homepage's LCP
    element, so it must be visible (opacity 1) from the first paint. The
    staggered rise is kept; only the fade-in from zero is gone. */
-.hero-anim > * {
+/* The staggered rise only plays when the visitor changes slide (HeroSlider
+   sets data-animate on the slide grid then), never on the first load.
+   Motion on first load is a visual change AFTER the first paint, which
+   Lighthouse's Speed Index scores as the screen still loading — it made
+   mobile Speed Index swing between ~1s and ~4.7s run to run. */
+[data-animate] .hero-anim > * {
   transform: translateY(18px);
   animation: heroRise 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
-.hero-anim > *:nth-child(1) { animation-delay: 0.02s; }
-.hero-anim > *:nth-child(2) { animation-delay: 0.08s; }
-.hero-anim > *:nth-child(3) { animation-delay: 0.14s; }
-.hero-anim > *:nth-child(4) { animation-delay: 0.2s; }
-.hero-anim > *:nth-child(5) { animation-delay: 0.26s; }
+[data-animate] .hero-anim > *:nth-child(1) { animation-delay: 0.02s; }
+[data-animate] .hero-anim > *:nth-child(2) { animation-delay: 0.08s; }
+[data-animate] .hero-anim > *:nth-child(3) { animation-delay: 0.14s; }
+[data-animate] .hero-anim > *:nth-child(4) { animation-delay: 0.2s; }
+[data-animate] .hero-anim > *:nth-child(5) { animation-delay: 0.26s; }
 @keyframes heroRise {
   to { transform: none; }
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { useLayoutEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { colors } from "@/lib/colors";
 import Nav from "@/components/Nav";
@@ -14,6 +15,14 @@ import CalendlyBookingTracker from "@/components/CalendlyBookingTracker";
 
 export default function SiteChrome({ children, footer }) {
   const pathname = usePathname();
+  // Marks <html> once the visitor has navigated within the site, which
+  // switches the page-entrance animation on (globals.css). Layout effect so
+  // the attribute is set before the new page paints; the first page never
+  // has it, so the first load paints once and stays still.
+  const firstPath = useRef(pathname);
+  useLayoutEffect(() => {
+    if (pathname !== firstPath.current) document.documentElement.dataset.navigated = "1";
+  }, [pathname]);
   // The admin panel is an internal tool, not a marketing page — it gets no
   // nav links, footer, or "book a free call" bubble, and renders its own
   // full-page background instead of this wrapper's.

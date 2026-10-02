@@ -30,14 +30,23 @@ export default function HeroSlider({ slides }) {
   const count = slides.length;
   const [slide, setSlide] = useState(0);
   const [paused, setPaused] = useState(false);
+  // False until the first slide change, so the entrance animation never
+  // plays on page load (see the [data-animate] rule in globals.css).
+  const [changed, setChanged] = useState(false);
 
   useEffect(() => {
     if (paused) return undefined;
-    const timer = setTimeout(() => setSlide((s) => (s + 1) % count), AUTOPLAY_MS);
+    const timer = setTimeout(() => {
+      setChanged(true);
+      setSlide((s) => (s + 1) % count);
+    }, AUTOPLAY_MS);
     return () => clearTimeout(timer);
   }, [slide, paused, count]);
 
-  const goTo = (index) => setSlide(((index % count) + count) % count);
+  const goTo = (index) => {
+    setChanged(true);
+    setSlide(((index % count) + count) % count);
+  };
 
   return (
     <div
@@ -52,7 +61,7 @@ export default function HeroSlider({ slides }) {
 
       {/* key={slide} remounts this wrapper on every slide change, which
           restarts the CSS entrance animation on its children for free. */}
-      <div className="hero-slide-grid" key={slide} role="group" aria-roledescription="slide" aria-label={`${slide + 1} of ${count}`}>
+      <div className="hero-slide-grid" key={slide} data-animate={changed || undefined} role="group" aria-roledescription="slide" aria-label={`${slide + 1} of ${count}`}>
         {slides[slide]}
       </div>
 

@@ -1,9 +1,9 @@
-import Script from "next/script";
 import { Space_Grotesk, DM_Sans } from "next/font/google";
 import "./globals.css";
 import SiteChrome from "@/components/SiteChrome";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
+import { gtmBootstrap } from "@/lib/gtmLoader";
 import { personSchema, professionalServiceSchema, webSiteSchema } from "@/lib/schema";
 import { GTM_ID, SITE_URL } from "@/lib/data";
 import { LOCAL_LANDINGS, NATIONAL_LANDINGS } from "@/lib/landings";
@@ -151,23 +151,11 @@ export default function RootLayout({ children }) {
         {/* Google Tag Manager — GA4 and any future tags/pixels are configured
             inside the GTM container itself (tagmanager.google.com), not
             hardcoded here. See GTM_ID in lib/data.js. */}
-        {/* lazyOnload, not afterInteractive: GTM + GA4 are ~950 KB of
-            script, and loading them during hydration competed with the
-            page's own JavaScript for the main thread (INP). Nothing is
-            lost by waiting — every event on this site goes through
-            lib/analytics.js as a dataLayer.push, and the dataLayer is a
-            plain array that GTM drains when it arrives. The one trade-off
-            is a visitor who closes the tab within a second or two of
-            landing may not register a pageview. The App Router has no
-            stable way to run GTM in a web worker (next/script's `worker`
-            strategy is Pages-Router-only and experimental). */}
-        <Script id="gtm-script" strategy="lazyOnload">
-          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-          })(window,document,'script','dataLayer','${GTM_ID}');`}
-        </Script>
+        {/* Loads on first interaction, a fallback timer, or immediately for
+            ad clicks — see lib/gtmLoader.js for the rules and why. A plain
+            inline <script> rather than next/script, so it runs during HTML
+            parsing instead of waiting for hydration. */}
+        <script id="gtm-bootstrap" dangerouslySetInnerHTML={{ __html: gtmBootstrap }} />
         <noscript>
           <iframe
             src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
